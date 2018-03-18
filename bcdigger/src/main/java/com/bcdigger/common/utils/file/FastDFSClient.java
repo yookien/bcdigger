@@ -8,13 +8,13 @@ import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.csource.common.NameValuePair;
+/*import org.csource.common.NameValuePair;
 import org.csource.fastdfs.ClientGlobal;
 import org.csource.fastdfs.StorageClient1;
 import org.csource.fastdfs.StorageServer;
 import org.csource.fastdfs.TrackerClient;
 import org.csource.fastdfs.TrackerServer;
-
+*/
 /**
  * FastDFS分布式文件系统操作客户端.
  * 
@@ -23,15 +23,15 @@ import org.csource.fastdfs.TrackerServer;
  */
 public class FastDFSClient {
 
-	private static final String CONF_FILENAME = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "fastdfs/fdfs_client.conf";
+	/*private static final String CONF_FILENAME = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "fastdfs/fdfs_client.conf";
 
 	private static StorageClient1 storageClient = null;
 
 	private static Logger logger = Logger.getLogger(FastDFSClient.class);
 
-	/**
+	*//**
 	 * 只加载一次.
-	 */
+	 *//*
 	static {
 		try {
 			logger.info("=== CONF_FILENAME:" + CONF_FILENAME);
@@ -51,14 +51,14 @@ public class FastDFSClient {
 		}
 	}
 
-	/**
+	*//**
 	 * 
 	 * @param file
 	 *            文件
 	 * @param fileName
 	 *            文件名
 	 * @return 返回Null则为失败
-	 */
+	 *//*
 	public static String uploadFile(File file, String fileName) {
 		FileInputStream fis = null;
 		try {
@@ -87,7 +87,7 @@ public class FastDFSClient {
 		}
 	}
 
-	/**
+	*//**
 	 * 根据组名和远程文件名来删除一个文件
 	 * 
 	 * @param groupName
@@ -95,7 +95,7 @@ public class FastDFSClient {
 	 * @param fileName
 	 *            例如"M00/00/00/wKgxgk5HbLvfP86RAAAAChd9X1Y736.jpg"
 	 * @return 0为成功，非0为失败，具体为错误代码
-	 */
+	 *//*
 	public static int deleteFile(String groupName, String fileName) {
 		try {
 			int result = storageClient.delete_file(groupName == null ? "group1" : groupName, fileName);
@@ -106,13 +106,13 @@ public class FastDFSClient {
 		}
 	}
 
-	/**
+	*//**
 	 * 根据fileId来删除一个文件（我们现在用的就是这样的方式，上传文件时直接将fileId保存在了数据库中）
 	 * 
 	 * @param fileId
 	 *            file_id源码中的解释file_id the file id(including group name and filename);例如 group1/M00/00/00/ooYBAFM6MpmAHM91AAAEgdpiRC0012.xml
 	 * @return 0为成功，非0为失败，具体为错误代码
-	 */
+	 *//*
 	public static int deleteFile(String fileId) {
 		try {
 			int result = storageClient.delete_file1(fileId);
@@ -123,7 +123,7 @@ public class FastDFSClient {
 		}
 	}
 
-	/**
+	*//**
 	 * 修改一个已经存在的文件
 	 * 
 	 * @param oldFileId
@@ -133,7 +133,7 @@ public class FastDFSClient {
 	 * @param filePath
 	 *            新文件路径
 	 * @return 返回空则为失败
-	 */
+	 *//*
 	public static String modifyFile(String oldFileId, File file, String filePath) {
 		String fileid = null;
 		try {
@@ -154,12 +154,12 @@ public class FastDFSClient {
 		return fileid;
 	}
 
-	/**
+	*//**
 	 * 文件下载
 	 * 
 	 * @param fileId
 	 * @return 返回一个流
-	 */
+	 *//*
 	public static InputStream downloadFile(String fileId) {
 		try {
 			byte[] bytes = storageClient.download_file1(fileId);
@@ -171,16 +171,16 @@ public class FastDFSClient {
 		}
 	}
 
-	/**
+	*//**
 	 * 获取文件后缀名（不带点）.
 	 * 
 	 * @return 如："jpg" or "".
-	 */
+	 *//*
 	private static String getFileExt(String fileName) {
 		if (StringUtils.isBlank(fileName) || !fileName.contains(".")) {
 			return "";
 		} else {
 			return fileName.substring(fileName.lastIndexOf(".") + 1); // 不带最后的点
 		}
-	}
+	}*/
 }
