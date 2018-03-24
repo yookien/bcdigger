@@ -24,9 +24,11 @@ create table bcd_admin
    department_id        int comment '部门',
    state                int comment '状态',
    pwd_error_count      int comment '连续输错密码的次数',
-   pwd_error_time       datetime comment '最后一次输错密码的时间'
+   pwd_error_time       datetime comment '最后一次输错密码的时间',
+   primary key (admin_id)
 );
 
+ALTER TABLE `bcd_admin` ADD UNIQUE INDEX `name` (`name`) ;
 alter table bcd_admin comment '管理员表';
 
 drop table if exists bcd_sys_menu;
@@ -47,7 +49,8 @@ create table bcd_sys_menu
    state                int comment '状态（0,失效，1正常）',
    display_order        int comment '显示顺序',
    add_time             datetime comment '添加时间',
-   update_time          datetime comment '更新时间'
+   update_time          datetime comment '更新时间',
+   primary key (menu_id)
 );
 
 alter table bcd_sys_menu comment '系统菜单表（用于后台权限控制）';
@@ -64,7 +67,8 @@ create table bcd_admin_role
    role_desc            varchar(255) comment '角色描述',
    state                int comment '状态（0失效，1有效）',
    add_time             datetime comment '添加时间',
-   update_time          datetime comment '更新时间'
+   update_time          datetime comment '更新时间',
+   primary key (role_id)
 );
 
 alter table bcd_admin_role comment '管理员角色表';
@@ -82,9 +86,11 @@ create table bcd_admin_role_ref
    role_ids             varchar(255) comment '角色ids（用,分隔）',
    state                int comment '状态（0失效，1有效）',
    add_time             datetime comment '添加时间',
-   update_time          datetime comment '更新时间'
+   update_time          datetime comment '更新时间',
+   primary key (admin_role_id)
 );
 
+ALTER TABLE `bcd_admin_role_ref` ADD INDEX `adminId` (`admin_id`) ;
 alter table bcd_admin_role_ref comment '管理员权限关联表';
 
 drop table if exists bcd_role_menu_ref;
@@ -99,9 +105,11 @@ create table bcd_role_menu_ref
    menu_ids             varchar(255) comment '菜单ids(用,分隔)',
    state                int comment '状态',
    add_time             datetime comment '添加时间',
-   update_time          datetime comment '更新时间'
+   update_time          datetime comment '更新时间',
+   primary key (role_menu_id)
 );
 
+ALTER TABLE `bcd_role_menu_ref`ADD INDEX `roleId` (`role_id`) ;
 alter table bcd_role_menu_ref comment '角色系统菜单关联表';
 
 drop table if exists bcd_admin_operate_log;
@@ -118,9 +126,11 @@ create table bcd_admin_operate_log
    state                int comment '操作状态（0失败，1成功）',
    ip                   varchar(64) comment 'ip地址',
    content              varchar(255) comment '操作内容',
-   add_time             datetime comment '添加时间'
+   add_time             datetime comment '添加时间',
+   primary key (log_id)
 );
 
+ALTER TABLE `bcd_admin_operate_log` ADD INDEX `adminId` (`admin_id`) ;
 alter table bcd_admin_operate_log comment '管理员操作日志表';
 
 
