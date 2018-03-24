@@ -30,7 +30,7 @@ public class AdminController {
 	@RequestMapping(value ="/login",method=RequestMethod.GET)
 	public String adminLogin(HttpServletRequest request) {
 		
-		request.getSession().setAttribute(CacheConstant.ADMIN_SESSION_ID,"1");
+		//request.getSession().setAttribute(CacheConstant.ADMIN_SESSION_ID,"1");
 		return "login";
 	}
 	
@@ -39,8 +39,8 @@ public class AdminController {
 		
 		System.out.println("aaaa"+ id);
 		Admin admin = adminService.getAdmin(id);
-		//RedisUtils.save("admin", admin);
-		//Admin admin01 = (Admin)RedisUtils.get("admin");
+		RedisUtils.save("admin", admin);
+		Admin admin01 = (Admin)RedisUtils.get("admin");
 		System.out.println("bbbb"+ admin.getNickname());
 		return "login";
 	}

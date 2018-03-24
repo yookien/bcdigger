@@ -39,14 +39,14 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
      * 
      * @return 
      */  
-    @Bean  
+    /*@Bean  
     public ViewResolver viewResolver() {  
         logger.info("ViewResolver");  
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();  
         viewResolver.setPrefix("/templates/");  
         viewResolver.setSuffix(".ftl");  
         return viewResolver;  
-    }
+    }*/
     
     /** 
      * 拦截器配置 
@@ -56,18 +56,13 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {  
         // 注册监控拦截器  
         registry.addInterceptor(adminLoginInterceptor)  
-                .addPathPatterns("/**")  
-         .excludePathPatterns("/public/");  
+                .addPathPatterns("/admin/**")  
+         .excludePathPatterns("/public/")
+         .excludePathPatterns("/static/")
+         .excludePathPatterns("/**/*.css")
+         .excludePathPatterns("/**/*.js");
+        
   
-    }  
-  
-    @Override  
-    public void addCorsMappings(CorsRegistry registry) {  
-        registry.addMapping("/**")  
-                .allowedOrigins("*")  
-                .allowedHeaders("*/*")  
-                .allowedMethods("*")  
-                .maxAge(120);  
     }  
   
     /** 
@@ -75,12 +70,13 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
      * @param registry 
      */  
     @Override  
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {  
-        logger.info("addResourceHandlers");  
-        registry.addResourceHandler("/*.yml")  
-                .addResourceLocations("classpath:/");  
-        registry.addResourceHandler("/.xml")  
-                .addResourceLocations("classpath:/");  
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
+    	registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
+    	registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/images/");
+    	registry.addResourceHandler("/fonts/**").addResourceLocations("classpath:/static/fonts/");
+    	registry.addResourceHandler("/html/**").addResourceLocations("classpath:/static/html/");
+        super.addResourceHandlers(registry);
     }  
 
 }

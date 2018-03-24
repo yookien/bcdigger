@@ -27,9 +27,9 @@ spring:
   redis : 
     #database : 6
     password : 
-    #timeout : 0
+    timeout : 0
     cluster :
-      nodes : 192.168.1.136:30001
+      nodes : 192.168.1.136:6379,192.168.1.136:6380,192.168.1.136:6381,192.168.1.136:6382,192.168.1.136:6383,192.168.1.136:6384
     expireSeconds: 120
     commandTimeout: 10000  #redis操作的超时时间
     pool:
