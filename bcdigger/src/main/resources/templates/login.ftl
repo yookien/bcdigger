@@ -19,6 +19,9 @@
     <link href="/css/animate.min.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="/css/custom.min.css" rel="stylesheet">
+    
+    <script src="/js/jquery-3.3.1.min.js" type="text/javascript" ></script>
+    
   </head>
 
   <body class="login">
@@ -32,13 +35,19 @@
             <form>
               <h1>欢迎使用bcdigger系统 </h1>
               <div>
-                <input type="text" class="form-control" placeholder="请输入用户名称" required="" />
+                <input type="text" id="login_name" class="form-control" placeholder="请输入用户名称" required="" />
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="请输入密码" required="" />
+                <input type="password" id="login_password" class="form-control" placeholder="请输入密码" required="" />
               </div>
+              
+              <div id="login_vrifycode_div" style="diaplay:none;">
+                <input type="text" id="login_vrifycode" class="form-control" placeholder="请输入验证码" required="" />
+                <img src="" id="login_vrifycode_img"/> <a href="javascript:getVrifycode();">刷新</a>
+              </div>
+              
               <div>
-                <a class="btn btn-default submit" href="index.html">登录</a>
+                <a class="btn btn-default submit" href="javascript:doLogin()">登录</a>
                 <a class="reset_pass" href="#">忘记密码?</a>
               </div>
 
@@ -90,7 +99,7 @@
 
                 <div>
                   <h1><i class="fa fa-paw"></i> www.bcdigger.com</h1>
-                  <p>©2016 All Rights Reserved. www.bcdigger.com</p>
+                  <p>©2018 All Rights Reserved. www.bcdigger.com</p>
                 </div>
               </div>
             </form>
@@ -100,3 +109,57 @@
     </div>
   </body>
 </html>
+<script type="text/javascript">
+$(document).ready(function(){
+	getVrifycode();
+});
+
+function doLogin(){
+	var name=$('#login_name').val();
+	if(name==''){
+		alert('请输入用户名称');
+		$('#login_name').focus();
+		return;
+	}
+	
+	var password=$('#login_password').val();
+	if(password==''){
+		alert('请输用密码');
+		$('#password').focus();
+		return;
+	}
+	
+	var vrifycode=$('#login_vrifycode').val();
+	if(vrifycode==''){
+		alert('请输用验证码');
+		$('#vrifycode').focus();
+		return;
+	}
+	
+	
+	$.ajax({
+		type: "POST",
+		cache: false,
+		dataType: "json",
+		data: {name:name,password:password,vrifycode:vrifycode},
+		url: "/admin/userLogin",
+		success: function(json){
+			if(json.result==1){
+				alert('登录成功');
+				window.location.href='/admin/index';
+			}else{
+				alert(json.result);
+			}
+		}
+	});
+}
+
+
+function getVrifycode(){
+	var timenow = new Date().getTime();
+	$('#login_vrifycode_img').attr('src','/vrifycode/random?d='+timenow);
+	$('#login_vrifycode_div').show();
+}
+
+
+</script>
