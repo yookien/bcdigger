@@ -95,6 +95,14 @@ public class AdminController {
 		return "index";
 	}
 	
+	@RequestMapping(value ="/logout")
+	@AdminAuth
+	public String logout(HttpServletRequest request) {
+		request.getSession().setAttribute(CacheConstant.ADMIN_SESSION_ID,null);
+		request.getSession().setAttribute(CacheConstant.ADMIN_ID_SESSION_KEY,null);
+		return "login";
+	}
+	
 	@RequestMapping(value ="/getAdmin/{id}",method=RequestMethod.GET)
 	@AdminAuth
 	public String getAdmin(@PathVariable int id) {
