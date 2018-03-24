@@ -145,7 +145,6 @@ function doLogin(){
 		url: "/admin/userLogin",
 		success: function(json){
 			if(json.result==1){
-				alert('登录成功');
 				window.location.href='/admin/index';
 			}else{
 				alert(json.result);
