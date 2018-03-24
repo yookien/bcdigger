@@ -16,6 +16,8 @@ public interface AdminDao {
 	
 	public Admin getById(Map params);
 	
+	public Admin getBycondition(Map params);
+	
 	public Page<Admin> findAdminByPage();
 	
 	

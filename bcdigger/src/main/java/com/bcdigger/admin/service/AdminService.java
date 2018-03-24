@@ -7,5 +7,7 @@ public interface AdminService {
 	
 	public Admin getAdmin(int id);
 	
+	public Admin getAdmin(Admin admin);
+	
 	public PageInfo<Admin> getAdmins(String name,PageInfo pageInfo);
 }

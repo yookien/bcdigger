@@ -48,11 +48,11 @@ public class AdminLoginInterceptor extends  HandlerInterceptorAdapter {
 		final Class<?> clazz = method.getDeclaringClass(); 
 		if (clazz.isAnnotationPresent(AdminAuth.class) || method.isAnnotationPresent(AdminAuth.class)) { 
 			if(request.getAttribute(CacheConstant.ADMIN_ID_SESSION_KEY) == null){ 
-				throw new Exception(); 
+				//throw new Exception(); 
 				// 跳转登录
-		        /*String url = "/admin/login";
+		        String url = "/admin/login";
 		        response.sendRedirect(url);
-		        return false;*/
+		        return false;
 			}else{ 
 				return true; 
 			} 
@@ -66,8 +66,11 @@ public class AdminLoginInterceptor extends  HandlerInterceptorAdapter {
 	 */
 	public void handlerSession(HttpServletRequest request) { 
 		String sessionId = request.getHeader(CacheConstant.ADMIN_SESSION_ID); 
-	    if(org.apache.commons.lang3.StringUtils.isBlank(sessionId)){ 
-	    	sessionId=(String) request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID); 
+	    if(org.apache.commons.lang3.StringUtils.isBlank(sessionId)){
+	    	Integer sessionIdTemp=(Integer) request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+	    	if(sessionIdTemp!=null){
+	    		sessionId=String.valueOf(sessionIdTemp);
+	    	}
 	    } 
 	    if (org.apache.commons.lang3.StringUtils.isNotBlank(sessionId)) { 
 	    	//从Redis中取用户数据
@@ -77,13 +80,12 @@ public class AdminLoginInterceptor extends  HandlerInterceptorAdapter {
 	    	if (model == null) { 
 	    		return ; 
 	    	} 
-	    	request.setAttribute(CacheConstant.ADMIN_SESSION_ID,sessionId); 
+	    	/**request.setAttribute(CacheConstant.ADMIN_SESSION_ID,sessionId); */
 	    	Integer adminId = model.getAdminId();
-	    	String mobile = model.getMobile();
 	    	if (adminId != null) { 
 	    		request.setAttribute(CacheConstant.ADMIN_ID_SESSION_KEY, Long.valueOf(adminId)); 
 	    	} 
-	    	
+	    	String mobile = model.getMobile();
 	    	if (mobile != null && !"".equals(mobile)) { 
 	    		request.setAttribute(CacheConstant.ADMIN_MOBILE_SESSION_KEY, mobile); 
 	    	} 
