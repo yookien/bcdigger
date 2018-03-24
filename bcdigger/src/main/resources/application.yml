@@ -1,13 +1,52 @@
 server:
-  port: 8080 
+  port: 8080
+  
 spring: 
   application: 
     name: bcdigger
+    
   freemarker : 
-    cache : true
+    cache : false
     charset : UTF-8
     check-template-location : true
     content-type : text/html
     expose-request-attributes : true
     expose-session-attributes : true
     request-context-attribute : request
+    #模板加载的位置
+    template-loader-path: classpath:/templates
+  
+  datasource : 
+    url : jdbc:mysql://192.168.1.139:3307/db_bcdigger?autoReconnect=true&useSSL=false
+    username : root
+    password : 123456
+    driver-class-name : com.mysql.jdbc.Driver
+    type : com.alibaba.druid.pool.DruidDataSource
+  
+  #spring redis   
+  redis : 
+    #database : 6
+    password : 
+    #timeout : 0
+    cluster :
+      nodes : 192.168.1.136:30001
+    expireSeconds: 120
+    commandTimeout: 10000  #redis操作的超时时间
+    pool:
+      max-active : 5000 #最大连接数
+      max-idle : 30 #最大空闲连接数
+      min-idle : 5 #最小空闲连接数
+      max-wait : 3000 #获取连接最大等待时间 ms  #default -1
+      
+mybatis:  
+  type-aliases-package : com.bcdigger.*.entity  
+  mapper-locations : classpath:mappers/*.xml
+  config-location : classpath:mybatis-config.xml
+  
+  
+#pagehelper分页插件配置
+pagehelper :
+  helperDialect : mysql
+  reasonable : true
+  supportMethodsArguments : true
+  params : count=countSql

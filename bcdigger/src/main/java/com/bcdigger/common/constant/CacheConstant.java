@@ -15,6 +15,16 @@ package com.bcdigger.common.constant;
  * @version 2014-4-22
  */
 public class CacheConstant {
+	
+	
+	/**
+	 * 管理员登录信息
+	 */
+	public static final String ADMIN_ID_SESSION_KEY = "ADMIN_ID_";
+	public static final String ADMIN_MOBILE_SESSION_KEY = "ADMIN_MOBILE_";
+	public static final String ADMIN_SESSION_ID = "ADMIN_SESSION_ID_";
+	
+	
 	/**
 	 * 银行费率 BANK_RATE_银行渠道编号
 	 */

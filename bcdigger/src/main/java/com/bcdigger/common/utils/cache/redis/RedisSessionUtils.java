@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 public class RedisSessionUtils {
 
 	private static Logger logger = Logger.getLogger(RedisSessionUtils.class);
+	
 	/**
 	 * 默认过期时间
 	 */

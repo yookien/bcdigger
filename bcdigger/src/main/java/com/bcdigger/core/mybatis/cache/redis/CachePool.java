@@ -29,7 +29,7 @@ public class CachePool {
      
      /**初始化*/
      private CachePool() {  
-              pool = readisUtils.getJedisSentinelPool();
+              //pool = readisUtils.getJedisSentinelPool();
      }  
      
      public  Jedis getJedis(){  

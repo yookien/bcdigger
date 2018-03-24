@@ -4,10 +4,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisSentinelPool;
+import redis.clients.jedis.JedisCluster;
 
 /**
  * 
@@ -17,6 +21,7 @@ import redis.clients.jedis.JedisSentinelPool;
  * @版本: V1.0
  * 
  */
+@Component
 public class RedisUtils {
 
 	private static Logger logger = Logger.getLogger(RedisUtils.class);
@@ -25,17 +30,24 @@ public class RedisUtils {
 	private static final int DEFAULT_CACHE_SECONDS = 60 * 60 * 1;// 单位秒 设置成一个钟
 
 	/** 连接池 **/
-	private static JedisSentinelPool jedisSentinelPool;
-
+	private static JedisCluster jedisCluster;
+	
+	@Autowired
+	private JedisCluster jedisCluster1;
+	@PostConstruct
+    public void beforeInit() {
+		jedisCluster = jedisCluster1;
+    }
 	/**
 	 * 释放redis资源
 	 * 
 	 * @param jedis
 	 */
-	private static void releaseResource(Jedis jedis) {
-		if (jedis != null) {
-			jedisSentinelPool.returnResource(jedis);
-		}
+	private static void releaseResource() {
+		//if (jedis != null) {
+			//jedisCluster.
+			//jedisPool.returnResource(jedis);
+		//}
 	}
 
 	/**
@@ -47,12 +59,13 @@ public class RedisUtils {
 	public static void flushAll() {
 		Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			jedis.flushAll();
+			/*jedis = jedisPool.getResource();
+			jedis.flushAll();*/
+			jedisCluster.flushAll();
 		} catch (Exception e) {
 			logger.error("Cache清空失败：" + e);
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -82,17 +95,17 @@ public class RedisUtils {
 	 * @return true or false .
 	 */
 	public static Boolean save(Object key, Object object, int seconds) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			jedis.set(SerializeUtils.serialize(key), SerializeUtils.serialize(object));
-			jedis.expire(SerializeUtils.serialize(key), seconds);
+			//jedis = jedisPool.getResource();
+			jedisCluster.set(SerializeUtils.serialize(key), SerializeUtils.serialize(object));
+			jedisCluster.expire(SerializeUtils.serialize(key), seconds);
 			return true;
 		} catch (Exception e) {
 			logger.error("Cache保存失败：" + e);
 			return false;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -105,16 +118,16 @@ public class RedisUtils {
 	 * @throws Exception
 	 */
 	public static Object get(Object key) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			byte[] obj = jedis.get(SerializeUtils.serialize(key));
+			//jedis = jedisPool.getResource();
+			byte[] obj = jedisCluster.get(SerializeUtils.serialize(key));
 			return obj == null ? null : SerializeUtils.unSerialize(obj);
 		} catch (Exception e) {
 			logger.error("Cache获取失败：" + e);
 			return null;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -126,17 +139,17 @@ public class RedisUtils {
 	 * @throws Exception
 	 */
 	public static Boolean del(Object key) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
 			// System.out.println(key);
-			jedis = jedisSentinelPool.getResource();
-			jedis.del(SerializeUtils.serialize(key));
+			//jedis = jedisPool.getResource();
+			jedisCluster.del(SerializeUtils.serialize(key));
 			return true;
 		} catch (Exception e) {
 			logger.error("Cache删除失败：" + e);
 			return false;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -148,16 +161,16 @@ public class RedisUtils {
 	 * @throws Exception
 	 */
 	public static Boolean del(Object... keys) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			jedis.del(SerializeUtils.serialize(keys));
+			//jedis = jedisPool.getResource();
+			jedisCluster.del(SerializeUtils.serialize(keys));
 			return true;
 		} catch (Exception e) {
 			logger.error("Cache删除失败：" + e);
 			return false;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -170,16 +183,16 @@ public class RedisUtils {
 	 */
 	public static Boolean expire(Object key, int seconds) {
 
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			jedis.expire(SerializeUtils.serialize(key), seconds);
+			//jedis = jedisPool.getResource();
+			jedisCluster.expire(SerializeUtils.serialize(key), seconds);
 			return true;
 		} catch (Exception e) {
 			logger.error("Cache设置超时时间失败：" + e);
 			return false;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -192,16 +205,16 @@ public class RedisUtils {
 	 * @return
 	 */
 	public static Boolean addHash(String key, Object field, Object value) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			jedis.hset(SerializeUtils.serialize(key), SerializeUtils.serialize(field), SerializeUtils.serialize(value));
+			//jedis = jedisPool.getResource();
+			jedisCluster.hset(SerializeUtils.serialize(key), SerializeUtils.serialize(field), SerializeUtils.serialize(value));
 			return true;
 		} catch (Exception e) {
 			logger.error("Cache保存失败：" + e);
 			return false;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -213,16 +226,16 @@ public class RedisUtils {
 	 * @return
 	 */
 	public static Object getHash(Object key, Object field) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			byte[] obj = jedis.hget(SerializeUtils.serialize(key), SerializeUtils.serialize(field));
+			//jedis = jedisPool.getResource();
+			byte[] obj = jedisCluster.hget(SerializeUtils.serialize(key), SerializeUtils.serialize(field));
 			return SerializeUtils.unSerialize(obj);
 		} catch (Exception e) {
 			logger.error("Cache读取失败：" + e);
 			return null;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -234,16 +247,16 @@ public class RedisUtils {
 	 * @return
 	 */
 	public static Boolean delHash(Object key, Object field) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			long result = jedis.hdel(SerializeUtils.serialize(key), SerializeUtils.serialize(field));
+			//jedis = jedisPool.getResource();
+			long result = jedisCluster.hdel(SerializeUtils.serialize(key), SerializeUtils.serialize(field));
 			return result == 1 ? true : false;
 		} catch (Exception e) {
 			logger.error("Cache删除失败：" + e);
 			return null;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -254,16 +267,16 @@ public class RedisUtils {
 	 * @return
 	 */
 	public static Set<byte[]> keys(String pattern) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			Set<byte[]> allKey = jedis.keys(("*" + pattern + "*").getBytes());
+			//jedis = jedisPool.getResource();
+			Set<byte[]> allKey = jedisCluster.hkeys(("*" + pattern + "*").getBytes());
 			return allKey;
 		} catch (Exception e) {
 			logger.error("Cache获取失败：" + e);
 			return new HashSet<byte[]>();
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -274,16 +287,16 @@ public class RedisUtils {
 	 * @return
 	 */
 	public static Map<byte[], byte[]> getAllHash(Object key) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			Map<byte[], byte[]> map = jedis.hgetAll(SerializeUtils.serialize(key));
+			//jedis = jedisPool.getResource();
+			Map<byte[], byte[]> map = jedisCluster.hgetAll(SerializeUtils.serialize(key));
 			return map;
 		} catch (Exception e) {
 			logger.error("Cache获取失败：" + e);
 			return null;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
 
@@ -294,28 +307,19 @@ public class RedisUtils {
 	 * @return
 	 */
 	public static Boolean exists(Object key) {
-		Jedis jedis = null;
+		//Jedis jedis = null;
 		Boolean result = false;
 		try {
-			jedis = jedisSentinelPool.getResource();
-			result = jedis.exists(SerializeUtils.serialize(key));
+			//jedis = jedisPool.getResource();
+			result = jedisCluster.exists(SerializeUtils.serialize(key));
 			return result;
 		} catch (Exception e) {
 			logger.error("Cache获取失败：" + e);
 			return false;
 		} finally {
-			releaseResource(jedis);
+			//releaseResource(jedis);
 		}
 	}
-
-	public void setJedisSentinelPool(JedisSentinelPool jedisSentinelPool) {
-		RedisUtils.jedisSentinelPool = jedisSentinelPool;
-	}
-
-	public static JedisSentinelPool getJedisSentinelPool() {
-		return jedisSentinelPool;
-	}
-	
 	
 
 }
