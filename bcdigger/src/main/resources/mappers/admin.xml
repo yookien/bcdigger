@@ -93,6 +93,14 @@
 		</where>
 	</select>
 	
+	<select id="getBycondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
 	<select id="findAdminByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select * from
 		<include refid="table" />
