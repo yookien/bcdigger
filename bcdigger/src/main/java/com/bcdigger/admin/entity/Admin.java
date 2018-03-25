@@ -6,7 +6,6 @@ import com.bcdigger.common.entity.BaseEntity;
 
 public class Admin extends BaseEntity{
 	
-	private Integer adminId;// 这里不用 int， 应为 int 自动初始化为0，mybatis mapper 文件 就不能使用 <if test="adminId!=null"> 了
 	private String nickname;
 	private String name;
 	private String password;
@@ -28,14 +27,6 @@ public class Admin extends BaseEntity{
 	private int userLevel;
 	
 	private String userPermissionStr;
-
-	public Integer getAdminId() {
-		return adminId;
-	}
-
-	public void setAdminId(Integer adminId) {
-		this.adminId = adminId;
-	}
 
 	public String getNickname() {
 		return nickname;
