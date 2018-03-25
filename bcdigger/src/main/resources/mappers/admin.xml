@@ -33,7 +33,10 @@
 			and id = #{id,jdbcType=BIGINT}
 		</if>
 		<if test="name != null and name !=''">
-			and name like concat('%',#{name,jdbcType=VARCHAR},'%')
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="nickname != null and nickname !=''">
+			and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
 		</if>
 	
 		<!--<if test="beginDate != null and endDate != null and endDate !='' and beginDate != ''">
