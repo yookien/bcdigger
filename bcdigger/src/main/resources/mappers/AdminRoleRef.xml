@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bcdigger.admin.dao.AdminRoleRefDao">
+
+	<sql id="table"> bcd_admin_role_ref </sql>
+
+	<resultMap id="BaseResultMap" type="com.bcdigger.admin.entity.AdminRoleRef">
+		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="adminId" column="admin_id" jdbcType="VARCHAR" />
+		<result property="roleIds" column="role_ids" jdbcType="VARCHAR" />
+		<result property="state" column="state" jdbcType="BIGINT"/>
+		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<sql id="condition_sql">
+	
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="roleName != null and roleName !=''">
+			and roleName like #{roleName,jdbcType=VARCHAR}
+		</if>
+	
+		<!--<if test="beginDate != null and endDate != null and endDate !='' and beginDate != ''">
+			and CREATE_TIME between #{beginDate} AND CONCAT(#{endDate},' 23:59:59')
+		</if>
+		<if test="beginOrderTime != null and beginOrderTime != '' and endOrderTime != null and endOrderTime !=''">
+			and ORDER_TIME between #{beginOrderTime} AND CONCAT(#{endOrderTime},' 23:59:59')
+		</if>
+
+		<if test="merchantOrderNo != null and merchantOrderNo != ''"> and MERCHANT_ORDER_NO like CONCAT(CONCAT('%',#{merchantOrderNo,jdbcType=VARCHAR}), '%') </if>
+		<if test="merchantNo != null and merchantNo != ''"> and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}</if>
+		<if test="merchantName != null and merchantName != ''"> and MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR}</if>
+		<if test="payerUserNo != null and payerUserNo != ''"> and PAYER_USER_NO = #{payerUserNo,jdbcType=VARCHAR}</if>
+		<if test="payerName != null and payerName != ''"> and PAYER_NAME = #{payerName,jdbcType=VARCHAR}</if>
+		<if test="orderIp != null and orderIp != ''"> and ORDER_IP = #{orderIp,jdbcType=VARCHAR}</if>
+		<if test="orderOperatorLoginName != null and orderOperatorLoginName != ''"> and ORDER_OPERATOR_LOGIN_NAME = #{orderOperatorLoginName,jdbcType=VARCHAR}</if>
+
+		<if test="orderFrom != null and orderFrom != ''"> and ORDER_FROM = #{orderFrom,jdbcType=SMALLINT}</if>
+		<if test="orderFlag != null and orderFlag != ''"> and ORDER_FLAG = #{orderFlag,jdbcType=SMALLINT}</if>
+		<if test="cur != null and cur != ''"> and CUR = #{cur,jdbcType=SMALLINT}</if>
+		<if test="status != null and status != ''"> and STATUS = #{status,jdbcType=SMALLINT}</if>
+		<if test="bizType != null and bizType != ''"> and BIZ_TYPE = #{bizType,jdbcType=SMALLINT}</if>
+		<if test="paymentType != null and paymentType != ''"> and PAYMENT_TYPE = #{paymentType,jdbcType=SMALLINT}</if>
+
+		<if test="payProductCode != null and payProductCode != ''"> and PAY_PRODUCT_CODE = #{payProductCode,jdbcType=VARCHAR}</if>
+		<if test="payWayCode != null and payWayCode != ''"> and PAY_WAY_CODE = #{payWayCode,jdbcType=VARCHAR}</if>
+
+		<if test="consigneeEmail != null and consigneeEmail != ''"> and CONSIGNEE_EMAIL = #{consigneeEmail,jdbcType=VARCHAR}</if>
+		
+		此处foreach中的条件用于分页查询，要用${item},不用#{item}
+		<if test="paymentTypes != null and  paymentTypes !=''">
+			and PAYMENT_TYPE in
+			<foreach collection="paymentTypes" index="index" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="successTrxNo != null and successTrxNo != ''"> and SUCCESS_TRX_NO = #{successTrxNo,jdbcType=VARCHAR}</if>
+		<if test="notBizType != null and notBizType != ''"> 
+			<![CDATA[ and BIZ_TYPE <> #{notBizType,jdbcType=SMALLINT}]]>
+		</if>
+		<if test="trxModel != null and trxModel != ''"> and TRX_MODEL = #{trxModel,jdbcType=SMALLINT}</if> -->
+	</sql>
+	
+	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		where id = #{id}
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+
+
+
+</mapper>
