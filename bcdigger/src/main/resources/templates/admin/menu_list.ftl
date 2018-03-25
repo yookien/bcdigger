@@ -1,37 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>欢迎使用bcdigger系统</title>
-
-    <!-- Bootstrap -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="/css/nprogress.css" rel="stylesheet">
-    <!-- Custom Theme Style -->
-    <link href="/build/css/custom.min.css" rel="stylesheet">
-    
-    <!-- iCheck -->
-    <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-    <!-- bootstrap-progressbar -->
-    <link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-    <!-- JQVMap -->
-    <link href="/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
-    <!-- bootstrap-daterangepicker -->
-    <link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
-	<!-- jQuery -->
-    <script src="/vendors/jquery/dist/jquery.min.js"></script>
-    <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="/build/js/custom.js"></script>
-  </head>
   <div class="x_content">
 	  <table id="datatable" class="table table-striped table-bordered">
 	      <thead>
@@ -77,8 +43,6 @@
 	<!-- 分页  -->
 	<div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
 	</div>
-  </body>
-</html>
 <script>
      /**$('#datatable_paginate').bootstrapPaginator({
      	currentPage: 1,//当前的请求页面。
