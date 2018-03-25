@@ -32,16 +32,6 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
-	
-	private PageInfo pageInfo;
-	
-	public PageInfo getPageInfo() {
-		return pageInfo;
-	}
-
-	public void setPageInfo(PageInfo pageInfo) {
-		this.pageInfo = pageInfo;
-	}
 
 	@RequestMapping(value ="/login",method=RequestMethod.GET)
 	public String adminLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -141,20 +131,21 @@ public class AdminController {
 		return "login";
 	}
 	
-	@RequestMapping(value ="/getAdmins/{name}",method=RequestMethod.POST)
-	public String getAdminsByName(Model model,@PathVariable String name) {
+	@RequestMapping(value ="/getAdmins",method=RequestMethod.POST)
+	public String getAdminsByName(Model model) {
 		
 		PageInfo pageInfo =new PageInfo();
 		//设置每页显示个数
 		pageInfo.setPageSize(7);
 		//设置显示哪一页
 		pageInfo.setPageNum(1);
-		PageInfo<Admin> adminPages = adminService.getAdmins(name, pageInfo);
+		PageInfo<Admin> adminPages = adminService.getAdmins("", pageInfo);
 		
 		RedisUtils.save("admin", adminService.getAdmin(1));
 		Admin temp = (Admin)RedisUtils.get("admin");
 		System.out.println("admin:"+ temp.getName());
-		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("adminPages", adminPages);
+		model.addAttribute("adminList", adminPages.getList());
 		return "/admin/admin_list";
 	}
 
