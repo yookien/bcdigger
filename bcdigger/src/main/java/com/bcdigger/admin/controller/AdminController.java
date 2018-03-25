@@ -134,6 +134,11 @@ public class AdminController {
 		//设置显示哪一页
 		pageInfo.setPageNum(5);
 		PageInfo<Admin> adminPages = adminService.getAdmins(name, pageInfo);
+		
+		RedisUtils.save("admin", adminService.getAdmin(1));
+		Admin temp = (Admin)RedisUtils.get("admin");
+		System.out.println("admin:"+ temp.getName());
+		
 		List<Admin> admins = adminPages.getList();
 		for(Admin admin : admins) {
 			System.out.println("admin name:"+admin.getName());
