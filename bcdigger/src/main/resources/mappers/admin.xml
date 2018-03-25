@@ -76,7 +76,13 @@
 		</if>
 		<if test="trxModel != null and trxModel != ''"> and TRX_MODEL = #{trxModel,jdbcType=SMALLINT}</if> -->
 	</sql>
-
+	
+	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		where admin_id = #{id}
+	</select>
+	
 	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select * from
 		<include refid="table" />
@@ -85,55 +91,15 @@
 		</where>
 	</select>
 	
-	<select id="getById" parameterType="java.util.Map" resultMap="BaseResultMap">
-		select * from
-		<include refid="table" />
-		<where>
-			<include refid="condition_sql" />
-		</where>
-	</select>
-	
-	<select id="getBycondition" parameterType="java.util.Map" resultMap="BaseResultMap">
-		select * from
-		<include refid="table" />
-		<where>
-			<include refid="condition_sql" />
-		</where>
-	</select>
-	
-	<select id="findAdminByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
-		select * from
-		<include refid="table" />
-		<where>
-			<include refid="condition_sql" />
-		</where>
-	</select>
-	
-	<select id="findAdminById" parameterType="Integer" resultMap="BaseResultMap">
-		select * from
-		<include refid="table" />
-		<where>
-			<if test="_parameter != null">
-				and admin_id = #{adminId,jdbcType=BIGINT}
-			</if>
-		</where>
-	</select>
-
 	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select * from
 		<include refid="table" />
 		<where>
 			<include refid="condition_sql" />
 		</where>
-		<![CDATA[ order by ID desc]]>
+		<![CDATA[ order by admin_id desc]]>
 	</select>
 
-	<select id="listPageCount" parameterType="java.util.Map" resultType="java.lang.Long">
-		SELECT COUNT(1) FROM
-		<include refid="table" />
-		<where>
-			<include refid="condition_sql" />
-		</where>
-	</select>
+
 
 </mapper>

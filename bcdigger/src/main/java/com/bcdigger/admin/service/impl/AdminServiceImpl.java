@@ -3,6 +3,7 @@ package com.bcdigger.admin.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Admin getAdmin(int id) {
 
-		Admin admin = adminDao.findAdminById(id);
-
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("adminId", id);
-
-		admin = adminDao.getById(params);
-
+		Admin admin = adminDao.getById(id);
 		return admin;
 	}
 
@@ -39,7 +34,7 @@ public class AdminServiceImpl implements AdminService {
 			}
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("name", admin.getName());
-			admin = adminDao.getBycondition(params);
+			admin = adminDao.getBy(params);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -48,11 +43,10 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Override
 	public PageInfo<Admin> getAdmins(String name, PageInfo pageInfo) {
-
-		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-		Page<Admin> admins = adminDao.findAdminByPage();
-		pageInfo.setList(admins);
-		return pageInfo;
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("name", name);
+		return adminDao.listPage(pageInfo, params);
 	}
 
 }

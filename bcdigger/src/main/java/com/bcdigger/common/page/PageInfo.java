@@ -3,6 +3,7 @@ package com.bcdigger.common.page;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.github.pagehelper.Page;
 
@@ -24,10 +25,101 @@ public class PageInfo<T> implements Serializable {
     private boolean isFirstPage = false;
     //是否为最后一页
     private boolean isLastPage = false;
+    
+ // 计算
+ 	private int pageCount; // 总页数
+ 	private int beginPageIndex; // 页码列表的开始索引（包含）
+ 	private int endPageIndex; // 页码列表的结束索引（包含）
+ 	
+ 	private Map<String, T> countResultMap; // 当前分页条件下的统计结果
 
 
     public PageInfo() {
     }
+    
+    /**
+	 * 只接受前4个必要的属性，会自动的计算出其他3个属生的值
+	 * 
+	 * @param pageNum
+	 * @param pageSize
+	 * @param total
+	 * @param list
+	 */
+	public PageInfo(int pageNum, int pageSize, int total, List<T> list) {
+		this.pageNum = pageNum;
+		this.pageSize = pageSize;
+		this.total = total;
+		this.list = list;
+
+		// 计算总页码
+		pageCount = (total + pageSize - 1) / pageSize;
+
+		// 计算 beginPageIndex 和 endPageIndex
+		// >> 总页数不多于10页，则全部显示
+		if (pageCount <= 10) {
+			beginPageIndex = 1;
+			endPageIndex = pageCount;
+		}
+		// >> 总页数多于10页，则显示当前页附近的共10个页码
+		else {
+			// 当前页附近的共10个页码（前4个 + 当前页 + 后5个）
+			beginPageIndex = pageNum - 4;
+			endPageIndex = pageNum + 5;
+			// 当前面的页码不足4个时，则显示前10个页码
+			if (beginPageIndex < 1) {
+				beginPageIndex = 1;
+				endPageIndex = 10;
+			}
+			// 当后面的页码不足5个时，则显示后10个页码
+			if (endPageIndex > pageCount) {
+				endPageIndex = pageCount;
+				beginPageIndex = pageCount - 10 + 1;
+			}
+		}
+	}
+	
+	/**
+	 * 只接受前5个必要的属性，会自动的计算出其他3个属生的值
+	 * 
+	 * @param pageNum
+	 * @param pageSize
+	 * @param total
+	 * @param list
+	 */
+	public PageInfo(int pageNum, int pageSize, int total, List<T> list, Map<String, T> countResultMap) {
+		this.pageNum = pageNum;
+		this.pageSize = pageSize;
+		this.total = total;
+		this.list = list;
+		this.countResultMap = countResultMap;
+
+		// 计算总页码
+		pageCount = (total + pageSize - 1) / pageSize;
+
+		// 计算 beginPageIndex 和 endPageIndex
+		// >> 总页数不多于10页，则全部显示
+		if (pageCount <= 10) {
+			beginPageIndex = 1;
+			endPageIndex = pageCount;
+		}
+		// >> 总页数多于10页，则显示当前页附近的共10个页码
+		else {
+			// 当前页附近的共10个页码（前4个 + 当前页 + 后5个）
+			beginPageIndex = pageNum - 4;
+			endPageIndex = pageNum + 5;
+			// 当前面的页码不足4个时，则显示前10个页码
+			if (beginPageIndex < 1) {
+				beginPageIndex = 1;
+				endPageIndex = 10;
+			}
+			// 当后面的页码不足5个时，则显示后10个页码
+			if (endPageIndex > pageCount) {
+				endPageIndex = pageCount;
+				beginPageIndex = pageCount - 10 + 1;
+			}
+		}
+	}
+
 
     /**
      * 包装Page对象

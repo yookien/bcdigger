@@ -116,7 +116,6 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value ="/getAdminName/{name}",method=RequestMethod.GET)
-	@AdminAuth
 	public String getAdminByName(@PathVariable String name) {
 		
 		System.out.println("aaaa"+ name);
