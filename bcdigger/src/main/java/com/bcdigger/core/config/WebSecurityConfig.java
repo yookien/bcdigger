@@ -77,6 +77,7 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
     	registry.addResourceHandler("/fonts/**").addResourceLocations("classpath:/static/fonts/");
     	registry.addResourceHandler("/html/**").addResourceLocations("classpath:/static/html/");
     	registry.addResourceHandler("/vendors/**").addResourceLocations("classpath:/static/vendors/");
+    	registry.addResourceHandler("/build/**").addResourceLocations("classpath:/static/build/");
     	registry.addResourceHandler("/index.html").addResourceLocations("classpath:/templates/index.html");
         super.addResourceHandlers(registry);
     }  
