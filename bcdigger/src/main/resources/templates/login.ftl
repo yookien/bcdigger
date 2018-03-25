@@ -51,12 +51,14 @@
                 <a class="reset_pass" href="#">忘记密码?</a>
               </div>
 
-              <div class="clearfix"></div>
+              <div class="clearfix" id="login_info" style="display:none"><i class="fa fa-exclamation-triangle" style="color:red"></i>
+              	 &nbsp&nbsp&nbsp&nbsp<span id="login_info_span">用户名或者密码输入错误，请重试...</span>
+              </div>
 
               <div class="separator">
-                <p class="change_link">注册新用户?
+               <!--  <p class="change_link">注册新用户?
                   <a href="#signup" class="to_register"> 注册 </a>
-                </p>
+                </p> -->
 
                 <div class="clearfix"></div>
                 <br />
@@ -117,25 +119,27 @@ $(document).ready(function(){
 function doLogin(){
 	var name=$('#login_name').val();
 	if(name==''){
-		alert('请输入用户名称');
+		$('#login_info_span').html("请输入用户名称...");
+		$('#login_info').css("display","block");
 		$('#login_name').focus();
 		return;
 	}
 	
 	var password=$('#login_password').val();
 	if(password==''){
-		alert('请输用密码');
+		$('#login_info_span').html("请输入密码...");
+		$('#login_info').css("display","block");
 		$('#password').focus();
 		return;
 	}
 	
 	var vrifycode=$('#login_vrifycode').val();
 	if(vrifycode==''){
-		alert('请输用验证码');
+		$('#login_info_span').html("请输入验证码...");
+		$('#login_info').css("display","block");
 		$('#vrifycode').focus();
 		return;
 	}
-	
 	
 	$.ajax({
 		type: "POST",
@@ -144,10 +148,18 @@ function doLogin(){
 		data: {name:name,password:password,vrifycode:vrifycode},
 		url: "/admin/userLogin",
 		success: function(json){
-			if(json.result==1){
+			var result = json.result;
+			alert(json);
+			if(result==1){
 				window.location.href='/admin/index';
+			}else if(result==4){
+				$('#login_info_span').html("请输入正确的验证码...");
+				$('#login_info').css("display","block");
+				//getVrifycode();
 			}else{
-				alert(json.result);
+				$('#login_info_span').html("输入的用户名或密码错误，请重试...");
+				$('#login_info').css("display","block");
+				//getVrifycode();
 			}
 		}
 	});
