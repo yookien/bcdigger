@@ -1,11 +1,13 @@
 package com.bcdigger.admin.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,7 +44,7 @@ public class SysMenuController {
 	 * @return Map<String,Object>  
 	 * @throws
 	 * @author liubei
-	 * @dateTime 2018年3月25日 下午3:03:35
+	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/addMenu",method=RequestMethod.POST)
 	@ResponseBody
@@ -70,7 +72,7 @@ public class SysMenuController {
 	 * @return Map<String,Object>  
 	 * @throws
 	 * @author liubei
-	 * @dateTime 2018年3月25日 下午3:03:54
+	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/getSysMenu/{id}",method=RequestMethod.GET)
 	public Map<String, Object> getSysMenu(@PathVariable int id) {
@@ -94,26 +96,29 @@ public class SysMenuController {
 	 * @return Map<String,Object>  
 	 * @throws
 	 * @author liubei
-	 * @dateTime 2018年3月25日 下午3:04:38
+	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/getSysMenus",method={RequestMethod.GET,RequestMethod.POST})
-	public Map<String, Object> getSysMenus(Integer pageNum) {
-		Map<String, Object> map = new HashMap<>();
+	public String getSysMenus(SysMenu sysMenu, Integer pageNum,ModelMap map) {
 		try{
 			PageInfo pageInfo =new PageInfo();
 			//设置每页显示个数
 			pageInfo.setPageSize(20);
 			//设置显示哪一页
+			if(pageNum==null){
+				pageNum=1;
+			}
 			pageInfo.setPageNum(pageNum);
-			SysMenu sysMenu=new SysMenu();
+			
 			PageInfo<SysMenu> sysMenuPages = sysMenuService.getSysMenus(sysMenu, pageInfo);
-			map.put("result", 1);//登录成功
-			map.put("sysMenuPages", sysMenuPages);
+			if(sysMenuPages!=null){
+				List<SysMenu> menuList=sysMenuPages.getList();
+				map.addAttribute("menuList", menuList);
+			}
 		}catch(Exception e){
-			map.put("result", 0);//系统异常
 			e.printStackTrace();
 		}
-		return map;
+		return "admin/menu_list";
 	}
 
 }
