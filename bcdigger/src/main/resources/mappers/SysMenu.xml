@@ -4,7 +4,7 @@
 
 	<sql id="table"> bcd_sys_menu </sql>
 
-	<resultMap id="BaseResultMap" type="com.bcdigger.admin.entity.SysMenu">
+	<resultMap id="BaseResultMap" type="sysMenu">
 		<id property="id" column="id" jdbcType="BIGINT" />
 		<result property="menuName" column="menu_name" jdbcType="VARCHAR" />
 		<result property="menuUrl" column="menu_url" jdbcType="VARCHAR" />
@@ -64,6 +64,31 @@
 			!= null and notBizType != ''"> <![CDATA[ and BIZ_TYPE <> #{notBizType,jdbcType=SMALLINT}]]> 
 			</if> <if test="trxModel != null and trxModel != ''"> and TRX_MODEL = #{trxModel,jdbcType=SMALLINT}</if> -->
 	</sql>
+	
+	<insert id="insert" parameterType="sysMenu">
+		INSERT INTO	 bcd_sys_menu
+			   (menu_name,menu_url,menu_logo_url,menu_desc,parent_id,is_leaf,level,display_order,state,add_time,update_time)
+		VALUES
+			   (#{menuName},#{menuUrl},#{menuLogoUrl},#{menuDesc},#{parentId},#{isLeaf}
+			   ,#{level},#{displayOrder},#{state},#{addTime},#{updateTime});
+	</insert>
+	
+	<update id="update" parameterType="sysMenu">
+		UPDATE bcd_sys_menu
+		<set>
+			<if test="menuName != null">menu_name=#{menuName},</if>
+			<if test="menuUrl != null">menu_url=#{menuUrl},</if>
+			<if test="menuLogoUrl != null">menu_logo_url=#{menuLogoUrl},</if>
+			<if test="menuDesc != null  ">menu_desc=#{menuDesc},</if>
+			<if test="parentId != null  ">parent_id=#{parentId},</if>
+			<if test="isLeaf != null and isLeaf > 0 ">is_leaf=#{isLeaf},</if>
+			<if test="level !=null and level > 0">level=#{level},</if>
+			<if test="displayOrder != null and displayOrder > 0">display_order=#{displayOrder},</if>
+			<if test="state!=null and state > -1 ">STATE=#{state},</if>
+			<if test="updateTime != null">update_time=#{updateTime},</if>
+		</set>
+		WHERE id=#{id}
+	</update>
 
 	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
 		select * from
@@ -80,6 +105,15 @@
 	</select>
 	
 	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by display_order desc]]>
+	</select>
+	
+	<select id="listPageByCondation" parameterType="sysMenu" resultMap="BaseResultMap">
 		select * from
 		<include refid="table" />
 		<where>
