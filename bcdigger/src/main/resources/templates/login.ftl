@@ -148,18 +148,17 @@ function doLogin(){
 		data: {name:name,password:password,vrifycode:vrifycode},
 		url: "/admin/userLogin",
 		success: function(json){
-			var result = json.result;
-			alert(json);
-			if(result==1){
+			if(json.result==1){
 				window.location.href='/admin/index';
-			}else if(result==4){
-				$('#login_info_span').html("请输入正确的验证码...");
-				$('#login_info').css("display","block");
-				//getVrifycode();
-			}else{
-				$('#login_info_span').html("输入的用户名或密码错误，请重试...");
-				$('#login_info').css("display","block");
-				//getVrifycode();
+			}else {
+				if(json.result==-4){
+					$('#login_info_span').html("请输入正确的验证码...");
+					$('#login_info').css("display","block");
+				}else{
+					$('#login_info_span').html("输入的用户名或密码错误，请重试...");
+					$('#login_info').css("display","block");	
+				}
+				getVrifycode();
 			}
 		}
 	});
