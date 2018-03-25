@@ -5,7 +5,7 @@
 	<sql id="table"> bcd_admin </sql>
 
 	<resultMap id="BaseResultMap" type="com.bcdigger.admin.entity.Admin">
-		<id property="adminId" column="admin_id" jdbcType="BIGINT"/>
+		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="nickname" column="nickname" jdbcType="VARCHAR" />
 		<result property="name" column="name" jdbcType="VARCHAR" />
 		<result property="password" column="password" jdbcType="VARCHAR" />
@@ -29,8 +29,8 @@
 
 	<sql id="condition_sql">
 	
-		<if test="adminId != null">
-			and admin_id = #{adminId,jdbcType=BIGINT}
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
 		</if>
 		<if test="name != null and name !=''">
 			and name like concat('%',#{name,jdbcType=VARCHAR},'%')
@@ -80,7 +80,7 @@
 	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
 		select * from
 		<include refid="table" />
-		where admin_id = #{id}
+		where id = #{id}
 	</select>
 	
 	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
@@ -97,7 +97,7 @@
 		<where>
 			<include refid="condition_sql" />
 		</where>
-		<![CDATA[ order by admin_id desc]]>
+		<![CDATA[ order by id desc]]>
 	</select>
 
 
