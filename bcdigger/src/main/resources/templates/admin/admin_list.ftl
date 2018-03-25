@@ -22,13 +22,15 @@
 		<tbody>
 			<#list adminList as admin>
             <tr>          	
-	            	<td>${admin.id}</td>
+	            	<td>${admin_index+1}</td>
 	            	<td>${admin.name}</td>
 	            	<td>${admin.nickname}</td>
 	            	<td>${admin.mobile}</td>
 	            	<td>${admin.email}</td>
 	            	<td>${admin.state}</td>
-	            	<td>${admin.state}</td>
+	            	<td><a class="fa fa-pencil-square" style="font-size:20px" title="修改"></a>
+	            	<span style="margin-right:20px;margin-left:10px"></span>
+	            	<a class="fa fa-close" style="font-size:20px;color:red" title="失效"></a></td>
             </tr>
             </#list>
         </tbody>
