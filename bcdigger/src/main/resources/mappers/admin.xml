@@ -33,7 +33,7 @@
 			and admin_id = #{adminId,jdbcType=BIGINT}
 		</if>
 		<if test="name != null and name !=''">
-			and name like #{name,jdbcType=VARCHAR}
+			and name like concat('%',#{name,jdbcType=VARCHAR},'%')
 		</if>
 	
 		<!--<if test="beginDate != null and endDate != null and endDate !='' and beginDate != ''">
