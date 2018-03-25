@@ -13,18 +13,18 @@ import java.util.Date;
 public class BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Long id;
+	private Integer id;
 	private Integer version = 0;
 	/**
 	 * 创建时间
 	 */
 	protected Date createTime = new Date();
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

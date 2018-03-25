@@ -80,7 +80,7 @@ public class AdminController {
 				map.put("result", -6);// 账户密码不匹配
 				return map;
 			}
-			request.getSession().setAttribute(CacheConstant.ADMIN_SESSION_ID,adminTemp.getAdminId());
+			request.getSession().setAttribute(CacheConstant.ADMIN_SESSION_ID,adminTemp.getId());
 			map.put("result", 1);//登录成功
 		}catch(Exception e){
 			map.put("result", 0);//系统异常

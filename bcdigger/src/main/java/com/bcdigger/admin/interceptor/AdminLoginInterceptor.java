@@ -81,7 +81,7 @@ public class AdminLoginInterceptor extends  HandlerInterceptorAdapter {
 	    		return ; 
 	    	} 
 	    	/**request.setAttribute(CacheConstant.ADMIN_SESSION_ID,sessionId); */
-	    	Integer adminId = model.getAdminId();
+	    	Integer adminId = model.getId();
 	    	if (adminId != null) { 
 	    		request.setAttribute(CacheConstant.ADMIN_ID_SESSION_KEY, Long.valueOf(adminId)); 
 	    	} 
