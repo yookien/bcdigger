@@ -49,7 +49,9 @@ public class SysMenuServiceImpl implements SysMenuService {
 	public PageInfo<SysMenu> getSysMenus(SysMenu sysMenu, PageInfo pageInfo) {
 		try{
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("menuName", sysMenu.getMenuName());
+			if(sysMenu!=null){
+				params.put("parentId", sysMenu.getParentId());
+			}
 			return sysMenuDao.listPage(pageInfo, params);
 		}catch(Exception e){
 			e.printStackTrace();
