@@ -31,6 +31,14 @@ public class SysMenuServiceImpl implements SysMenuService {
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateSysMenu(SysMenu sysMenu){
+		try{
+			sysMenuDao.update(sysMenu);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 	public SysMenu getSysMenuById(int id) {
 		try{
@@ -52,7 +60,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 			if(sysMenu!=null){
 				params.put("parentId", sysMenu.getParentId());
 			}
-			return sysMenuDao.listPage(pageInfo, params);
+			//return sysMenuDao.listPage(pageInfo, params);
+			return sysMenuDao.findSysMenus(pageInfo, sysMenu);
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;

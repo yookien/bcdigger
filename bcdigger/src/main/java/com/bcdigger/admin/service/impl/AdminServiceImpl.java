@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
 	public PageInfo<Admin> getAdmins(String name, PageInfo pageInfo) {
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("name", name);
+		//params.put("name", name);
 		return adminDao.listPage(pageInfo, params);
 	}
 

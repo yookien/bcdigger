@@ -12,9 +12,9 @@ public class PageInfo<T> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
     //当前页
-    private int pageNum;
+    private int pageNum=1;// 默认值
     //每页的数量
-    private int pageSize;
+    private int pageSize=20;// 默认值
     //总记录数
     private long total;
     //总页数

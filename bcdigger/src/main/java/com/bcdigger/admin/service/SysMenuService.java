@@ -10,9 +10,18 @@ public interface SysMenuService {
 	 * @param sysMenu void  
 	 * @throws
 	 * @author liubei
-	 * @dateTime 2018年3月25日 下午2:44:38
+	 * @dateTime 2018年3月25日
 	 */
 	public void addSysMenu(SysMenu sysMenu);
+	
+	/**
+	 * @Description: 更新系统菜单
+	 * @param sysMenu void  
+	 * @throws
+	 * @author liubei
+	 * @date 2018年3月25日
+	 */
+	public void updateSysMenu(SysMenu sysMenu);
 	
 	/**
 	 * @Description: 根据id查询菜单信息
@@ -20,7 +29,7 @@ public interface SysMenuService {
 	 * @return SysMenu  
 	 * @throws
 	 * @author liubei
-	 * @dateTime 2018年3月25日 下午2:38:34
+	 * @dateTime 2018年3月25日
 	 */
 	public SysMenu getSysMenuById(int id);
 	
@@ -32,7 +41,7 @@ public interface SysMenuService {
 	 * @return PageInfo<SysMenu>  
 	 * @throws
 	 * @author liubei
-	 * @dateTime 2018年3月25日 下午2:37:23
+	 * @dateTime 2018年3月25日
 	 */
 	public PageInfo<SysMenu> getSysMenus(SysMenu sysMenu,PageInfo pageInfo);
 }

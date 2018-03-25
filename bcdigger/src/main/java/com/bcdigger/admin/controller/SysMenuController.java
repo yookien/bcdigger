@@ -38,9 +38,7 @@ public class SysMenuController {
 	
 	/**
 	 * @Description: 添加菜单
-	 * @param name
-	 * @param password
-	 * @param vrifycode
+	 * @param sysMenu
 	 * @return Map<String,Object>  
 	 * @throws
 	 * @author liubei
@@ -48,15 +46,15 @@ public class SysMenuController {
 	 */
 	@RequestMapping(value ="/addMenu",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> addSysMenu(@RequestParam String name, String password, String vrifycode){
+	public Map<String, Object> addSysMenu(SysMenu sysMenu){
 		Map<String, Object> map = new HashMap<>();  
 		try{
-			if(name==null || name.trim().equals("")){
-				map.put("result", -2);// 用户名不能为空
+			// 参数校验，待完善
+			if(sysMenu==null){
+				map.put("result", -1);// 参数为空
 				return map;
 			}
 			
-			SysMenu sysMenu=new SysMenu();
 			sysMenuService.addSysMenu(sysMenu);
 			map.put("result", 1);//登录成功
 		}catch(Exception e){
@@ -65,6 +63,7 @@ public class SysMenuController {
 		}
 		return map;
 	}
+	
 	
 	/**
 	 * @Description: 根据id查询菜单信息
@@ -88,7 +87,35 @@ public class SysMenuController {
 		return map;
 	}
 	
-	
+	/**
+	 * 
+	 * @Description: 更新菜单
+	 * @param sysMenu
+	 * @return Map<String,Object>  
+	 * @throws
+	 * @author liubei
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/updateMenu",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> updateSysMenu(SysMenu sysMenu){
+		Map<String, Object> map = new HashMap<>();  
+		try{
+			// 参数校验，待完善
+			if(sysMenu==null){
+				map.put("result", -1);// 参数为空
+				return map;
+			}
+			
+			sysMenuService.updateSysMenu(sysMenu);
+			map.put("result", 1);//更新成功
+		}catch(Exception e){
+			map.put("result", 0);//系统异常
+			e.printStackTrace();
+		}
+		return map;
+	}
+
 	
 	/**
 	 * @Description: 分页查询菜单信息
