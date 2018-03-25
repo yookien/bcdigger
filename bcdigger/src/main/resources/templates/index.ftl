@@ -67,7 +67,7 @@
 
         <!-- page content -->
         <div class="right_col" role="main" id="contents">
-        	<div class="right_col" role="main">
+        	<#include "/lib/contents.ftl">
         </div>
         <!-- /page content -->
 
