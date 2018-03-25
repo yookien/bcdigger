@@ -18,7 +18,7 @@
     <!-- Animate.css -->
     <link href="/css/animate.min.css" rel="stylesheet">
     <!-- Custom Theme Style -->
-    <link href="/css/custom.min.css" rel="stylesheet">
+    <link href="/build/css/custom.min.css" rel="stylesheet">
     
     <script src="/js/jquery-3.3.1.min.js" type="text/javascript" ></script>
     

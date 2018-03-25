@@ -21,11 +21,14 @@
 
 	<sql id="condition_sql">
 
-		<if test="id != null">
+		<if test=" id != null and id > 0 ">
 			and id = #{id,jdbcType=BIGINT}
 		</if>
-		<if test="menuName != null and menuName !=''">
+		<if test=" menuName != null and menuName !='' ">
 			and menu_name like #{menuName,jdbcType=VARCHAR}
+		</if>
+		<if test=" parentId != null ">
+			and parent_id = #{parentId,jdbcType=BIGINT}
 		</if>
 
 		<!--<if test="beginDate != null and endDate != null and endDate !='' and 
@@ -75,16 +78,15 @@
 			<include refid="condition_sql" />
 		</where>
 	</select>
-
+	
 	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select * from
 		<include refid="table" />
 		<where>
 			<include refid="condition_sql" />
 		</where>
-		<![CDATA[ order by id desc]]>
+		<![CDATA[ order by display_order desc]]>
 	</select>
-
-
+	
 
 </mapper>
