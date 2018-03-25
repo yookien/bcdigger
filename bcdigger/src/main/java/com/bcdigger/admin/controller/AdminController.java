@@ -35,9 +35,17 @@ public class AdminController {
 	private AdminService adminService;
 	
 	@RequestMapping(value ="/login",method=RequestMethod.GET)
-	public String adminLogin(HttpServletRequest request) {
-		
-		//request.getSession().setAttribute(CacheConstant.ADMIN_SESSION_ID,"1");
+	public String adminLogin(HttpServletRequest request, HttpServletResponse response) {
+		try{
+			Integer sessionId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+			if(sessionId!=null && sessionId>0){
+				// 用户已经登录，自动跳转到操作页
+				response.sendRedirect("/admin/index");
+				return null;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		return "login";
 	}
 	
