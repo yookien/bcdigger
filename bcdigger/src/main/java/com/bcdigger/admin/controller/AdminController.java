@@ -1,7 +1,6 @@
 package com.bcdigger.admin.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,12 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.bcdigger.admin.entity.Admin;
 import com.bcdigger.admin.service.AdminService;
@@ -34,6 +33,16 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	private PageInfo pageInfo;
+	
+	public PageInfo getPageInfo() {
+		return pageInfo;
+	}
+
+	public void setPageInfo(PageInfo pageInfo) {
+		this.pageInfo = pageInfo;
+	}
+
 	@RequestMapping(value ="/login",method=RequestMethod.GET)
 	public String adminLogin(HttpServletRequest request, HttpServletResponse response) {
 		try{
@@ -132,27 +141,21 @@ public class AdminController {
 		return "login";
 	}
 	
-	@RequestMapping(value ="/getAdminName/{name}",method=RequestMethod.GET)
-	public String getAdminByName(@PathVariable String name) {
+	@RequestMapping(value ="/getAdmins/{name}",method=RequestMethod.POST)
+	public String getAdminsByName(Model model,@PathVariable String name) {
 		
-		System.out.println("aaaa"+ name);
 		PageInfo pageInfo =new PageInfo();
 		//设置每页显示个数
-		pageInfo.setPageSize(3);
+		pageInfo.setPageSize(7);
 		//设置显示哪一页
-		pageInfo.setPageNum(5);
+		pageInfo.setPageNum(1);
 		PageInfo<Admin> adminPages = adminService.getAdmins(name, pageInfo);
 		
 		RedisUtils.save("admin", adminService.getAdmin(1));
 		Admin temp = (Admin)RedisUtils.get("admin");
 		System.out.println("admin:"+ temp.getName());
-		
-		List<Admin> admins = adminPages.getList();
-		for(Admin admin : admins) {
-			System.out.println("admin name:"+admin.getName());
-		}
-		System.out.println("bbb"+ pageInfo.getTotal());
-		return "login";
+		model.addAttribute("pageInfo", pageInfo);
+		return "/admin/admin_list";
 	}
 
 }
