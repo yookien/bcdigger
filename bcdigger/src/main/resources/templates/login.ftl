@@ -43,12 +43,13 @@
               
               <div id="login_vrifycode_div" style="diaplay:none;">
                 <input type="text" id="login_vrifycode" class="form-control" placeholder="请输入验证码" required="" />
-                <img src="" id="login_vrifycode_img"/> <a href="javascript:getVrifycode();">刷新</a>
+                 &nbsp&nbsp&nbsp&nbsp
+                <img src="" id="login_vrifycode_img"/> <a href="javascript:getVrifycode();">刷  新</a>
               </div>
               
               <div>
-                <a class="btn btn-default submit" href="javascript:doLogin()">登录</a>
-                <a class="reset_pass" href="#">忘记密码?</a>
+                <a class="btn btn-default submit" href="javascript:doLogin()">登  录</a>
+               <!--  <a class="reset_pass" href="#">忘记密码?</a> -->
               </div>
 
               <div class="clearfix" id="login_info" style="display:none"><i class="fa fa-exclamation-triangle" style="color:red"></i>
