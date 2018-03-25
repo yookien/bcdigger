@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
 import org.apache.ibatis.jdbc.SqlRunner;
-import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bcdigger.common.entity.BaseEntity;
 import com.bcdigger.common.exceptions.BizException;
 import com.bcdigger.common.page.PageInfo;
-import com.bcdigger.core.mybatis.interceptor.ExecutorInterceptor;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -141,30 +138,18 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 		if (paramMap == null)
 			paramMap = new HashMap<String, Object>();
 		
-		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-		List<Object> list = sqlSession.selectList(getStatement(sqlId),paramMap);
-		
-		return new PageInfo(list);
+		Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+		List<Object> list = sqlSession.selectList(sqlId, paramMap);
+		pageInfo.setTotal(page.getTotal());
+		pageInfo.setPages(page.getPages());
+		pageInfo.setIsFirstPage(page.getPageNum()==1?true:false);
+		pageInfo.setIsLastPage(page.getPageNum()==page.getPages()?true:false);
+		pageInfo.setList(list);
+		return pageInfo;
 	}
 
 	public PageInfo listPage(PageInfo pageInfo, Map<String, Object> paramMap) {
-
-		if (paramMap == null)
-			paramMap = new HashMap<String, Object>();
-		
-		PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-		List<Object> list = sqlSession.selectList(SQL_LIST_PAGE, paramMap);
-		pageInfo.setList(list);
-		return pageInfo;
-		
-		// 是否统计当前分页条件下的数据：1:是，其他为否
-		/*Object isCount = paramMap.get("isCount");
-		if (isCount != null && "1".equals(isCount.toString())) {
-			Map<String, Object> countResultMap = sqlSession.selectOne(getStatement(SQL_COUNT_BY_PAGE_PARAM), paramMap);
-			return new PageInfo(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), list, countResultMap);
-		} else {
-			return new PageInfo(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), list);
-		}*/
+		return listPage(pageInfo,paramMap,SQL_LIST_PAGE);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

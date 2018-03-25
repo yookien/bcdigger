@@ -132,13 +132,13 @@ public class AdminController {
 		//设置每页显示个数
 		pageInfo.setPageSize(3);
 		//设置显示哪一页
-		pageInfo.setPageNum(2);
+		pageInfo.setPageNum(5);
 		PageInfo<Admin> adminPages = adminService.getAdmins(name, pageInfo);
 		List<Admin> admins = adminPages.getList();
 		for(Admin admin : admins) {
 			System.out.println("admin name:"+admin.getName());
 		}
-		System.out.println("bbb"+ admins.size());
+		System.out.println("bbb"+ pageInfo.getTotal());
 		return "login";
 	}
 
