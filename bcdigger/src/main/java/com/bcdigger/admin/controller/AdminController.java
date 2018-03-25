@@ -95,6 +95,15 @@ public class AdminController {
 		return "index";
 	}
 	
+	/**
+	 * 
+	 * @Description: 退出登录
+	 * @param request
+	 * @return String  
+	 * @throws
+	 * @author liubei
+	 * @date 2018年3月25日 上午1:44:45
+	 */
 	@RequestMapping(value ="/logout")
 	@AdminAuth
 	public String logout(HttpServletRequest request) {
