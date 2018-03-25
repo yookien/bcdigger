@@ -149,12 +149,12 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	}
 
 	public PageInfo listPage(PageInfo pageInfo, Map<String, Object> paramMap) {
-		return listPage(pageInfo,paramMap,SQL_LIST_PAGE);
+		return listPage(pageInfo,paramMap,getStatement(SQL_LIST_PAGE));
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<T> listBy(Map<String, Object> paramMap) {
-		return (List) this.listBy(paramMap, SQL_LIST_BY);
+		return (List) this.listBy(paramMap, getStatement(SQL_LIST_BY));
 	}
 
 	public List<Object> listBy(Map<String, Object> paramMap, String sqlId) {
