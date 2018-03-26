@@ -17,6 +17,7 @@ public class SysMenuDao extends BaseDaoImpl<SysMenu>{
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public PageInfo findSysMenus(PageInfo pageInfo, SysMenu sysMenu) {
 		try{
 			Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
