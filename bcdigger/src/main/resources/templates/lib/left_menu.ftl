@@ -5,7 +5,7 @@
                   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="javascript:goto('/admin/getAdmins/')">管理员列表</a></li>
-                      <li><a href="javascript:goto('/admin/getSysMenus')">菜单列表</a></li>
+                      <li><a href="javascript:goto('/admin/sysMenusIndex')">菜单管理</a></li>
                       <li><a href="index3.html">Dashboard3</a></li>
                     </ul>
                   </li>
