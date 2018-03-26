@@ -6,7 +6,7 @@ $(function(){
 	 $('#pages').bootstrapPaginator({
 	        bootstrapMajorVersion:3,
 	        currentPage: ${(pageInfo.pageNum)!1},
-	        numberOfPages: ${(pageInfo.pageSize)!1},
+	        numberOfPages: ${(pageInfo.pageNumCount)!5},
 	        totalPages:${(pageInfo.pages)!1},
 	        itemTexts: function (type, page, current) {
 				switch (type) {
