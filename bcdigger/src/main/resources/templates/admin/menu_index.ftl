@@ -1,7 +1,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>系统操作员管理 </h2>
+        <h2>系统菜单管理 </h2>
         <div class="clearfix"></div>
       </div>
       
@@ -127,7 +127,8 @@ function getSysMenus(parentId){
 // 打开新增菜单页面
 function addSysMenusEvent(){
 	// 重设form
-	document.getElementById("addOrEditSysMenusForm").reset();
+	$('#addOrEditSysMenusForm')[0].reset();
+	$('#myModalLabel').html('添加系统菜单');
 	$("#save_btn").unbind();
 	$("#save_btn").click(function(){
 	  	addSysMenus();
@@ -162,7 +163,8 @@ function addSysMenus(){
 // 打开编辑菜单页面
 function editSysMenus(id){
 	// 重设form
-	document.getElementById("addOrEditSysMenusForm").reset();
+	$('#addOrEditSysMenusForm')[0].reset();
+	$('#myModalLabel').html('编辑系统菜单');
 	if(isNaN(id) || id<=0){
 		return;
 	}
