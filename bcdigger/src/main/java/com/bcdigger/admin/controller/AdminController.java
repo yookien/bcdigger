@@ -35,15 +35,6 @@ public class AdminController {
 	
 	private PageInfo pageInfo;
 	
-
-	public PageInfo getPageInfo() {
-		return pageInfo;
-	}
-
-	public void setPageInfo(PageInfo pageInfo) {
-		this.pageInfo = pageInfo;
-	}
-
 	@RequestMapping(value ="/login",method=RequestMethod.GET)
 	public String adminLogin(HttpServletRequest request, HttpServletResponse response) {
 		try{
@@ -143,13 +134,8 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value ="/getAdmins",method= {RequestMethod.POST,RequestMethod.GET})
-	public String getAdminsByName(Model model,PageInfo pageInfo) {
+	public String getAdminsByName(PageInfo pageInfo) {
 		
-		//PageInfo pageInfo =new PageInfo();
-		//设置每页显示个数
-		//pageInfo.setPageSize(7);
-		//设置显示哪一页
-		//pageInfo.setPageNum(1);
 		if(pageInfo == null)
 			pageInfo =new PageInfo<Admin>();
 		pageInfo = adminService.getAdmins("", pageInfo);
@@ -158,8 +144,6 @@ public class AdminController {
 		//Admin temp = (Admin)RedisUtils.get("admin");
 		//System.out.println("admin:"+ temp.getName());
 		
-		model.addAttribute("pageInfo", pageInfo);
-		model.addAttribute("adminList", pageInfo.getList());
 		return "/admin/admin_list";
 	}
 

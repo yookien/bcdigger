@@ -38,5 +38,6 @@ $(function(){
 	  });
 	
 });
-</#if>
+
 </script>
+</#if>

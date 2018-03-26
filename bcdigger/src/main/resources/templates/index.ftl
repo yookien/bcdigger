@@ -11,6 +11,7 @@
 
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrapValidator.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
@@ -81,6 +82,8 @@
     <script src="/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrapValidator.min.js"></script>
+    
     <!-- FastClick -->
     <script src="/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
