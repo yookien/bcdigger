@@ -117,8 +117,9 @@
             <!-- /menu footer buttons -->
             
 <script type="text/javascript">
-	function goto(request_url){
-		
+	var request_url;
+	function goto(requesturl){
+		request_url = requesturl;
 		$.ajax({
 	        type: "post",
 	        dataType: "html",

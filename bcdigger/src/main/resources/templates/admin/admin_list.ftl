@@ -27,14 +27,18 @@
 	            	<td>${admin.nickname}</td>
 	            	<td>${admin.mobile}</td>
 	            	<td>${admin.email}</td>
-	            	<td>${admin.state}</td>
+	            	<td><#if admin.state==1>正常<#else>停用</#if></td>
 	            	<td><a class="fa fa-pencil-square" style="font-size:20px" title="修改"></a>
 	            	<span style="margin-right:20px;margin-left:10px"></span>
 	            	<a class="fa fa-close" style="font-size:20px;color:red" title="失效"></a></td>
             </tr>
-            </#list>
+            </#list>n
         </tbody>
     </table>
  </div>
+ <!-- 分页信息 ,注意要放到ul元素里面-->
+ <div style="float:right"><ul id='pages'></ul></div>
+ <#include "/lib/pages.ftl">
+ 
                 </div>
               </div>

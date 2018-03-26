@@ -14,7 +14,7 @@ public class PageInfo<T> implements Serializable {
     //当前页
     private int pageNum=1;// 默认值
     //每页的数量
-    private int pageSize=20;// 默认值
+    private int pageSize=5;// 默认值
     //总记录数
     private long total;
     //总页数

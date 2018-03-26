@@ -137,6 +137,8 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
 		if (paramMap == null)
 			paramMap = new HashMap<String, Object>();
+		if(pageInfo == null)
+			pageInfo = new PageInfo();
 		
 		Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
 		List<Object> list = sqlSession.selectList(sqlId, paramMap);
