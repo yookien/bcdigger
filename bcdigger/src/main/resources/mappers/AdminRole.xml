@@ -4,7 +4,7 @@
 
 	<sql id="table"> bcd_admin_role </sql>
 
-	<resultMap id="BaseResultMap" type="com.bcdigger.admin.entity.AdminRole">
+	<resultMap id="BaseResultMap" type="sdminRole">
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="roleName" column="role_name" jdbcType="VARCHAR" />
 		<result property="roleDesc" column="role_desc" jdbcType="VARCHAR" />
@@ -62,6 +62,24 @@
 		</if>
 		<if test="trxModel != null and trxModel != ''"> and TRX_MODEL = #{trxModel,jdbcType=SMALLINT}</if> -->
 	</sql>
+	
+	<insert id="insert" parameterType="sdminRole">
+		INSERT INTO	 bcd_admin_role
+			   (role_name,role_desc,state,add_time,update_time)
+		VALUES
+			   (#{roleName},#{roleDesc},#{state},#{addTime},#{updateTime});
+	</insert>
+	
+	<update id="update" parameterType="sdminRole">
+		UPDATE bcd_admin_role
+		<set>
+			<if test="roleName != null">role_name=#{roleName},</if>
+			<if test="roleDesc != null">role_desc=#{roleDesc},</if>
+			<if test="state!=null and state > -1 ">STATE=#{state},</if>
+			<if test="updateTime != null">update_time=#{updateTime},</if>
+		</set>
+		WHERE id=#{id}
+	</update>
 	
 	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
 		select * from
