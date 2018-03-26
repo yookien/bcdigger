@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.bcdigger.admin.dao.AdminRoleDao;
 import com.bcdigger.admin.entity.AdminRole;
-import com.bcdigger.admin.entity.SysMenu;
 import com.bcdigger.admin.service.AdminRoleService;
 import com.bcdigger.common.page.PageInfo;
 
 /**
  * 
  * ClassName: SysMenuServiceImpl
+ * 
  * @Description: 菜单service
  * @author yookien
  * @date 2018年3月25日
@@ -27,21 +27,44 @@ public class AdminRoleServiceImpl implements AdminRoleService {
 
 	@Override
 	public void addRole(AdminRole role) {
-		// TODO Auto-generated method stub
-		
+		try {
+			adminRoleDao.insert(role);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public SysMenu getRoleById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateAdminRole(AdminRole role) {
+		try {
+			adminRoleDao.update(role);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public AdminRole getRoleById(int id) {
+		try {
+			if (id <= 0) {
+				return null;
+			}
+			return adminRoleDao.getById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public PageInfo<AdminRole> getAdminRoles(AdminRole role, PageInfo pageInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+			Map<String, Object> params = new HashMap<String, Object>();
+			return adminRoleDao.listPage(pageInfo, params);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
-	
-	
+
 }

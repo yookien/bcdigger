@@ -16,6 +16,15 @@ public interface AdminRoleService {
 	public void addRole(AdminRole role);
 	
 	/**
+	 * @Description: 修改角色
+	 * @param role void  
+	 * @throws
+	 * @author liubei
+	 * @date 2018年3月26日
+	 */
+	public void updateAdminRole(AdminRole role);
+	
+	/**
 	 * @Description: 添加角色
 	 * @param id
 	 * @return AdminRole  
@@ -23,7 +32,7 @@ public interface AdminRoleService {
 	 * @author yookien
 	 * @dateTime 2018年3月25日 下午2:38:34
 	 */
-	public SysMenu getRoleById(int id);
+	public AdminRole getRoleById(int id);
 	
 	
 	/**
