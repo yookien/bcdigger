@@ -26,6 +26,8 @@ public class PageInfo<T> implements Serializable {
     //是否为最后一页
     private boolean isLastPage = false;
     
+    // 页面分页展示页码数量
+    private int pageNumCount=5;// 默认值
  	
  	private Map<String, T> countResultMap; // 当前分页条件下的统计结果
 
@@ -99,9 +101,18 @@ public class PageInfo<T> implements Serializable {
         sb.append(", list=").append(list);
         sb.append(", isFirstPage=").append(isFirstPage);
         sb.append(", isLastPage=").append(isLastPage);
+        sb.append(", pageNumCount=").append(pageNumCount);
         sb.append(", navigatepageNums=");
         sb.append('}');
         return sb.toString();
     }
+
+	public int getPageNumCount() {
+		return pageNumCount;
+	}
+
+	public void setPageNumCount(int pageNumCount) {
+		this.pageNumCount = pageNumCount;
+	}
 
 }
