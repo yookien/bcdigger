@@ -66,7 +66,7 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 		this.sqlSession = sqlSession;
     }*/
 	
-	public long insert(T t) {
+	public int insert(T t) {
 
 		if (t == null)
 			throw new RuntimeException("T is null");
@@ -82,7 +82,7 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 		return result;
 	}
 
-	public long insert(List<T> list) {
+	public int insert(List<T> list) {
 
 		if (list == null || list.size() <= 0)
 			return 0;
@@ -95,7 +95,7 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 		return result;
 	}
 
-	public long update(T t) {
+	public int update(T t) {
 		if (t == null)
 			throw new RuntimeException("T is null");
 
@@ -107,7 +107,7 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 		return result;
 	}
 
-	public long update(List<T> list) {
+	public int update(List<T> list) {
 
 		if (list == null || list.size() <= 0)
 			return 0;
@@ -129,8 +129,8 @@ public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 		return sqlSession.selectOne(getStatement(SQL_GET_BY_ID), id);
 	}
 
-	public long deleteById(int id) {
-		return (long) sqlSession.delete(getStatement(SQL_DELETE_BY_ID), id);
+	public int deleteById(int id) {
+		return (int) sqlSession.delete(getStatement(SQL_DELETE_BY_ID), id);
 	}
 
 	public PageInfo listPage(PageInfo pageInfo, Map<String, Object> paramMap, String sqlId) {

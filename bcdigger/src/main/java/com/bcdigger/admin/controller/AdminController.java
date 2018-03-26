@@ -6,8 +6,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -146,5 +148,31 @@ public class AdminController {
 		
 		return "/admin/admin_list";
 	}
-
+	
+	@RequestMapping(value ="/addAdmin",method= {RequestMethod.POST,RequestMethod.GET},produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public int addAdmin(Admin admin) {
+		
+		int result = 0;
+		if(StringUtils.isBlank(admin.getName())||StringUtils.isBlank(admin.getPassword()) )
+			return result;
+		else
+			admin.setPassword(MD5.getMD5Str(admin.getPassword()));
+		result = adminService.addAdmin(admin);
+		result =1;
+		return result;
+	}
+	
+	@RequestMapping(value ="/editAdmin",method= {RequestMethod.POST,RequestMethod.GET},produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public int editAdmin(Admin admin) {
+		
+		int result = 0;
+		if(admin.getId()==0||StringUtils.isBlank(admin.getName())||StringUtils.isBlank(admin.getPassword()) )
+			return result;
+		result = adminService.updateAdmin(admin);
+		result =1;
+		return result;
+	}
+	
 }

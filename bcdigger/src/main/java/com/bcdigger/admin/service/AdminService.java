@@ -10,4 +10,9 @@ public interface AdminService {
 	public Admin getAdmin(Admin admin);
 	
 	public PageInfo<Admin> getAdmins(String name,PageInfo pageInfo);
+	
+	public int addAdmin(Admin admin);
+	
+	public int updateAdmin(Admin admin);
+	
 }

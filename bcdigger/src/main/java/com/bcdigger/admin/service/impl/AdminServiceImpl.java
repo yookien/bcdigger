@@ -48,5 +48,18 @@ public class AdminServiceImpl implements AdminService {
 		//params.put("name", name);
 		return adminDao.listPage(pageInfo, params);
 	}
+	/**
+	 * 插入操作 用户
+	 */
+	public int addAdmin(Admin admin) {
+		return adminDao.insert(admin);
+	}
+	
+	/**
+	 * 更新操作 用户信息
+	 */
+	public int updateAdmin(Admin admin) {
+		return adminDao.update(admin);
+	}
 
 }

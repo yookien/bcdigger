@@ -15,7 +15,6 @@ public class Admin extends BaseEntity{
 	private String duty;
 	private String telephone;
 	private String mobile;
-	private String fox;
 	private String email;
 	private String address;
 	private Date addTime;
@@ -25,6 +24,8 @@ public class Admin extends BaseEntity{
 	private String openId;
 	private Date entryDate;// 入职日期
 	private int userLevel;
+	private int pwdErrorCount;
+	private Date pwdErrorTime;
 	
 	private String userPermissionStr;
 
@@ -100,12 +101,20 @@ public class Admin extends BaseEntity{
 		this.mobile = mobile;
 	}
 
-	public String getFox() {
-		return fox;
+	public int getPwdErrorCount() {
+		return pwdErrorCount;
 	}
 
-	public void setFox(String fox) {
-		this.fox = fox;
+	public void setPwdErrorCount(int pwdErrorCount) {
+		this.pwdErrorCount = pwdErrorCount;
+	}
+
+	public Date getPwdErrorTime() {
+		return pwdErrorTime;
+	}
+
+	public void setPwdErrorTime(Date pwdErrorTime) {
+		this.pwdErrorTime = pwdErrorTime;
 	}
 
 	public String getEmail() {

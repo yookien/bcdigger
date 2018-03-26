@@ -24,7 +24,7 @@ public interface BaseDao<T> {
 	 *            .
 	 * @return id .
 	 */
-	long insert(T entity);
+	int insert(T entity);
 
 	/**
 	 * 批量保存对象.
@@ -33,7 +33,7 @@ public interface BaseDao<T> {
 	 *            .
 	 * @return id .
 	 */
-	long insert(List<T> list);
+	int insert(List<T> list);
 
 	/**
 	 * 更新实体对应的记录.
@@ -42,7 +42,7 @@ public interface BaseDao<T> {
 	 *            .
 	 * @return
 	 */
-	long update(T entity);
+	int update(T entity);
 
 	/**
 	 * 批量更新对象.
@@ -51,7 +51,7 @@ public interface BaseDao<T> {
 	 *            .
 	 * @return int .
 	 */
-	long update(List<T> list);
+	int update(List<T> list);
 
 	/**
 	 * 根据ID查找记录.
@@ -69,7 +69,7 @@ public interface BaseDao<T> {
 	 *            .
 	 * @return
 	 */
-	long deleteById(int id);
+	int deleteById(int id);
 
 	/**
 	 * 分页查询 .

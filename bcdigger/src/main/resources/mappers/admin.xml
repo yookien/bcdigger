@@ -15,7 +15,6 @@
 		<result property="duty" column="duty" jdbcType="VARCHAR"/>
 		<result property="telephone" column="telephone" jdbcType="VARCHAR"/>
 		<result property="mobile" column="mobile" jdbcType="VARCHAR"/>
-		<result property="fox" column="fox" jdbcType="VARCHAR"/>
 		<result property="email" column="email" jdbcType="VARCHAR"/>
 		<result property="address" column="address" jdbcType="VARCHAR"/>
 		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
@@ -25,6 +24,8 @@
 		<result property="openId" column="open_id" jdbcType="VARCHAR"></result>
 		<result property="entryDate" column="entry_date" jdbcType="TIMESTAMP"></result>
 		<result property="userLevel" column="user_level" jdbcType="BIGINT"></result>
+		<result property="pwdErrorCount" column="pwd_error_count" jdbcType="BIGINT"></result>
+		<result property="pwdErrorTime" column="pwd_error_time" jdbcType="TIMESTAMP"></result>
 	</resultMap>
 
 	<sql id="condition_sql">
@@ -79,6 +80,18 @@
 		</if>
 		<if test="trxModel != null and trxModel != ''"> and TRX_MODEL = #{trxModel,jdbcType=SMALLINT}</if> -->
 	</sql>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Admin">
+		insert into
+		<include refid="table" />
+		(name, nickname,
+		password, sex,age,duty, mobile,
+		email,address,add_time,update_time,state)
+		values (#{name},#{nickname},#{password},#{sex},#{age},
+		#{duty},#{mobile},#{email},#{address},now(),now(),1
+		)
+	</insert>
+	
 	
 	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
 		select * from

@@ -110,13 +110,26 @@
             </div>  
             <div class="modal-footer">  
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>  
-                <button type="button" class="btn btn-primary">保存</button>  
+                <button type="button" onclick="addAdminInfo()" class="btn btn-primary">保存</button>  
             </div>  
         </div>  
     </div>  
 </div> 
 
 <script type="text/javascript">
+function addAdminInfo(){
+	$.ajax({
+        type: "post",
+        dataType: "html",
+        url: "/admin/addAdmin",
+        success: function (data) {
+            if (data == 1) {
+            	
+            	goto(request_url)
+            }
+        }
+    })
+}
 $(function(){
 	$('#adminForm').bootstrapValidator({
 		message: '输入值不符合要求',
