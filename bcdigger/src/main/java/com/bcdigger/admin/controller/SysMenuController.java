@@ -1,8 +1,11 @@
 package com.bcdigger.admin.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -54,7 +57,10 @@ public class SysMenuController {
 				map.put("result", -1);// 参数为空
 				return map;
 			}
-			
+			Date now=new Date();
+			sysMenu.setAddTime(now);
+			sysMenu.setUpdateTime(now);
+			sysMenu.setLevel(1);
 			sysMenuService.addSysMenu(sysMenu);
 			map.put("result", 1);//登录成功
 		}catch(Exception e){
@@ -115,8 +121,20 @@ public class SysMenuController {
 		}
 		return map;
 	}
-
 	
+	/**
+	 * @Description:打开菜单管理首页
+	 * @param request
+	 * @return
+	 * @return String
+	 * @author liubei
+	 * @date 2018年3月26日
+	 */
+	@RequestMapping(value ="/sysMenusIndex")
+	public String sysMenusIndex() {
+		return "/admin/menu_index";
+	}
+
 	/**
 	 * @Description: 分页查询菜单信息
 	 * @param pageNum
@@ -126,26 +144,21 @@ public class SysMenuController {
 	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/getSysMenus",method={RequestMethod.GET,RequestMethod.POST})
-	public String getSysMenus(SysMenu sysMenu, Integer pageNum,ModelMap map) {
+	public String getSysMenus(SysMenu sysMenu, PageInfo pageInfo,ModelMap map) {
 		try{
-			PageInfo pageInfo =new PageInfo();
-			//设置每页显示个数
-			pageInfo.setPageSize(20);
-			//设置显示哪一页
-			if(pageNum==null){
-				pageNum=1;
+			if(pageInfo==null){
+				pageInfo=new PageInfo();
 			}
-			pageInfo.setPageNum(pageNum);
+			//设置每页显示个数
+			pageInfo.setPageSize(10);
 			
 			PageInfo<SysMenu> sysMenuPages = sysMenuService.getSysMenus(sysMenu, pageInfo);
-			if(sysMenuPages!=null){
-				List<SysMenu> menuList=sysMenuPages.getList();
-				map.addAttribute("menuList", menuList);
-			}
+			map.addAttribute("pageInfo", sysMenuPages);
+			map.addAttribute("parentId", sysMenu.getParentId());// 传递参数，供新增菜单使用
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "admin/menu_list";
+		return "/admin/menu_list";
 	}
 
 }
