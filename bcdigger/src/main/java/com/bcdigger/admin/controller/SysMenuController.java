@@ -57,6 +57,10 @@ public class SysMenuController {
 				map.put("result", -1);// 参数为空
 				return map;
 			}
+			if(sysMenu.getMenuName()==null || "".equals(sysMenu.getMenuName().trim())){
+				map.put("result", -2);// 菜单名称不能为空
+				return map;
+			}
 			Date now=new Date();
 			sysMenu.setAddTime(now);
 			sysMenu.setUpdateTime(now);
@@ -79,11 +83,15 @@ public class SysMenuController {
 	 * @author liubei
 	 * @date 2018年3月25日
 	 */
-	@RequestMapping(value ="/getSysMenu/{id}",method=RequestMethod.GET)
-	public Map<String, Object> getSysMenu(@PathVariable int id) {
-		Map<String, Object> map = new HashMap<>();  
+	@RequestMapping(value ="/getSysMenu",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> getSysMenu(SysMenu sysMenu) {
+		Map<String, Object> map = new HashMap<>();
 		try{
-			SysMenu sysMenu = sysMenuService.getSysMenuById(id);
+			if( sysMenu==null || sysMenu.getId()<=0){
+				return null;
+			}
+			sysMenu = sysMenuService.getSysMenuById(sysMenu.getId());
 			map.put("result", 1);//登录成功
 			map.put("sysMenu", sysMenu);
 		}catch(Exception e){
