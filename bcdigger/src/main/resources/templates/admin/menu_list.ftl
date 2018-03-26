@@ -28,7 +28,7 @@
                   	<td><#if (menu.addTime)??>${menu.addTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
                   	<td><#if (menu.updateTime)??>${menu.updateTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
                   	<td>
-                  		<a href="#" name="editRoleBt" roleId="${(menu.id)!}" >编辑</a>
+                  		<a href="###" onclick="editSysMenus(${(menu.id)!0})" name="editRoleBt" data-toggle="modal" data-target="#myModal" roleId="${(menu.id)!}" >编辑</a>
 						<span style="margin:0 1px">|</span>
 						<a href="javascript:getSysMenus(${(menu.id)!});" name="viewRoleBt" roleId="${(menu.id)!}" >查看</a>
 				  	</td>

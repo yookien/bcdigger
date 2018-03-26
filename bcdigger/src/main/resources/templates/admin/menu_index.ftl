@@ -5,8 +5,12 @@
         <div class="clearfix"></div>
       </div>
       
+      <div style="float:left;margin:0px 50px;font-size:20px">
+      	<button type="button" class="btn btn-primary" onclick="getSysMenus(0)">返回主目录</button>
+      </div>
+      
       <div style="float:right;margin:0px 50px;font-size:20px">
-      	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">添加菜单</button>
+      	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="addSysMenusEvent()">添加菜单</button>
       </div>
 
 	  <div class="x_content" id="sysMenus_datas">
@@ -18,15 +22,15 @@
 
 
 <!-- 添加菜单 -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">  
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> 
     <div class="modal-dialog" role="document">  
         <div class="modal-content">  
             <div class="modal-header">  
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">  
                     <span aria-hidden="true"><i class="fa fa-times"></i></span>  
                 </button>  
-                <h4 class="modal-title" id="myModalLabel">添加系统菜单</h4>  
-            </div>  
+                <h4 class="modal-title" id="myModalLabel">添加系统菜单</h4>
+            </div>
             <div class="modal-body">  
                    <form class="form-horizontal form-label-left input_mask" id="addOrEditSysMenusForm">
 						<div class="form-group">
@@ -62,26 +66,31 @@
 						<div class="form-group">
 	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">子节点</label>
 	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="isLeaf" name="isLeaf" placeholder="是否有子节点">
+	                          <select class="select2_single form-control" tabindex="-1" id="isLeaf" name="isLeaf">
+	                            <option value="0">无</option>
+	                            <option value="1">有</option>
+	                          </select>
 	                      </div>
 	                    </div>
 						<div class="form-group">  
 	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">状态</label>
 	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="state" name="state" placeholder="状态">
+	                         <select class="select2_single form-control" tabindex="-1" id="state" name="state">
+	                        	<option value="1">正常</option>
+	                            <option value="0">停用</option>
+	                          </select>
 	                      </div>
                       </div>
-						
+					  <input type="hidden" name="id" id="menu_id" value="0"> 
                  </form>
-            </div>  
-            <div class="modal-footer">  
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>  
-                <button type="button" class="btn btn-primary" id="save_btn" onclick="addSysMenus();">保存</button>  
-            </div>  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close_btn">关闭</button>  
+                <button type="button" class="btn btn-primary" id="save_btn">保存</button>
+            </div>
         </div>  
     </div>  
-</div> 
-
+</div>
 
 <script type="text/javascript">
 // ajax分页参数，待优化
@@ -113,6 +122,18 @@ function getSysMenus(parentId){
 	})
 }
 
+
+
+// 打开新增菜单页面
+function addSysMenusEvent(){
+	// 重设form
+	document.getElementById("addOrEditSysMenusForm").reset();
+	$("#save_btn").unbind();
+	$("#save_btn").click(function(){
+	  	addSysMenus();
+	});
+}
+
 // 添加系统菜单
 function addSysMenus(){
 	$("#addOrEditSysMenusForm").bootstrapValidator('validate');//提交验证  
@@ -128,7 +149,84 @@ function addSysMenus(){
 			success:function (json) {
 				if(json.result==1){
 					getSysMenus(parentId);
-					$(".close").click();
+					$("#close_btn").click();
+				}else{
+					alert(json.result);
+				}
+			}
+		})
+    } 
+}
+
+
+// 打开编辑菜单页面
+function editSysMenus(id){
+	// 重设form
+	document.getElementById("addOrEditSysMenusForm").reset();
+	if(isNaN(id) || id<=0){
+		return;
+	}
+	var pars='id='+id;
+	$.ajax({
+		url: '/admin/getSysMenu',
+		type:'POST',
+		data: pars,
+		dataType:'json',
+		success:function (json) {
+			if(json.result==1){
+				var sysMenu=json.sysMenu;
+				if(sysMenu==undefined){
+					return;
+				}
+				if(sysMenu.menuName!=null && sysMenu.menuName!=undefined){
+					$('#menuName').val(sysMenu.menuName);
+				}
+				if(sysMenu.menuLogoUrl!=null && sysMenu.menuLogoUrl!=undefined){
+					$('#menuLogoUrl').val(sysMenu.menuLogoUrl);
+				}
+				if(sysMenu.menuUrl!=null && sysMenu.menuUrl!=undefined){
+					$('#menuUrl').val(sysMenu.menuUrl);
+				}
+				if(sysMenu.menuDesc!=null && sysMenu.menuDesc!=undefined){
+					$('#menuDesc').val(sysMenu.menuDesc);
+				}
+				if(!isNaN(sysMenu.displayOrder)){
+					$('#displayOrder').val(sysMenu.displayOrder);
+				}
+				if(!isNaN(sysMenu.isLeaf)){
+					$("#isLeaf").find("option[value="+sysMenu.isLeaf+"]").attr("selected",true);
+				}
+				if(!isNaN(sysMenu.state)){
+					$("#state").find("option[value="+sysMenu.state+"]").attr("selected",true);
+				}
+				if(!isNaN(sysMenu.id)){
+					$('#menu_id').val(sysMenu.id);
+				}
+				
+				$("#save_btn").unbind();
+				$("#save_btn").click(function(){
+				  	updateSysMenus();
+				});
+			}
+		}
+	})
+}
+
+// 添加系统菜单
+function updateSysMenus(){
+	$("#addOrEditSysMenusForm").bootstrapValidator('validate');//提交验证  
+    if ($("#addOrEditSysMenusForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
+        var pars=$("#addOrEditSysMenusForm").serialize();
+		$.ajax({
+			url: '/admin/updateMenu',
+			type:'POST',
+			data: pars,
+			dataType:'JSON',
+			success:function (json) {
+				if(json.result==1){
+					var parentId=$('#parentId').val();
+					getSysMenus(parentId);
+					$("#close_btn").click();
 				}else{
 					alert(json.result);
 				}
