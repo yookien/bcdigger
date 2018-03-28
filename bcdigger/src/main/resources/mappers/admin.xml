@@ -33,11 +33,17 @@
 		<if test="id != null">
 			and id = #{id,jdbcType=BIGINT}
 		</if>
-		<if test="name != null and name !=''">
+		<if test="name != null and name !='' and like == 1 ">
+			and name like concat('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="name != null and name !='' and like == null">
 			and name = #{name,jdbcType=VARCHAR}
 		</if>
 		<if test="nickname != null and nickname !=''">
 			and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="startTime != null and endTime != null and endTime !='' and startTime != ''">
+			and add_time between CONCAT(#{startTime},' 00:00:00') AND CONCAT(#{endTime},' 23:59:59')
 		</if>
 	
 		<!--<if test="beginDate != null and endDate != null and endDate !='' and beginDate != ''">

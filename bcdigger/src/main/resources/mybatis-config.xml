@@ -38,6 +38,7 @@
         
         <typeAlias alias="sysMenu" type="com.bcdigger.admin.entity.SysMenu" />
         <typeAlias alias="sdminRole" type="com.bcdigger.admin.entity.AdminRole" />
+        <typeAlias alias="admin" type="com.bcdigger.admin.entity.Admin" />
         
     </typeAliases>  
 </configuration>

@@ -48,6 +48,20 @@ public class AdminServiceImpl implements AdminService {
 		//params.put("name", name);
 		return adminDao.listPage(pageInfo, params);
 	}
+	
+	@Override
+	public PageInfo<Admin> getAdmins(Admin admin, PageInfo pageInfo) {
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("name", admin.getName());
+		params.put("startTime", admin.getStartTime());
+		params.put("endTime", admin.getEndTime());
+		if(StringUtils.isBlank(admin.getName()))
+			params.put("like", 0);
+		else 
+			params.put("like", 1);
+		return adminDao.listPage(pageInfo, params);
+	}
 	/**
 	 * 插入操作 用户
 	 */

@@ -19,6 +19,8 @@
     <!-- Custom Theme Style -->
     <link href="/css/custom.min.css" rel="stylesheet">
     
+    <!-- bootstrap-daterangepicker -->
+    <link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- bootstrap-progressbar -->
@@ -108,6 +110,9 @@
     <script src="/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
     <script src="/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
     <script src="/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/vendors/moment/min/moment.min.js"></script>
+    <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- DateJS -->
     <script src="/vendors/DateJS/build/date.js"></script>
     <!-- JQVMap -->

@@ -17,10 +17,14 @@
 					}//默认显示的是第一页。
 				},
 				onPageClicked: function (event, originalEvent, type, page){//给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字。
+					if(ajax_pars=='')
+						temp_pars = 'pageNum='+page;
+					else
+						temp_pars = ajax_pars+'&pageNum='+page;
 					$.ajax({
 						url: ajax_request_url,
 						type:'POST',
-						data: ajax_pars+'pageNum='+page,
+						data: temp_pars,
 						dataType:'html',
 						success:function (data) {
 							if (data != "") {

@@ -11,6 +11,8 @@ public interface AdminService {
 	
 	public PageInfo<Admin> getAdmins(String name,PageInfo pageInfo);
 	
+	public PageInfo<Admin> getAdmins(Admin admin,PageInfo pageInfo);
+	
 	public int addAdmin(Admin admin);
 	
 	public int updateAdmin(Admin admin);

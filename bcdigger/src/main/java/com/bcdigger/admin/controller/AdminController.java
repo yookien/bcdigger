@@ -1,5 +1,6 @@
 package com.bcdigger.admin.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,7 +102,7 @@ public class AdminController {
 	
 	@RequestMapping(value ="/index")
 	@AdminAuth
-	public String adminIndex(HttpServletRequest request) {
+	public String index(HttpServletRequest request) {
 		return "index";
 	}
 	
@@ -123,24 +123,43 @@ public class AdminController {
 		return "login";
 	}
 	
-	@RequestMapping(value ="/getAdmin/{id}",method=RequestMethod.GET)
+	@RequestMapping(value ="/getAdmin",method=RequestMethod.POST)
+	@ResponseBody
 	@AdminAuth
-	public String getAdmin(@PathVariable int id) {
+	public Map getAdmin(Admin admin) {
 		
-		System.out.println("aaaa"+ id);
-		Admin admin = adminService.getAdmin(id);
-		RedisUtils.save("admin", admin);
-		Admin admin01 = (Admin)RedisUtils.get("admin");
-		System.out.println("bbbb"+ admin.getNickname());
-		return "login";
+		Map<String, Object> map = new HashMap<>();
+		try{
+			if( admin==null || admin.getId()<=0){
+				return null;
+			}
+			admin = adminService.getAdmin(admin.getId());
+			map.put("result", 1);//登录成功
+			map.put("admin", admin);
+		}catch(Exception e){
+			map.put("result", 0);//系统异常
+			e.printStackTrace();
+		}
+		return map;
+		
+		//RedisUtils.save("admin", admin);
+		//Admin admin01 = (Admin)RedisUtils.get("admin");
+		
+		
+	}
+	
+	@RequestMapping(value ="/adminIndex")
+	public String adminIndex() {
+		return "/admin/admin_index";
 	}
 	
 	@RequestMapping(value ="/getAdmins",method= {RequestMethod.POST,RequestMethod.GET})
-	public String getAdminsByName(PageInfo pageInfo) {
+	public String getAdmins(PageInfo pageInfo,Admin admin) {
 		
 		if(pageInfo == null)
 			pageInfo =new PageInfo<Admin>();
-		pageInfo = adminService.getAdmins("", pageInfo);
+		
+		pageInfo = adminService.getAdmins(admin, pageInfo);
 		
 		//RedisUtils.save("admin", adminService.getAdmin(1));
 		//Admin temp = (Admin)RedisUtils.get("admin");
@@ -151,28 +170,49 @@ public class AdminController {
 	
 	@RequestMapping(value ="/addAdmin",method= {RequestMethod.POST,RequestMethod.GET},produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public int addAdmin(Admin admin) {
+	public Map addAdmin(Admin admin) {
+		Map<String, Object> map = new HashMap<>();  
+
+		if(admin==null){
+			map.put("result", -1);// 参数为空
+			return map;
+		}
+		if(StringUtils.isBlank(admin.getName())||StringUtils.isBlank(admin.getPassword()) ){
+			map.put("result", -2);// 名称和密码不能为空
+			return map;
+		}
+		admin.setPassword(MD5.getMD5Str(admin.getPassword()));
+		Date now=new Date();
+		admin.setAddTime(now);
+		admin.setUpdateTime(now);
+		adminService.addAdmin(admin);
+		map.put("result", 1);//登录成功
 		
-		int result = 0;
-		if(StringUtils.isBlank(admin.getName())||StringUtils.isBlank(admin.getPassword()) )
-			return result;
-		else
-			admin.setPassword(MD5.getMD5Str(admin.getPassword()));
-		result = adminService.addAdmin(admin);
-		result =1;
-		return result;
+		return map;
+		
 	}
 	
 	@RequestMapping(value ="/editAdmin",method= {RequestMethod.POST,RequestMethod.GET},produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public int editAdmin(Admin admin) {
+	public Map editAdmin(Admin admin) {
 		
-		int result = 0;
-		if(admin.getId()==0||StringUtils.isBlank(admin.getName())||StringUtils.isBlank(admin.getPassword()) )
-			return result;
-		result = adminService.updateAdmin(admin);
-		result =1;
-		return result;
+		Map<String, Object> map = new HashMap<>();  
+		
+		
+		if(admin==null){
+			map.put("result", -1);// 参数为空
+			return map;
+		}
+		if(admin.getId()==0||StringUtils.isBlank(admin.getName())) {
+			map.put("result", -2);// 名称不能为空
+			return map;
+		}
+		
+		adminService.updateAdmin(admin);
+		map.put("result", 1);//更新成功
+		
+		return map;
+		
 	}
 	
 }
