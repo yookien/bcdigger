@@ -9,7 +9,7 @@ import com.bcdigger.common.entity.BaseEntity;
  * ClassName: AdminRole
  * 
  * @Description: 用户角色
- * @author liubei
+ * @author ipui
  * @date 2018年3月25日
  */
 public class AdminRole extends BaseEntity {

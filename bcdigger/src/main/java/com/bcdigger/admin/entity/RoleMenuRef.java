@@ -10,7 +10,7 @@ import com.bcdigger.common.entity.BaseEntity;
  * ClassName: RoleMenuRef
  * 
  * @Description: 角色权限分配
- * @author liubei
+ * @author ipui
  * @date 2018年3月25日
  */
 public class RoleMenuRef extends BaseEntity {
@@ -60,6 +60,18 @@ public class RoleMenuRef extends BaseEntity {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+	
+	public String getMenuJson(){
+		StringBuffer str=new StringBuffer("({funcs:[{menudm:'0'}");
+		if(menuIds != null && menuIds.split(",").length>0){
+			String[] arr=menuIds.split(",");
+			for (String s : arr) {
+				str.append(",{menudm:'"+s+"'}");
+			}
+			str.append("]})");
+		}
+		return str.toString();
 	}
 
 }

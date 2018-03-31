@@ -1,5 +1,7 @@
 package com.bcdigger.admin.service;
 
+import java.util.List;
+
 import com.bcdigger.admin.entity.AdminRole;
 import com.bcdigger.admin.entity.SysMenu;
 import com.bcdigger.common.page.PageInfo;
@@ -19,7 +21,7 @@ public interface AdminRoleService {
 	 * @Description: 修改角色
 	 * @param role void  
 	 * @throws
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月26日
 	 */
 	public void updateAdminRole(AdminRole role);
@@ -45,4 +47,15 @@ public interface AdminRoleService {
 	 * @dateTime 2018年3月25日 下午2:37:23
 	 */
 	public PageInfo<AdminRole> getAdminRoles(AdminRole role,PageInfo pageInfo);
+	
+	/**
+	 * 
+	 * @Description: 查询角色列表
+	 * @param role
+	 * @return List<AdminRole>  
+	 * @throws
+	 * @author ipui
+	 * @date 2018年3月31日
+	 */
+	public List<AdminRole> getAdminRoleList(AdminRole role);
 }

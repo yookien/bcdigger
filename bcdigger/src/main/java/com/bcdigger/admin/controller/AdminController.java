@@ -113,7 +113,7 @@ public class AdminController {
 	 * @param request
 	 * @return String  
 	 * @throws
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月25日 上午1:44:45
 	 */
 	@RequestMapping(value ="/logout")

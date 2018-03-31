@@ -1,6 +1,7 @@
 package com.bcdigger.admin.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,21 @@ public class AdminRoleServiceImpl implements AdminRoleService {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public PageInfo<AdminRole> getAdminRoles(AdminRole role, PageInfo pageInfo) {
 		try{
 			Map<String, Object> params = new HashMap<String, Object>();
 			return adminRoleDao.listPage(pageInfo, params);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<AdminRole> getAdminRoleList(AdminRole role){
+		try{
+			return (List<AdminRole>)adminRoleDao.findAdminRoleList(role);
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;

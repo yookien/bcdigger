@@ -82,7 +82,7 @@ public class AdminRoleController {
 	public Map<String, Object> getAdminRole(AdminRole adminRole) {
 		Map<String, Object> map = new HashMap<>();
 		try{
-			if( adminRole==null || adminRole.getId()<=0){
+			if(adminRole==null || adminRole.getId()<=0){
 				return null;
 			}
 			adminRole = adminRoleService.getRoleById(adminRole.getId());
@@ -100,7 +100,7 @@ public class AdminRoleController {
 	 * @param adminRole
 	 * @return Map<String,Object>  
 	 * @throws
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月26日
 	 */
 	@RequestMapping(value ="/updateAdminRole",method=RequestMethod.POST)
@@ -129,7 +129,7 @@ public class AdminRoleController {
 	 * @param request
 	 * @return
 	 * @return String
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月26日
 	 */
 	@RequestMapping(value ="/adminRoleIndex")

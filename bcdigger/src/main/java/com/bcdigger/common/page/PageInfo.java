@@ -1,13 +1,9 @@
 package com.bcdigger.common.page;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.github.pagehelper.Page;
-
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class PageInfo<T> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

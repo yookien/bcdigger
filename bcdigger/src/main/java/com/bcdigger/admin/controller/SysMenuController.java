@@ -26,7 +26,7 @@ import com.bcdigger.core.annotation.AdminAuth;
  * 
  * ClassName: SysMenuController
  * @Description: 菜单管理
- * @author liubei
+ * @author ipui
  * @date 2018年3月25日
  */
 @Controller	
@@ -44,7 +44,7 @@ public class SysMenuController {
 	 * @param sysMenu
 	 * @return Map<String,Object>  
 	 * @throws
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/addMenu",method=RequestMethod.POST)
@@ -80,7 +80,7 @@ public class SysMenuController {
 	 * @param id
 	 * @return Map<String,Object>  
 	 * @throws
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/getSysMenu",method={RequestMethod.GET,RequestMethod.POST})
@@ -107,7 +107,7 @@ public class SysMenuController {
 	 * @param sysMenu
 	 * @return Map<String,Object>  
 	 * @throws
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/updateMenu",method=RequestMethod.POST)
@@ -136,7 +136,7 @@ public class SysMenuController {
 	 * @param request
 	 * @return
 	 * @return String
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月26日
 	 */
 	@RequestMapping(value ="/sysMenusIndex")
@@ -149,7 +149,7 @@ public class SysMenuController {
 	 * @param pageNum
 	 * @return Map<String,Object>  
 	 * @throws
-	 * @author liubei
+	 * @author ipui
 	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/getSysMenus",method={RequestMethod.GET,RequestMethod.POST})

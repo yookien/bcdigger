@@ -7,7 +7,7 @@ import com.bcdigger.common.entity.BaseEntity;
  * 
  * ClassName: AdminRoleRef
  * @Description: 用户角色分配
- * @author liubei
+ * @author ipui
  * @date 2018年3月25日
  */
 public class AdminRoleRef extends BaseEntity {

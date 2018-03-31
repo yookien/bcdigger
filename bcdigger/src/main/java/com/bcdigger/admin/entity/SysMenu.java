@@ -9,7 +9,7 @@ import com.bcdigger.common.entity.BaseEntity;
  * ClassName: SysMenu
  * 
  * @Description: 系统菜单
- * @author liubei
+ * @author ipui
  * @date 2018年3月25日
  */
 public class SysMenu extends BaseEntity {

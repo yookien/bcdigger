@@ -33,4 +33,9 @@ public class SysMenuDao extends BaseDaoImpl<SysMenu>{
 		return pageInfo;
 	}
 	
+	
+	public List<SysMenu> findSysMenuList(SysMenu sysMenu) {
+		return sqlSession.selectList("findSysMenuList", sysMenu);
+	}
+	
 }

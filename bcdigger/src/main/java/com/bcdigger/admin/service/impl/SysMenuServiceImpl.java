@@ -1,6 +1,7 @@
 package com.bcdigger.admin.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import com.bcdigger.common.page.PageInfo;
  * 
  * ClassName: SysMenuServiceImpl
  * @Description: 菜单service
- * @author liubei
+ * @author ipui
  * @date 2018年3月25日
  */
 @Service("sysMenuService")
@@ -62,6 +63,15 @@ public class SysMenuServiceImpl implements SysMenuService {
 			}
 			//return sysMenuDao.listPage(pageInfo, params);
 			return sysMenuDao.findSysMenus(pageInfo, sysMenu);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<SysMenu> getSysMenuList(SysMenu sysMenu){
+		try{
+			return sysMenuDao.findSysMenuList(sysMenu);
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
