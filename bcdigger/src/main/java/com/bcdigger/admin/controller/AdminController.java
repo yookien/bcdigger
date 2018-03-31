@@ -164,11 +164,11 @@ public class AdminController {
 		
 		
 	
-		File file = new File("D:\\git_repository\\bcdigger\\src\\main\\resources\\static\\images\\img.jpg");
+		/*File file = new File("D:\\git_repository\\bcdigger\\src\\main\\resources\\static\\images\\20140104_210153.jpg");
 		String filePath = FastDFSClient.uploadFile(file);
-		String path = FastDFSClient.uploadImageAndCrtThumbImage("D:\\git_repository\\bcdigger\\src\\main\\resources\\static\\images\\img.jpg");
+		String path = FastDFSClient.uploadImageAndCrtThumbImage("D:\\git_repository\\bcdigger\\src\\main\\resources\\static\\images\\20140104_210153.jpg");
 		System.out.println("filePath:"+filePath);
-		System.out.println("uploadImageAndCrtThumbImage:"+path);
+		System.out.println("uploadImageAndCrtThumbImage:"+path);*/
 		
 		//RedisUtils.save("admin", adminService.getAdmin(1));
 		//Admin temp = (Admin)RedisUtils.get("admin");
