@@ -63,24 +63,37 @@
                           		<input type="text" class="form-control" id='displayOrder' name='displayOrder' placeholder="显示顺序">
                         	</div>
                         </div>
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">子节点</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                          <select class="select2_single form-control" tabindex="-1" id="isLeaf" name="isLeaf">
-	                            <option value="0">无</option>
-	                            <option value="1">有</option>
-	                          </select>
-	                      </div>
-	                    </div>
-						<div class="form-group">  
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">状态</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                         <select class="select2_single form-control" tabindex="-1" id="state" name="state">
-	                        	<option value="1">正常</option>
-	                            <option value="0">停用</option>
-	                          </select>
-	                      </div>
-                      </div>
+                        
+                        <div class="form-group">
+	                        <div  class="form-group has-feedback col-md-6 col-sm-6 col-xs-12">
+		                        <label class="control-label col-md-4 col-sm-4 col-xs-8">子节点</label>
+		                        <input id="isLeaf" name="isLeaf" type="hidden">
+		                        <div class="col-md-8 col-sm-8 col-xs-12">
+		                          <div class="btn-group" data-toggle="buttons" id='isLeaf_div'>
+		                            <label onclick="clickRadioBtn(this)" targetId="isLeaf" class="btn btn-default" >
+		                              <input  type="radio"  value="1" data-parsley-multiple="isLeaf"> &nbsp; 有 &nbsp;
+		                            </label>
+		                            <label onclick="clickRadioBtn(this)" targetId="isLeaf" class="btn btn-primary " >
+		                              <input  type="radio"  value="0" data-parsley-multiple="isLeaf"> 无
+		                            </label>
+		                          </div>
+		                        </div>
+		                    </div>
+		                    <div class="form-group has-feedback col-md-6 col-sm-6 col-xs-12" >
+		                        <label class="control-label col-md-4 col-sm-4 col-xs-8">状态</label>
+		                        <input id="state" name="state" type="hidden">
+		                        <div class="col-md-8 col-sm-8 col-xs-12">
+		                          <div class="btn-group" data-toggle="buttons">
+		                            <label name="state_label" onclick="clickRadioBtn(this)" targetId="state" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+		                              <input  type="radio"  value="1" data-parsley-multiple="state"> &nbsp; 有效 &nbsp;
+		                            </label>
+		                            <label name="state_label" onclick="clickRadioBtn(this)" targetId="state" class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+		                              <input  type="radio"  value="0" data-parsley-multiple="state"> 无效
+		                            </label>
+		                          </div>
+		                        </div>
+	                        </div>
+                        </div>
 					  <input type="hidden" name="id" id="menu_id" value="0"> 
                  </form>
             </div>
@@ -195,12 +208,33 @@ function editSysMenus(id){
 				if(!isNaN(sysMenu.displayOrder)){
 					$('#displayOrder').val(sysMenu.displayOrder);
 				}
-				if(!isNaN(sysMenu.isLeaf)){
+				/**if(!isNaN(sysMenu.isLeaf)){
 					$("#isLeaf").find("option[value="+sysMenu.isLeaf+"]").attr("selected",true);
 				}
 				if(!isNaN(sysMenu.state)){
 					$("#state").find("option[value="+sysMenu.state+"]").attr("selected",true);
+				}*/
+				if(!isNaN(sysMenu.isLeaf)){
+					$("[targetId='isLeaf']").each(function(){
+						if($(this).find("[type='radio']").attr('value')==sysMenu.isLeaf){
+							$(this).attr("class","btn btn-primary");
+						}else{
+							$(this).attr("class","btn btn-default");
+						}
+				    })
+					$("#isLeaf").val(sysMenu.isLeaf);
 				}
+				if(!isNaN(sysMenu.state)){
+					$("[targetId='state']").each(function(){
+						if($(this).find("[type='radio']").attr('value')==sysMenu.state){
+							$(this).attr("class","btn btn-primary");
+						}else{
+							$(this).attr("class","btn btn-default");
+						}
+				    })
+					$("#state").val(sysMenu.state);
+				}
+				
 				if(!isNaN(sysMenu.id)){
 					$('#menu_id').val(sysMenu.id);
 				}

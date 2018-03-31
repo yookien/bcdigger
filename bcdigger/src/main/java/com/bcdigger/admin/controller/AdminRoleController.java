@@ -113,6 +113,8 @@ public class AdminRoleController {
 				map.put("result", -1);// 参数为空
 				return map;
 			}
+			Date now=new Date();
+			adminRole.setUpdateTime(now);
 			adminRoleService.updateAdminRole(adminRole);
 			map.put("result", 1);//更新成功
 		}catch(Exception e){

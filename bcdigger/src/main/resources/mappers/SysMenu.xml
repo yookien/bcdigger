@@ -81,7 +81,7 @@
 			<if test="menuLogoUrl != null">menu_logo_url=#{menuLogoUrl},</if>
 			<if test="menuDesc != null  ">menu_desc=#{menuDesc},</if>
 			<if test="parentId != null  ">parent_id=#{parentId},</if>
-			<if test="isLeaf != null and isLeaf > 0 ">is_leaf=#{isLeaf},</if>
+			<if test="isLeaf != null and isLeaf > -1 ">is_leaf=#{isLeaf},</if>
 			<if test="level !=null and level > 0">level=#{level},</if>
 			<if test="displayOrder != null and displayOrder > 0">display_order=#{displayOrder},</if>
 			<if test="state!=null and state > -1 ">STATE=#{state},</if>
