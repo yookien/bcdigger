@@ -176,7 +176,7 @@ function clickSexBtn(btn){
 } 
 
 // 分页查询管理员信息
-function getAdmins(){
+function getAdmins(type){
 	ajax_request_url='/admin/getAdmins';
 	var startTime='';
 	var endTime='';
@@ -185,7 +185,10 @@ function getAdmins(){
 		$('#start_time').val(rangeDate.split(" - ")[0]);
 		$('#end_time').val(rangeDate.split(" - ")[1]);
 	}
-	ajax_pars=$("#searchForm").serialize(); 
+	ajax_pars=$("#searchForm").serialize();
+	if(type==1){
+		ajax_pars ="";
+	}
 	//ajax_pars='name='+$('#search_name').val() + '&startTime='+startTime+'&endTime='+endTime;
 	//alert(ajax_pars);
 	$.ajax({
@@ -312,7 +315,7 @@ function editAdmin(id){
 
 // 添加系统操作员
 function updateAdmin(){
-	$("#addOrEdiAdminForm").bootstrapValidator('validate');//提交验证  
+	$("#addOrEditAdminForm").bootstrapValidator('validate');//提交验证  
     if ($("#addOrEditAdminForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
         var pars=$("#addOrEditAdminForm").serialize();
     alert(pars);
@@ -323,8 +326,8 @@ function updateAdmin(){
 			dataType:'JSON',
 			success:function (json) {
 				if(json.result==1){
-					var adminId=$('#adminId').val();
-					getAdmin(adminId);
+					//var adminId=$('#admin_id').val();
+					getAdmins(1);
 					$("#close_btn").click();
 				}else{
 					alert(json.result);

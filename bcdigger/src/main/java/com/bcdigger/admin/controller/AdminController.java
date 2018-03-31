@@ -1,5 +1,7 @@
 package com.bcdigger.admin.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +23,7 @@ import com.bcdigger.admin.entity.Admin;
 import com.bcdigger.admin.service.AdminService;
 import com.bcdigger.common.constant.CacheConstant;
 import com.bcdigger.common.page.PageInfo;
-import com.bcdigger.common.utils.cache.redis.RedisUtils;
+import com.bcdigger.common.utils.file.FastDFSClient;
 import com.bcdigger.common.utils.rsa.MD5;
 import com.bcdigger.core.annotation.AdminAuth;
 
@@ -161,6 +162,14 @@ public class AdminController {
 		
 		pageInfo = adminService.getAdmins(admin, pageInfo);
 		
+		
+	
+		File file = new File("D:\\git_repository\\bcdigger\\src\\main\\resources\\static\\images\\img.jpg");
+		String filePath = FastDFSClient.uploadFile(file);
+		String path = FastDFSClient.uploadImageAndCrtThumbImage("D:\\git_repository\\bcdigger\\src\\main\\resources\\static\\images\\img.jpg");
+		System.out.println("filePath:"+filePath);
+		System.out.println("uploadImageAndCrtThumbImage:"+path);
+		
 		//RedisUtils.save("admin", adminService.getAdmin(1));
 		//Admin temp = (Admin)RedisUtils.get("admin");
 		//System.out.println("admin:"+ temp.getName());
@@ -209,6 +218,29 @@ public class AdminController {
 		}
 		
 		adminService.updateAdmin(admin);
+		map.put("result", 1);//更新成功
+		
+		return map;
+		
+	}
+	
+	@RequestMapping(value ="/updateAdminPassword",method= {RequestMethod.POST,RequestMethod.GET},produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Map updateAdminPassword(Admin admin) {
+		
+		Map<String, Object> map = new HashMap<>();  
+		
+		
+		if(admin==null){
+			map.put("result", -1);// 参数为空
+			return map;
+		}
+		if(admin.getId()==0||StringUtils.isBlank(admin.getPassword())) {
+			map.put("result", -2);// 名称不能为空
+			return map;
+		}
+		
+		adminService.updateAdminPassword(admin);
 		map.put("result", 1);//更新成功
 		
 		return map;

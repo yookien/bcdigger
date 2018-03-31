@@ -3,11 +3,26 @@ package com.bcdigger.common.utils.file;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.github.tobato.fastdfs.domain.MateData;
+import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 /*import org.csource.common.NameValuePair;
 import org.csource.fastdfs.ClientGlobal;
 import org.csource.fastdfs.StorageClient1;
@@ -21,148 +36,118 @@ import org.csource.fastdfs.TrackerServer;
  * @author yookien .
  * 
  */
-public class FastDFSClient {
-
-	/*private static final String CONF_FILENAME = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "fastdfs/fdfs_client.conf";
-
-	private static StorageClient1 storageClient = null;
-
+@Component
+public class FastDFSClient  {
+	
 	private static Logger logger = Logger.getLogger(FastDFSClient.class);
-
-	*//**
-	 * 只加载一次.
-	 *//*
-	static {
+	
+	private static String FDFSWebRoot;
+	private static FastFileStorageClient storageClient;
+	
+	@Value("${fdfs.webRoot}")//系统属性配置
+	private String FDFSWebRoot1;
+	
+	@Autowired
+	private FastFileStorageClient storageClient1;
+	@PostConstruct
+    public void beforeInit() {
+		storageClient = storageClient1;
+		FDFSWebRoot = FDFSWebRoot1;
+    }
+	
+	/**
+     * 上传文件
+     * @param file 文件对象
+     * @return 文件访问地址
+     * @throws IOException
+     */
+    public static String uploadFile(MultipartFile file) throws IOException {
+        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
+        return getResAccessUrl(storePath);
+    }
+    
+	/**
+     * 上传文件
+     * @param filePath 文件路径
+     * @return 文件访问地址
+     * @throws IOException
+     */
+    public static String uploadFile(String filePath)  {
+    	if(StringUtils.isBlank(filePath)){  
+            throw new NullPointerException();  
+        }
+    	File file = new File(filePath);
+        return uploadFile(file);
+    }
+    
+    
+    /**
+     * 上传文件
+     * @param file 文件对象
+     * @return 文件访问地址
+     * @throws IOException
+     */
+    public static String uploadFile(File file){
+    	
 		try {
-			logger.info("=== CONF_FILENAME:" + CONF_FILENAME);
-			ClientGlobal.init(CONF_FILENAME);
-			TrackerClient trackerClient = new TrackerClient(ClientGlobal.g_tracker_group);
-			TrackerServer trackerServer = trackerClient.getConnection();
-			if (trackerServer == null) {
-				logger.error("getConnection return null");
-			}
-			StorageServer storageServer = trackerClient.getStoreStorage(trackerServer);
-			if (storageServer == null) {
-				logger.error("getStoreStorage return null");
-			}
-			storageClient = new StorageClient1(trackerServer, storageServer);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
-
-	*//**
-	 * 
-	 * @param file
-	 *            文件
-	 * @param fileName
-	 *            文件名
-	 * @return 返回Null则为失败
-	 *//*
-	public static String uploadFile(File file, String fileName) {
-		FileInputStream fis = null;
-		try {
-			NameValuePair[] meta_list = null; // new NameValuePair[0];
-			fis = new FileInputStream(file);
-			byte[] file_buff = null;
-			if (fis != null) {
-				int len = fis.available();
-				file_buff = new byte[len];
-				fis.read(file_buff);
-			}
-
-			String fileid = storageClient.upload_file1(file_buff, getFileExt(fileName), meta_list);
-			return fileid;
-		} catch (Exception ex) {
-			logger.error(ex);
-			return null;
-		}finally{
-			if (fis != null){
-				try {
-					fis.close();
-				} catch (IOException e) {
-					logger.error(e);
-				}
-			}
-		}
-	}
-
-	*//**
-	 * 根据组名和远程文件名来删除一个文件
-	 * 
-	 * @param groupName
-	 *            例如 "group1" 如果不指定该值，默认为group1
-	 * @param fileName
-	 *            例如"M00/00/00/wKgxgk5HbLvfP86RAAAAChd9X1Y736.jpg"
-	 * @return 0为成功，非0为失败，具体为错误代码
-	 *//*
-	public static int deleteFile(String groupName, String fileName) {
-		try {
-			int result = storageClient.delete_file(groupName == null ? "group1" : groupName, fileName);
-			return result;
-		} catch (Exception ex) {
-			logger.error(ex);
-			return 0;
-		}
-	}
-
-	*//**
-	 * 根据fileId来删除一个文件（我们现在用的就是这样的方式，上传文件时直接将fileId保存在了数据库中）
-	 * 
-	 * @param fileId
-	 *            file_id源码中的解释file_id the file id(including group name and filename);例如 group1/M00/00/00/ooYBAFM6MpmAHM91AAAEgdpiRC0012.xml
-	 * @return 0为成功，非0为失败，具体为错误代码
-	 *//*
-	public static int deleteFile(String fileId) {
-		try {
-			int result = storageClient.delete_file1(fileId);
-			return result;
-		} catch (Exception ex) {
-			logger.error(ex);
-			return 0;
-		}
-	}
-
-	*//**
-	 * 修改一个已经存在的文件
-	 * 
-	 * @param oldFileId
-	 *            原来旧文件的fileId, file_id源码中的解释file_id the file id(including group name and filename);例如 group1/M00/00/00/ooYBAFM6MpmAHM91AAAEgdpiRC0012.xml
-	 * @param file
-	 *            新文件
-	 * @param filePath
-	 *            新文件路径
-	 * @return 返回空则为失败
-	 *//*
-	public static String modifyFile(String oldFileId, File file, String filePath) {
-		String fileid = null;
-		try {
-			// 先上传
-			fileid = uploadFile(file, filePath);
-			if (fileid == null) {
-				return null;
-			}
-			// 再删除
-			int delResult = deleteFile(oldFileId);
-			if (delResult != 0) {
-				return null;
-			}
-		} catch (Exception ex) {
-			logger.error(ex);
+			FileInputStream inputStream = new FileInputStream(file);
+			String fileName=file.getName();  
+	         //获取文件后缀名  
+	         String strs= FilenameUtils.getExtension(fileName);
+	         if(StringUtils.isBlank(strs)){  
+	             throw new NullPointerException();  
+	         }  
+	         //StorePath storePath = storageClient.uploadImageAndCrtThumbImage(inputStream,file.length(),strs,null);  
+	         StorePath storePath = storageClient.uploadFile(inputStream,file.length(),strs,null);
+	         return getResAccessUrl(storePath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			return null;
 		}
-		return fileid;
-	}
+        
+    }
 
-	*//**
-	 * 文件下载
-	 * 
-	 * @param fileId
-	 * @return 返回一个流
-	 *//*
-	public static InputStream downloadFile(String fileId) {
+    /**
+     * 将一段字符串生成一个文件上传
+     * @param content 文件内容
+     * @param fileExtension
+     * @return
+     */
+    public static String uploadFile(String content, String fileExtension) {
+        byte[] buff = content.getBytes(Charset.forName("UTF-8"));
+        ByteArrayInputStream stream = new ByteArrayInputStream(buff);
+        StorePath storePath = storageClient.uploadFile(stream,buff.length, fileExtension,null);
+        return getResAccessUrl(storePath);
+    }
+    
+    /**
+     * 删除文件
+     * @param fileUrl 文件访问地址
+     * @return
+     */
+    public static void deleteFile(String fileUrl) {
+        if (StringUtils.isEmpty(fileUrl)) {
+            return;
+        }
+        try {
+            StorePath storePath = StorePath.praseFromUrl(fileUrl);
+            storageClient.deleteFile(storePath.getGroup(), storePath.getPath());
+        } catch (FdfsUnsupportStorePathException e) {
+            logger.warn(e.getMessage());
+        }
+    }
+	
+    /**
+     * 下载一个文件
+     * @param groupName
+     * @param filePath
+     * @return
+     */
+	public static InputStream downloadFile(String groupName,String filePath) {
 		try {
-			byte[] bytes = storageClient.download_file1(fileId);
+			if(StringUtils.isBlank(groupName))
+				groupName = "group1";
+			byte[] bytes = storageClient.downloadFile(groupName, filePath, null);
 			InputStream inputStream = new ByteArrayInputStream(bytes);
 			return inputStream;
 		} catch (Exception ex) {
@@ -170,17 +155,65 @@ public class FastDFSClient {
 			return null;
 		}
 	}
-
-	*//**
-	 * 获取文件后缀名（不带点）.
-	 * 
-	 * @return 如："jpg" or "".
-	 *//*
-	private static String getFileExt(String fileName) {
-		if (StringUtils.isBlank(fileName) || !fileName.contains(".")) {
-			return "";
-		} else {
-			return fileName.substring(fileName.lastIndexOf(".") + 1); // 不带最后的点
+	
+	/**
+	 * 上传图片并同时生成一个缩略图
+	 * @param inputStream
+	 * @param fileSize
+	 * @param fileExtName
+	 * @param metaDataSet
+	 * @return
+	 */
+	public static String uploadImageAndCrtThumbImage(InputStream inputStream, long fileSize, String fileExtName,
+	            Set<MateData> metaDataSet) {
+		storageClient.uploadImageAndCrtThumbImage(inputStream, fileSize, fileExtName, metaDataSet);
+		return null;
+	}
+	
+	/**
+	 * 上传图片并同时生成一个缩略图
+	 * @param File file文件
+	 */
+	public static String uploadImageAndCrtThumbImage(File file) {
+		try {
+			FileInputStream inputStream = new FileInputStream(file);
+			String fileName=file.getName();  
+	         //获取文件后缀名  
+	         String strs= FilenameUtils.getExtension(fileName);
+	         if(StringUtils.isBlank(strs)){  
+	             throw new NullPointerException();  
+	         }  
+	         StorePath storePath = storageClient.uploadImageAndCrtThumbImage(inputStream,file.length(),strs,null);
+	         return getResAccessUrl(storePath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
 		}
-	}*/
+	}
+	
+	/**
+	 * 上传图片并同时生成一个缩略图
+	 * @param File filePath文件路径
+	 */
+	public static String uploadImageAndCrtThumbImage(String filePath) {
+		if(StringUtils.isBlank(filePath)){  
+            throw new NullPointerException();  
+        }
+    	File file = new File(filePath);
+        return uploadImageAndCrtThumbImage(file);
+	}
+	
+	
+    /**
+     * 封装图片完整URL地址
+     * @param storePath
+     * @return
+     */
+    private static String getResAccessUrl(StorePath storePath) {
+        String fileUrl = FDFSWebRoot + "/" + storePath.getFullPath();
+        return fileUrl;
+    }
+    
+	
+	
 }

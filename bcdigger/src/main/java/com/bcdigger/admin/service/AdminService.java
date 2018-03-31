@@ -17,4 +17,6 @@ public interface AdminService {
 	
 	public int updateAdmin(Admin admin);
 	
+	public int updateAdminPassword(Admin admin);
+	
 }

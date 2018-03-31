@@ -98,6 +98,35 @@
 		)
 	</insert>
 	
+	<update id="update" parameterType="admin">
+		update
+		<include refid="table" />
+		<set>
+			name = #{name},
+			nickname = #{nickname},
+			sex = #{sex},
+			duty = #{duty},
+			mobile = #{mobile},
+			email = #{email},
+			update_time = now(),
+			state = #{state}
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<update id="updatePassword" parameterType="admin">
+		update
+		<include refid="table" />
+		<set>
+			password = #{password}
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
 	
 	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
 		select * from

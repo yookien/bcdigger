@@ -75,5 +75,9 @@ public class AdminServiceImpl implements AdminService {
 	public int updateAdmin(Admin admin) {
 		return adminDao.update(admin);
 	}
+	
+	public int updateAdminPassword(Admin admin) {
+		return adminDao.updatePassword(admin);
+	}
 
 }
