@@ -21,6 +21,9 @@
 		<if test="roleId != null">
 			and role_id = #{roleId,jdbcType=BIGINT}
 		</if>
+		<if test="roleIds != null and roleIds != '' ">
+			and role_id in (${roleIds})
+		</if>
 	
 	</sql>
 	<insert id="insert" parameterType="sysMenu">
