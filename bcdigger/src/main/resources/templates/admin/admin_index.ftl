@@ -137,6 +137,36 @@
     </div>  
 </div>
 
+<!-- 权限赋予 -->
+<div class="modal fade" id="adminRoleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">  
+    <div class="modal-dialog" role="document">  
+        <div class="modal-content">  
+            <div class="modal-header">  
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close_btn">  
+                    <span aria-hidden="true"><i class="fa fa-times"></i></span>  
+                </button>  
+                <h4 class="modal-title" id="myModalLabel">角色赋予</h4>  
+            </div>  
+            <div class="modal-body">  
+                <form class="form-horizontal form-label-left input_mask" id="saveAdminRoleRefForm">
+					 <input type="hidden" id="admin_user_id" name="adminId">
+                     <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback" id="saveAdminRoleRef">
+	                     <#if roleList?? && roleList?size != 0>
+				            <#list roleList as role>
+				            	<input type="checkbox" name="role" id="role_${(role.id)!0}" value="${(role.id)!0}"/> ${(role.roleName)!} 
+				            </#list>
+			             </#if>
+                     </div>
+                </form>
+            </div>
+            <div class="modal-footer">  
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="adminRoleClose">关闭</button>  
+                <button type="button" class="btn btn-primary" onclick="saveAdminRoleRef();">保存</button>  
+            </div>  
+        </div>  
+    </div>  
+</div>
+
 <script type="text/javascript">
 // ajax分页参数，待优化
 var ajax_request_url='';
@@ -318,7 +348,6 @@ function updateAdmin(){
 	$("#addOrEditAdminForm").bootstrapValidator('validate');//提交验证  
     if ($("#addOrEditAdminForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
         var pars=$("#addOrEditAdminForm").serialize();
-    alert(pars);
 		$.ajax({
 			url: '/admin/editAdmin',
 			type:'POST',
@@ -336,6 +365,78 @@ function updateAdmin(){
 		})
     } 
 }
+
+	// 查询用户当前角色
+	function ajaxAdminRoleRef(adminId){
+		if(isNaN(adminId) || adminId<=0){
+			return;
+		}
+		$('#admin_user_id').val(adminId);
+		
+		$("#saveAdminRoleRef input[type='checkbox']").attr("checked","");
+		
+		//根据角色ID 查找 
+		$.ajax({
+			   type: "POST", 
+			   dataType:"json",
+			   url: "/admin/getAdminRoleRefByRoleId.do",
+			   data: {adminId:adminId},
+	           success: function(msg){
+					if(parseInt(msg.infoNo) == 1){
+						var roles = eval(msg.roles);
+						var roleList = roles.funcs;
+						for(var i=1; i<roleList.length;i++){
+							$('#role_'+roleList[i].roledm).attr("checked","true");
+						}
+						$("#saveAdminRoleRef").html();
+						$('#btn_'+adminId).click();
+					}else if(parseInt(msg.infoNo) == 3){
+						alert(msg.str);
+					}else{
+						return;
+					}
+				}
+		 });
+	}
+
+	// 保存用户角色
+	function saveAdminRoleRef(){
+		var roleIds=''
+		var count=$('#saveAdminRoleRef input[type="checkbox"]:checked');
+		var size=count.size();
+		var adminId=$('#admin_user_id').val();
+		if(size>0){
+			count.each(function(){
+				roleIds+=this.value+","
+			})
+			roleIds=roleIds.substring(0,roleIds.length-1);
+		}
+		//绑定后的权限提交
+		if(isNaN(adminId) || adminId<0){
+			alert('数据不完整不能提交');
+			return;
+		}
+	
+		if(roleIds==''){
+			alert('请勾选相应的数据');
+			return;
+		}
+		$.ajax({			   
+		   type: "POST", 
+		   dataType:"json",
+		   url: "/admin/saveAdminRoleRef.do",
+		   data: {adminId:adminId,roleIds:roleIds,state:1},
+           success: function(msg){
+				if(parseInt(msg.infoNo) == 1){
+					$("#adminRoleClose").click();
+				}else {
+					alert(msg.str);
+				}
+			}
+	   });
+	}	
+	
+
 //初始化日历选择控件
 function initDateRangePicker(){
 	
