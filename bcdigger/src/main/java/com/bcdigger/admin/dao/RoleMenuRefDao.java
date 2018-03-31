@@ -25,4 +25,13 @@ public class RoleMenuRefDao extends BaseDaoImpl<RoleMenuRef>{
 		return null;
 	}
 	
+	public List<RoleMenuRef> getRoleMenuRefs(RoleMenuRef roleMenuRef) {
+		try{
+			return sqlSession.selectList("getRoleMenuRef", roleMenuRef);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }
