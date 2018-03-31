@@ -37,8 +37,9 @@
         <typeAlias alias="LinkedList" type="java.util.LinkedList" />
         
         <typeAlias alias="sysMenu" type="com.bcdigger.admin.entity.SysMenu" />
-        <typeAlias alias="sdminRole" type="com.bcdigger.admin.entity.AdminRole" />
+        <typeAlias alias="adminRole" type="com.bcdigger.admin.entity.AdminRole" />
         <typeAlias alias="admin" type="com.bcdigger.admin.entity.Admin" />
+        <typeAlias alias="roleMenuRef" type="com.bcdigger.admin.entity.RoleMenuRef" />
         
     </typeAliases>  
 </configuration>

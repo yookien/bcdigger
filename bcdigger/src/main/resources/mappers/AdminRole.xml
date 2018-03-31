@@ -4,7 +4,7 @@
 
 	<sql id="table"> bcd_admin_role </sql>
 
-	<resultMap id="BaseResultMap" type="sdminRole">
+	<resultMap id="BaseResultMap" type="adminRole">
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="roleName" column="role_name" jdbcType="VARCHAR" />
 		<result property="roleDesc" column="role_desc" jdbcType="VARCHAR" />
@@ -20,6 +20,10 @@
 		</if>
 		<if test="roleName != null and roleName !=''">
 			and roleName like #{roleName,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="state != null">
+			and state = #{state,jdbcType=BIGINT}
 		</if>
 	
 		<!--<if test="beginDate != null and endDate != null and endDate !='' and beginDate != ''">
@@ -63,14 +67,14 @@
 		<if test="trxModel != null and trxModel != ''"> and TRX_MODEL = #{trxModel,jdbcType=SMALLINT}</if> -->
 	</sql>
 	
-	<insert id="insert" parameterType="sdminRole">
+	<insert id="insert" parameterType="adminRole">
 		INSERT INTO	 bcd_admin_role
 			   (role_name,role_desc,state,add_time,update_time)
 		VALUES
 			   (#{roleName},#{roleDesc},#{state},#{addTime},#{updateTime});
 	</insert>
 	
-	<update id="update" parameterType="sdminRole">
+	<update id="update" parameterType="adminRole">
 		UPDATE bcd_admin_role
 		<set>
 			<if test="roleName != null">role_name=#{roleName},</if>
@@ -103,7 +107,15 @@
 		</where>
 		<![CDATA[ order by id desc]]>
 	</select>
-
+	
+	<select id="findAdminRoleList" parameterType="adminRole" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
 
 
 </mapper>

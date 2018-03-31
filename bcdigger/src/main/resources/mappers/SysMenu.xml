@@ -122,5 +122,15 @@
 		<![CDATA[ order by display_order desc]]>
 	</select>
 	
+	
+	<select id="findSysMenuList" parameterType="sysMenu" resultMap="BaseResultMap">
+		select * from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by display_order desc]]>
+	</select>
+	
 
 </mapper>
