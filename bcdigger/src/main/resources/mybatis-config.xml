@@ -40,6 +40,6 @@
         <typeAlias alias="adminRole" type="com.bcdigger.admin.entity.AdminRole" />
         <typeAlias alias="admin" type="com.bcdigger.admin.entity.Admin" />
         <typeAlias alias="roleMenuRef" type="com.bcdigger.admin.entity.RoleMenuRef" />
-        
+        <typeAlias alias="adminRoleRef" type="com.bcdigger.admin.entity.AdminRoleRef" />
     </typeAliases>  
 </configuration>
