@@ -24,14 +24,16 @@
 	
 	</sql>
 	<insert id="insert" parameterType="sysMenu">
-		INSERT INTO	 bcd_role_menu_ref
+		INSERT INTO	 
+		<include refid="table" />
 			   (role_id,menu_ids,state,add_time,update_time)
 		VALUES
 			   (#{roleId},#{menuIds},#{state},#{addTime},#{updateTime});
 	</insert>
 	
 	<update id="update" parameterType="sysMenu">
-		UPDATE bcd_role_menu_ref
+		UPDATE 
+		<include refid="table" />
 		<set>
 			<if test="menuIds != null">menu_ids=#{menuIds},</if>
 			<if test="state!=null and state > -1 ">STATE=#{state},</if>
