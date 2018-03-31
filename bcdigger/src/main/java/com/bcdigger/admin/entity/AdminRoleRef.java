@@ -58,5 +58,17 @@ public class AdminRoleRef extends BaseEntity {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+	
+	public String getRoleJson(){
+		StringBuffer sb=new StringBuffer("({funcs:[");
+		if(roleIds != null && roleIds.split(",").length>0){
+			String[] rolesArr=roleIds.split(",");
+			for (String str : rolesArr) {
+				sb.append(",{roledm:'"+str+"'}");
+			}
+			sb.append("]})");
+		}
+		return sb.toString();
+	}
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bcdigger.admin.entity.Admin;
+import com.bcdigger.admin.entity.AdminRole;
+import com.bcdigger.admin.service.AdminRoleService;
 import com.bcdigger.admin.service.AdminService;
 import com.bcdigger.common.constant.CacheConstant;
 import com.bcdigger.common.page.PageInfo;
@@ -35,6 +39,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private AdminRoleService adminRoleService;
 	
 	private PageInfo pageInfo;
 	
@@ -150,7 +157,17 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value ="/adminIndex")
-	public String adminIndex() {
+	public String adminIndex(ModelMap map) {
+		try{
+			// 查询所有用户角色信息
+			AdminRole role=new AdminRole();
+			role.setState(1);// 只查询有效的角色
+			List<AdminRole> roleList = adminRoleService.getAdminRoleList(role);
+			map.addAttribute("roleList", roleList);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		return "/admin/admin_index";
 	}
 	
