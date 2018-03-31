@@ -82,6 +82,9 @@
 
     <!-- jQuery -->
     <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- public -->
+    <script src="/js/public.js"></script>
+    
     <!-- Bootstrap -->
     <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/js/bootstrapValidator.min.js"></script>
