@@ -120,7 +120,8 @@ public class SysMenuController {
 				map.put("result", -1);// 参数为空
 				return map;
 			}
-			
+			Date now=new Date();
+			sysMenu.setUpdateTime(now);
 			sysMenuService.updateSysMenu(sysMenu);
 			map.put("result", 1);//更新成功
 		}catch(Exception e){
