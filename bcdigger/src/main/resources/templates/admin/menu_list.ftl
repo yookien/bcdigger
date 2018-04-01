@@ -19,7 +19,7 @@
 			<#list pageInfo.list as menu>
 				<tr>
 					<td>${(menu.id)!1}</td>
-					<td>${(menu.menuLogoUrl)!}</td>
+					<td><i class="fa ${(menu.menuLogoUrl)!}"</td>
                   	<td>${(menu.menuName)!}</td>
                   	<td>${(menu.menuUrl)!}</td>
                   	<td>${(menu.menuDesc)!}</td>

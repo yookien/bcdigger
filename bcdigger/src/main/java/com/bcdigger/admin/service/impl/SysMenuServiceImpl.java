@@ -32,6 +32,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 				if(sysMenuTemp!=null){
 					sysMenu.setLevel(sysMenuTemp.getLevel()+1);
 				}
+			}else if(sysMenu!=null && sysMenu.getParentId() == 0 ){
+				sysMenu.setLevel(1);
 			}
 			if(sysMenu == null || sysMenu.getLevel()<1 || sysMenu.getLevel()>3){
 				return;

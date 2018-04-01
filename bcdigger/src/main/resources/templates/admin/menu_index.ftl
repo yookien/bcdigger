@@ -291,7 +291,7 @@ function initValidator(){
 	            	}
 	        	}
 	       	},
-	        menuLogoUrl: {
+	       /** menuLogoUrl: {
 	            validators: {
 	               notEmpty: {
 	                  message: '菜单logo'
@@ -304,7 +304,7 @@ function initValidator(){
 	                	message: '请输入正确菜单URL'
 	             	}
 	        	}
-	     	},
+	     	},*/
 	        menuDesc: {
 	        	validators: {
 	            	notEmpty: {

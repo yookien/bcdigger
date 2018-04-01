@@ -5,17 +5,33 @@
 		                  
 				<#if level1List?? && level1List?size != 0>
 					<#list level1List as menu1>
-						<li><a><i class="fa fa-home"></i> ${(menu1.menuName)!} <span class="fa fa-chevron-down"></span></a>
-							<ul class="nav child_menu">
-								<#if level2List?? && level2List?size != 0>
-									<#list level2List as menu2>
-										<#if menu1.id=menu2.parentId>
-											<li><a href="javascript:goto('${(menu2.menuUrl)!}')">${(menu2.menuName)!}</a></li>
-										</#if>
-									</#list>
-								</#if>
-					 		</ul>
-                  		</li>
+						<#if (menu1.isLeaf)?? && menu1.isLeaf==1>
+							<li><a><i class="fa ${(menu1.menuLogoUrl)!'fa-cog'}"></i> ${(menu1.menuName)!} <span class="fa fa-chevron-down"></span></a>
+								<ul class="nav child_menu">
+									<#if level2List?? && level2List?size != 0>
+										<#list level2List as menu2>
+											<#if menu1.id=menu2.parentId>
+												<#if (menu2.isLeaf)?? && menu2.isLeaf==1>
+													<li><a><i class="fa ${(menu2.menuLogoUrl)!}"></i> ${(menu2.menuName)!} <span class="fa fa-chevron-down"></span></a>
+														<ul class="nav child_menu">
+															<#if level3List?? && level3List?size != 0>
+																<#list level3List as menu3>
+																	<li><a href="javascript:goto('${(menu3.menuUrl)!}')">${(menu3.menuName)!}</a></li>
+																</#list>
+															</#if>
+														</ul>
+	                  								</li>
+												<#else>
+													<li><a href="javascript:goto('${(menu2.menuUrl)!}')">${(menu2.menuName)!}</a></li>
+												</#if>
+											</#if>
+										</#list>
+									</#if>
+						 		</ul>
+	                  		</li>
+                  		<#else>
+							<li><a href="javascript:goto('${(menu1.menuUrl)!}')"><i class="fa fa-home"></i> ${(menu1.menuName)!}</a></li>
+						</#if>
 					</#list>
 				</#if>     
                 
