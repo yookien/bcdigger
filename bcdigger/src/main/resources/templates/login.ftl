@@ -66,7 +66,7 @@
 
                 <div>
                   <h1><i class="fa fa-paw"></i> www.bcdigger.com</h1>
-                  <p>©2016 All Rights Reserved. www.bcdigger.com</p>
+                  <p>©2018 All Rights Reserved. www.bcdigger.com</p>
                 </div>
               </div>
             </form>
