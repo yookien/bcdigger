@@ -37,6 +37,9 @@ public class SysMenu extends BaseEntity {
 	private Date addTime;
 
 	private Date updateTime;
+	
+	// 非数据库字段
+	private String menuIds;
 
 	public String getMenuName() {
 		return menuName;
@@ -124,6 +127,14 @@ public class SysMenu extends BaseEntity {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getMenuIds() {
+		return menuIds;
+	}
+
+	public void setMenuIds(String menuIds) {
+		this.menuIds = menuIds;
 	}
 
 }

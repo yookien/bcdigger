@@ -13,17 +13,17 @@ import com.bcdigger.common.entity.BaseEntity;
 public class AdminRoleRef extends BaseEntity {
 
 	private static final long serialVersionUID = -2539244210955086805L;
-	private String adminId;
+	private Integer adminId;
 	private String roleIds;
 	private Integer state;
 	private Date addTime;
 	private Date updateTime;
 
-	public String getAdminId() {
+	public Integer getAdminId() {
 		return adminId;
 	}
 
-	public void setAdminId(String adminId) {
+	public void setAdminId(Integer adminId) {
 		this.adminId = adminId;
 	}
 

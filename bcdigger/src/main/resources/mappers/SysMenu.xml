@@ -30,6 +30,12 @@
 		<if test=" parentId != null ">
 			and parent_id = #{parentId,jdbcType=BIGINT}
 		</if>
+		<if test=" state != null and state > -1 ">
+			and state = #{state,jdbcType=BIGINT}
+		</if>
+		<if test="menuIds != null and menuIds != '' ">
+			and id in (${menuIds})
+		</if>
 
 		<!--<if test="beginDate != null and endDate != null and endDate !='' and 
 			beginDate != ''"> and CREATE_TIME between #{beginDate} AND CONCAT(#{endDate},' 

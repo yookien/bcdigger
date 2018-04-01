@@ -1,7 +1,6 @@
 package com.bcdigger.admin.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +22,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bcdigger.admin.entity.Admin;
 import com.bcdigger.admin.entity.AdminRole;
+import com.bcdigger.admin.entity.AdminRoleRef;
+import com.bcdigger.admin.entity.RoleMenuRef;
+import com.bcdigger.admin.entity.SysMenu;
+import com.bcdigger.admin.service.AdminRoleRefService;
 import com.bcdigger.admin.service.AdminRoleService;
 import com.bcdigger.admin.service.AdminService;
+import com.bcdigger.admin.service.RoleMenuRefService;
+import com.bcdigger.admin.service.SysMenuService;
 import com.bcdigger.common.constant.CacheConstant;
 import com.bcdigger.common.page.PageInfo;
-import com.bcdigger.common.utils.file.FastDFSClient;
 import com.bcdigger.common.utils.rsa.MD5;
 import com.bcdigger.core.annotation.AdminAuth;
 
@@ -39,11 +43,58 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
-	
 	@Autowired
 	private AdminRoleService adminRoleService;
+	@Autowired
+	private SysMenuService sysMenuService;
+	@Autowired
+	private RoleMenuRefService roleMenuRefService;
+	@Autowired
+	private AdminRoleRefService adminRoleRefService;
 	
-	private PageInfo pageInfo;
+	
+	private List<SysMenu> getUserMenu(Integer adminId){
+		try{
+			List<SysMenu> sysMenuList=new ArrayList<SysMenu>();
+			// 查询用户角色
+			AdminRoleRef adminRoleRef = new AdminRoleRef();
+			adminRoleRef.setAdminId(adminId);
+			adminRoleRef.setState(1);
+			adminRoleRef = this.adminRoleRefService.getAdminRoleRef(adminRoleRef);
+			if(adminRoleRef != null && adminRoleRef.getRoleIds() != null && !"".equals(adminRoleRef.getRoleIds())){
+				String roleIds=adminRoleRef.getRoleIds();
+				RoleMenuRef roleMenuRef=new RoleMenuRef();
+				roleMenuRef.setRoleIds(roleIds);
+				roleMenuRef.setState(1);
+				// 查询角色对应的菜单id
+				List<RoleMenuRef> list = roleMenuRefService.getRoleMenuRefs(roleMenuRef);
+				if(list!=null && list.size()>0){
+					StringBuffer sb = new StringBuffer();
+					RoleMenuRef roleMenuRefTemp=null;
+					for(int i=0;i<list.size();i++){
+						roleMenuRefTemp = list.get(i);
+						if(roleMenuRefTemp==null){
+							continue;
+						}
+						if(i==list.size()-1){
+							sb.append(roleMenuRefTemp.getMenuIds());
+						}else{
+							sb.append(roleMenuRefTemp.getMenuIds()).append(",");
+						}
+					}
+					SysMenu sysMenu=new SysMenu();
+					sysMenu.setMenuIds(sb.toString());
+					sysMenu.setState(1);
+					sysMenuList = this.sysMenuService.getSysMenuList(sysMenu);
+				}
+			}
+			return sysMenuList;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	@RequestMapping(value ="/login",method=RequestMethod.GET)
 	public String adminLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -110,7 +161,36 @@ public class AdminController {
 	
 	@RequestMapping(value ="/index")
 	@AdminAuth
-	public String index(HttpServletRequest request) {
+	public String index(HttpServletRequest request,ModelMap map) {
+		try{
+			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+			adminId=1;
+			List<SysMenu> menuList=getUserMenu(adminId);
+			List<SysMenu> level1List= new ArrayList<SysMenu>();
+			List<SysMenu> level2List= new ArrayList<SysMenu>();
+			List<SysMenu> level3List= new ArrayList<SysMenu>();
+			if(menuList!=null && menuList.size()>0){
+				SysMenu sysMenu=null;
+				for(int i=0,j=menuList.size();i<j;i++){
+					sysMenu=menuList.get(i);
+					if(sysMenu==null){
+						continue;
+					}
+					if(sysMenu.getLevel()==1){
+						level1List.add(sysMenu);
+					}else if(sysMenu.getLevel()==2){
+						level2List.add(sysMenu);
+					}else if(sysMenu.getLevel()==3){
+						level3List.add(sysMenu);
+					}
+				}
+			}
+			map.addAttribute("level1List", level1List);
+			map.addAttribute("level2List", level2List);
+			map.addAttribute("level3List", level3List);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		return "index";
 	}
 	

@@ -21,6 +21,9 @@ public class RoleMenuRef extends BaseEntity {
 	private Integer state;
 	private Date addTime;
 	private Date updateTime;
+	
+	// 非数据库字段
+	private String roleIds;
 
 	public Integer getRoleId() {
 		return roleId;
@@ -62,6 +65,14 @@ public class RoleMenuRef extends BaseEntity {
 		this.updateTime = updateTime;
 	}
 	
+	public String getRoleIds() {
+		return roleIds;
+	}
+
+	public void setRoleIds(String roleIds) {
+		this.roleIds = roleIds;
+	}
+
 	public String getMenuJson(){
 		StringBuffer str=new StringBuffer("({funcs:[{menudm:'0'}");
 		if(menuIds != null && menuIds.split(",").length>0){
