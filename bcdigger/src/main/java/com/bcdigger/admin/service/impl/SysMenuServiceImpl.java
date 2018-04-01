@@ -27,6 +27,15 @@ public class SysMenuServiceImpl implements SysMenuService {
 	
 	public void addSysMenu(SysMenu sysMenu){
 		try{
+			if(sysMenu != null && sysMenu.getParentId()!=null && sysMenu.getParentId()>0){
+				SysMenu sysMenuTemp = sysMenuDao.getById(sysMenu.getParentId());
+				if(sysMenuTemp!=null){
+					sysMenu.setLevel(sysMenuTemp.getLevel()+1);
+				}
+			}
+			if(sysMenu == null || sysMenu.getLevel()<1 || sysMenu.getLevel()>3){
+				return;
+			}
 			sysMenuDao.insert(sysMenu);
 		}catch(Exception e){
 			e.printStackTrace();
