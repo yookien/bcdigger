@@ -64,7 +64,6 @@ public class SysMenuController {
 			Date now=new Date();
 			sysMenu.setAddTime(now);
 			sysMenu.setUpdateTime(now);
-			sysMenu.setLevel(1);
 			sysMenuService.addSysMenu(sysMenu);
 			map.put("result", 1);//登录成功
 		}catch(Exception e){
