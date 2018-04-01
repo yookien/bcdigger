@@ -29,8 +29,10 @@
                   	<td><#if (menu.updateTime)??>${menu.updateTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
                   	<td>
                   		<a href="###" onclick="editSysMenus(${(menu.id)!0})" name="editRoleBt" data-toggle="modal" data-target="#myModal" roleId="${(menu.id)!}" >编辑</a>
-						<span style="margin:0 1px">|</span>
-						<a href="javascript:getSysMenus(${(menu.id)!});" name="viewRoleBt" roleId="${(menu.id)!}" >查看</a>
+						<#if (menu.level?? && menu.level<3)>
+							<span style="margin:0 1px">|</span>
+							<a href="javascript:getSysMenus(${(menu.id)!});" name="viewRoleBt" roleId="${(menu.id)!}" >查看</a>
+						</#if>
 				  	</td>
                 </tr>
 		 	</#list>
@@ -42,6 +44,7 @@
  	</tbody>
  </table>
 <input type="hidden" name="parentId" id="parentId" value="${parentId!0}">
+
  <!-- 分页信息 ,注意要放到ul元素里面-->
  <div style="float:right"><ul id='pages'></ul></div>
  <#include "/lib/ajax_pages.ftl">
