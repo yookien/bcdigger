@@ -252,7 +252,7 @@ create table bcd_department
    left_id              int comment '左节点id',
    right_id             int comment '右节点id',
    display_order        int comment '显示顺序',
-   create_time          datetime comment '创建时间',
+   add_time          datetime comment '创建时间',
    update_time          datetime comment '更新时间',
    state                int comment '状态',
    primary key (id)

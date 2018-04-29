@@ -18,7 +18,7 @@ public class Department extends BaseEntity{
 	private int  leftId;
 	private int  rightId;
 	private int  displayOrder;
-	private Date  createTime;
+	private Date  addTime;
 	private Date  updateTime;
 	private int  state;
 	public String getName() {
@@ -57,11 +57,11 @@ public class Department extends BaseEntity{
 	public void setDisplayOrder(int displayOrder) {
 		this.displayOrder = displayOrder;
 	}
-	public Date getCreateTime() {
-		return createTime;
+	public Date getAddTime() {
+		return addTime;
 	}
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setAddTime(Date addTime) {
+		this.addTime = addTime;
 	}
 	public Date getUpdateTime() {
 		return updateTime;

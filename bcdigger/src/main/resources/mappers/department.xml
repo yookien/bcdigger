@@ -12,13 +12,13 @@
 		<result property="leftId" column="left_id" jdbcType="BIGINT"/>
 		<result property="rightId" column="right_id" jdbcType="BIGINT"/>
 		<result property="displayOrder" column="display_order" jdbcType="BIGINT"/>
-		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 		<result property="state" column="state" jdbcType="BIGINT"/>
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id, name, admin_id,parent_id,left_id,right_id,display_order,create_time,update_time,state
+		id, name, admin_id,parent_id,left_id,right_id,display_order,add_time,update_time,state
 	</sql>
 	
 	<sql id="condition_sql">
@@ -34,7 +34,7 @@
 		</if>
 	
 		<!--<if test="beginDate != null and endDate != null and endDate !='' and beginDate != ''">
-			and CREATE_TIME between #{beginDate} AND CONCAT(#{endDate},' 23:59:59')
+			and add_time between #{beginDate} AND CONCAT(#{endDate},' 23:59:59')
 		</if>
 		<if test="beginOrderTime != null and beginOrderTime != '' and endOrderTime != null and endOrderTime !=''">
 			and ORDER_TIME between #{beginOrderTime} AND CONCAT(#{endOrderTime},' 23:59:59')
@@ -77,7 +77,7 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Department">
 		insert into
 		<include refid="table" />
-		(name, admin_id,parent_id,left_id,right_id,display_order,create_time,update_time,state)
+		(name, admin_id,parent_id,left_id,right_id,display_order,add_time,update_time,state)
 		values (#{name},#{adminId},#{parentId},#{leftId},#{rightId},
 		#{displayOrder},now(),now(),#{state}
 		)
