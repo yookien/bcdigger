@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bcdigger.store.dao.StoreDao">
+
+	<sql id="table"> bcd_store </sql>
+
+	<resultMap id="BaseResultMap" type="com.bcdigger.store.entity.Store">
+		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="storeCode" column="store_code" jdbcType="VARCHAR" />
+		<result property="chineseName" column="chinese_name" jdbcType="VARCHAR" />
+		<result property="phone" column="phone" jdbcType="VARCHAR" />
+		<result property="mobile" column="mobile" jdbcType="VARCHAR" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="direction" column="direction" jdbcType="VARCHAR" />
+		<result property="openHour" column="open_hour" jdbcType="VARCHAR" />
+		<result property="closeHour" column="close_hour" jdbcType="VARCHAR" />
+		<result property="englishName" column="english_name" jdbcType="VARCHAR" />
+		<result property="englishAddress" column="english_address" jdbcType="VARCHAR" />
+		<result property="locationImage" column="location_image" jdbcType="VARCHAR" />
+		<result property="storeImages" column="store_images" jdbcType="VARCHAR" />
+		<result property="storeProvince" column="store_province" jdbcType="VARCHAR" />
+		<result property="storeCity" column="store_city" jdbcType="VARCHAR" />
+		<result property="cityArea" column="city_area" jdbcType="VARCHAR" />
+		<result property="isOpen" column="is_open" jdbcType="BIGINT"/>	
+		<result property="bmapPosition" column="bmap_position" jdbcType="VARCHAR" />
+		<result property="bmapPositionX" column="bmap_positionX" jdbcType="DOUBLE" />
+		<result property="bmapPositionY" column="bmap_positionY" jdbcType="DOUBLE" />
+		<result property="searchUrl" column="search_url" jdbcType="VARCHAR" />
+		<result property="bus" column="bus" jdbcType="VARCHAR" />
+		<result property="subway" column="subway" jdbcType="VARCHAR" />
+		<result property="nearby" column="nearby" jdbcType="VARCHAR" />
+		<result property="email" column="email" jdbcType="VARCHAR" />
+		<result property="storeImage1" column="store_image1" jdbcType="VARCHAR" />
+		<result property="storeImage2" column="store_image2" jdbcType="VARCHAR" />
+		<result property="storeImage3" column="store_image3" jdbcType="VARCHAR" />
+		<result property="storeImage4" column="store_image4" jdbcType="VARCHAR" />
+		<result property="appointLimit" column="appoint_limit" jdbcType="BIGINT"/>
+		<result property="storeType" column="store_type" jdbcType="BIGINT"/>
+		<result property="isBooking" column="is_booking" jdbcType="BIGINT"/>
+		<result property="openTime" column="open_time" jdbcType="TIMESTAMP"/>
+		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<sql id="base_column_list">
+		id,store_code,chinese_name,phone, mobile, address, direction, open_hour, close_hour, english_name, english_address,
+		location_image, store_images ,store_province ,store_city, city_area, is_open, bmap_position, bmap_positionX, bmap_positionY,
+		search_url, bus, subway ,nearby ,email, store_image1 ,store_image2, store_image3, store_image4, appoint_limit, 
+		store_type, is_booking ,open_time ,add_time, update_time
+	</sql>
+	
+	<sql id="condition_sql">
+	
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="chineseName != null and chineseName !='' and like == 1 ">
+			and chinese_name like concat('%',#{chineseName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="chineseName != null and chineseName !='' and like == null">
+			and chinese_name = #{chineseName,jdbcType=VARCHAR}
+		</if>
+	
+		<!--<if test="beginDate != null and endDate != null and endDate !='' and beginDate != ''">
+			and CREATE_TIME between #{beginDate} AND CONCAT(#{endDate},' 23:59:59')
+		</if>
+		<if test="beginOrderTime != null and beginOrderTime != '' and endOrderTime != null and endOrderTime !=''">
+			and ORDER_TIME between #{beginOrderTime} AND CONCAT(#{endOrderTime},' 23:59:59')
+		</if>
+
+		<if test="merchantOrderNo != null and merchantOrderNo != ''"> and MERCHANT_ORDER_NO like CONCAT(CONCAT('%',#{merchantOrderNo,jdbcType=VARCHAR}), '%') </if>
+		<if test="merchantNo != null and merchantNo != ''"> and MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR}</if>
+		<if test="merchantName != null and merchantName != ''"> and MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR}</if>
+		<if test="payerUserNo != null and payerUserNo != ''"> and PAYER_USER_NO = #{payerUserNo,jdbcType=VARCHAR}</if>
+		<if test="payerName != null and payerName != ''"> and PAYER_NAME = #{payerName,jdbcType=VARCHAR}</if>
+		<if test="orderIp != null and orderIp != ''"> and ORDER_IP = #{orderIp,jdbcType=VARCHAR}</if>
+		<if test="orderOperatorLoginName != null and orderOperatorLoginName != ''"> and ORDER_OPERATOR_LOGIN_NAME = #{orderOperatorLoginName,jdbcType=VARCHAR}</if>
+
+		<if test="orderFrom != null and orderFrom != ''"> and ORDER_FROM = #{orderFrom,jdbcType=SMALLINT}</if>
+		<if test="orderFlag != null and orderFlag != ''"> and ORDER_FLAG = #{orderFlag,jdbcType=SMALLINT}</if>
+		<if test="cur != null and cur != ''"> and CUR = #{cur,jdbcType=SMALLINT}</if>
+		<if test="status != null and status != ''"> and STATUS = #{status,jdbcType=SMALLINT}</if>
+		<if test="bizType != null and bizType != ''"> and BIZ_TYPE = #{bizType,jdbcType=SMALLINT}</if>
+		<if test="paymentType != null and paymentType != ''"> and PAYMENT_TYPE = #{paymentType,jdbcType=SMALLINT}</if>
+
+		<if test="payProductCode != null and payProductCode != ''"> and PAY_PRODUCT_CODE = #{payProductCode,jdbcType=VARCHAR}</if>
+		<if test="payWayCode != null and payWayCode != ''"> and PAY_WAY_CODE = #{payWayCode,jdbcType=VARCHAR}</if>
+
+		<if test="consigneeEmail != null and consigneeEmail != ''"> and CONSIGNEE_EMAIL = #{consigneeEmail,jdbcType=VARCHAR}</if>
+		
+		此处foreach中的条件用于分页查询，要用${item},不用#{item}
+		<if test="paymentTypes != null and  paymentTypes !=''">
+			and PAYMENT_TYPE in
+			<foreach collection="paymentTypes" index="index" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		<if test="successTrxNo != null and successTrxNo != ''"> and SUCCESS_TRX_NO = #{successTrxNo,jdbcType=VARCHAR}</if>
+		<if test="notBizType != null and notBizType != ''"> 
+			<![CDATA[ and BIZ_TYPE <> #{notBizType,jdbcType=SMALLINT}]]>
+		</if>
+		<if test="trxModel != null and trxModel != ''"> and TRX_MODEL = #{trxModel,jdbcType=SMALLINT}</if> -->
+	</sql>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="store">
+		insert into
+		<include refid="base_column_list" />
+		(<include refid="table" />)
+		values (
+			#{storeCode},#{chineseName},#{phone},#{mobile},#{address},#{direction},#{openHour},#{closeHour},#{englishName},#{englishAddress},
+			#{locationImage},#{storeImages},#{storeProvince},#{storeCity},#{cityArea},#{isOpen},#{bmapPosition},#{bmapPositionX},#{bmapPositionY},
+			#{searchUrl},#{bus},#{subway},#{nearby},#{email},#{storeImage1},#{storeImage2},#{storeImage3},#{storeImage4},#{appointLimit},
+			#{storeType},#{isBooking},#{openTime},now(),now()
+		)
+	</insert>
+	
+	<update id="update" parameterType="store">
+		update
+		<include refid="table" />
+		<set>
+			store_code = #{storeCode},
+			chinese_name= #{chineseName},
+			phone = #{phone},
+			mobile = #{mobile},
+			address= #{address},
+			direction= #{direction},
+			open_hour= #{openHour},
+			close_hour= #{closeHour},
+			english_name = #{englishName},
+			english_address= #{englishAddress},
+			location_image= #{locationImage},
+			store_images= #{storeImages},
+			store_province= #{storeProvince},
+			store_city= #{storeCity},
+			city_area= #{cityArea},
+			is_open	= #{isOpen},
+			bmap_position= #{bmapPosition},
+			bmap_positionX = #{bmapPositionX},
+			bmap_positionY= #{bmapPositionY},
+			search_url= #{searchUrl},
+			bus= #{bus},
+			subway= #{subway},
+			nearby= #{nearby},
+			email= #{email},
+			store_image1= #{storeImage1},
+			store_image2= #{storeImage2},
+			store_image3= #{storeImage3},
+			store_image4 = #{storeImage4},
+			appoint_limit= #{appointLimit},
+			store_type= #{storeType},
+			is_booking= #{isBooking},
+			update_time= now()
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		where id = #{id}
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+
+</mapper>

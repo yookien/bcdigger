@@ -245,7 +245,7 @@ drop table if exists bcd_department;
 
 create table bcd_department
 (
-   id                   int not null comment '主键id',
+   id                   int not null AUTO_INCREMENT comment '主键id',
    name                 varchar(0) comment '部门名称',
    admin_id             int comment '负责人',
    parent_id            int comment '父id',
@@ -270,7 +270,7 @@ drop table if exists bcd_store;
 
 create table bcd_store
 (
-   id                   int(11) not null comment '主键id',
+   id                   int(11) not null AUTO_INCREMENT comment '主键id',
    store_code           varchar(50) default NULL comment '门店编码',
    chinese_name         varchar(50) default NULL comment '中文名称',
    phone                varchar(20) default NULL comment '电话',
@@ -302,6 +302,9 @@ create table bcd_store
    appoint_limit        int(11) unsigned not null default 0 comment '预约限制',
    store_type           int unsigned not null default 0 comment '门店类型：0-自营店，1-写字楼店，2-商场店，3-加盟店',
    is_booking           int default 0 comment '是否预约',
+   open_time            datetime comment '开店时间',
+   create_time          datetime comment '添加时间',
+   update_time          datetime comment '更新时间',
    primary key (id)
 );
 

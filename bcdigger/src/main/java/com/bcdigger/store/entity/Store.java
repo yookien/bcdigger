@@ -1,5 +1,7 @@
 package com.bcdigger.store.entity;
 
+import java.util.Date;
+
 import com.bcdigger.common.entity.BaseEntity;
 /**
  * 门店表
@@ -45,9 +47,9 @@ public class Store extends BaseEntity {
 	//百度位置
 	private String   bmapPosition;
 	//百度x位置
-	private float bmapPositionX;
+	private Double bmapPositionX;
 	//百度y位置
-	private float   bmapPositionY;
+	private Double   bmapPositionY;
 	//搜索地址
 	private String   searchUrl;
 	//公交情况
@@ -69,6 +71,11 @@ public class Store extends BaseEntity {
 	private int  storeType;
 	//是否预约
 	private int isBooking;
+	
+	private Date openTime;//开业时间
+	private Date addTime;
+	private Date updateTime;
+	
 	public String getStoreCode() {
 		return storeCode;
 	}
@@ -171,16 +178,16 @@ public class Store extends BaseEntity {
 	public void setBmapPosition(String bmapPosition) {
 		this.bmapPosition = bmapPosition;
 	}
-	public float getBmapPositionX() {
+	public Double getBmapPositionX() {
 		return bmapPositionX;
 	}
-	public void setBmapPositionX(float bmapPositionX) {
+	public void setBmapPositionX(Double bmapPositionX) {
 		this.bmapPositionX = bmapPositionX;
 	}
-	public float getBmapPositionY() {
+	public Double getBmapPositionY() {
 		return bmapPositionY;
 	}
-	public void setBmapPositionY(float bmapPositionY) {
+	public void setBmapPositionY(Double bmapPositionY) {
 		this.bmapPositionY = bmapPositionY;
 	}
 	public String getSearchUrl() {
@@ -255,4 +262,24 @@ public class Store extends BaseEntity {
 	public void setIsBooking(int isBooking) {
 		this.isBooking = isBooking;
 	}
+	public Date getOpenTime() {
+		return openTime;
+	}
+	public void setOpenTime(Date openTime) {
+		this.openTime = openTime;
+	}
+	public Date getAddTime() {
+		return addTime;
+	}
+	public void setAddTime(Date addTime) {
+		this.addTime = addTime;
+	}
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+	
+	
 }
