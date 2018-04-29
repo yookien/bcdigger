@@ -19,7 +19,7 @@ spring:
     template-loader-path: classpath:/templates
   
   datasource : 
-    url : jdbc:mysql://192.168.1.6:3306/db_bcdigger?autoReconnect=true&useSSL=false
+    url : jdbc:mysql://183.234.125.42:13308/db_bcdigger?autoReconnect=true&useSSL=false
     username : root
     password : 123456
     driver-class-name : com.mysql.jdbc.Driver
