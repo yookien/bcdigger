@@ -237,5 +237,74 @@ create table bcd_users
 alter table bcd_users comment '用户表';
 
 
+drop table if exists bcd_department;
+
+/*==============================================================*/
+/* Table: bcd_department                                        */
+/*==============================================================*/
+
+create table bcd_department
+(
+   id                   int not null comment '主键id',
+   name                 varchar(0) comment '部门名称',
+   admin_id             int comment '负责人',
+   parent_id            int comment '父id',
+   left_id              int comment '左节点id',
+   right_id             int comment '右节点id',
+   display_order        int comment '显示顺序',
+   create_time          datetime comment '创建时间',
+   update_time          datetime comment '更新时间',
+   state                int comment '状态',
+   primary key (id)
+);
+
+alter table bcd_department comment '(公司部门表)';
+
+
+
+drop table if exists bcd_store;
+
+/*==============================================================*/
+/* Table: bcd_store                                             */
+/*==============================================================*/
+
+create table bcd_store
+(
+   id                   int(11) not null comment '主键id',
+   store_code           varchar(50) default NULL comment '门店编码',
+   chinese_name         varchar(50) default NULL comment '中文名称',
+   phone                varchar(20) default NULL comment '电话',
+   mobile               varchar(100) default NULL comment '负责人手机',
+   address              varchar(255) default NULL comment '地址',
+   direction            varchar(255) default NULL comment '地区',
+   open_hour            varchar(10) default NULL comment '开业时间',
+   close_hour           varchar(10) default NULL comment '停业时间',
+   english_name         varchar(50) default NULL,
+   english_address      varchar(255) default NULL,
+   location_image       varchar(100) default NULL comment '位置示意图',
+   store_images         varchar(500) not null default '' comment '门店主图',
+   store_province       varchar(50) not null default '' comment '门店所属省',
+   store_city           varchar(50) not null default '' comment '门店所属城市名',
+   city_area            varchar(50) not null default '' comment '城市下的区域',
+   is_open              tinyint(4) not null default 1 comment '是否在开',
+   bmap_position        varchar(25) not null comment '百度位置',
+   bmap_positionX       decimal(12,6) not null comment '百度x位置',
+   bmap_positionY       decimal(12,6) not null comment '百度y位置',
+   search_url           int(4) not null comment '搜索地址',
+   bus                  varchar(100) not null comment '公交情况',
+   subway               varchar(50) not null comment '地铁情况',
+   nearby               varchar(80) not null comment '附近建筑',
+   email                varchar(50) not null comment '邮箱',
+   store_image1         varchar(100) not null comment '店面图片1',
+   store_image2         varchar(100) not null comment '店面图片2',
+   store_image3         varchar(100) not null comment '店面图片3',
+   store_image4         varchar(100) not null comment '店面图片4',
+   appoint_limit        int(11) unsigned not null default 0 comment '预约限制',
+   store_type           int unsigned not null default 0 comment '门店类型：0-自营店，1-写字楼店，2-商场店，3-加盟店',
+   is_booking           int default 0 comment '是否预约',
+   primary key (id)
+);
+
+alter table bcd_store comment '门店表';
 
 
