@@ -311,3 +311,199 @@ create table bcd_store
 alter table bcd_store comment '门店表';
 
 
+drop table if exists bcd_goods_category;
+
+/*==============================================================*/
+/* Table: bcd_goods_category                                    */
+/*==============================================================*/
+create table bcd_goods_category
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   cat_name             varchar(64) comment '分类名称',
+   cat_desc             varchar(255) comment '描述',
+   state                int comment '状态',
+   left_id              int comment '左节点id',
+   right_id             int comment '右节点id',
+   display_order        int comment '显示顺序',
+   parent_id            int comment '父节点id',
+   inner_name           varchar(255) comment '全称',
+   cat_image            varchar(255) comment '分类图片',
+   add_time             datetime comment '添加时间',
+   update_time          datetime comment '更新时间',
+   primary key (id)
+);
+
+alter table bcd_goods_category comment '商品分类表';
+
+drop table if exists bcd_goods;
+
+/*==============================================================*/
+/* Table: bcd_goods                                             */
+/*==============================================================*/
+create table bcd_goods
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   cat_id               int comment '分类id',
+   goods_no             varchar(32) comment '商品货号',
+   good_name            varchar(64) comment '商品名称',
+   state                int comment '状态 0不可用 1可用',
+   small_image          varchar(64) comment '商品小图',
+   middle_image         varchar(64) comment '商品大图',
+   goods_image          varchar(64) comment '商品主图',
+   weight               double comment '重量',
+   unit                 varchar(32) comment '单位',
+   inner_name           varchar(255) comment '全名',
+   type                 int comment '类型',
+   price                int comment '售价',
+   market_price         int comment '市场价',
+   pur_price            int comment '采购价',
+   goods_desc           text comment '商品描述',
+   display_order        int comment '显示顺序',
+   add_time             datetime comment '添加时间',
+   update_time          datetime comment '更新时间',
+   primary key (id)
+);
+
+alter table bcd_goods comment '商品表';
+
+drop table if exists bcd_goods_repository;
+
+/*==============================================================*/
+/* Table: bcd_goods_repository                                  */
+/*==============================================================*/
+create table bcd_goods_repository
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   name                 varchar(64) comment '名称',
+   store_id             int comment '所属店铺id',
+   type                 int comment '类型
+            5601 正常仓
+            5602 辅料仓
+            5603 退货仓',
+   address              varchar(255) comment '地址',
+   is_use               int comment '是否可用',
+   capacity             int comment '容量',
+   quantity             int comment '目前库存数',
+   operator             int comment '管理人',
+   state                int comment '状态',
+   add_time             datetime comment '添加时间',
+   update_time          datetime comment '更新时间',
+   primary key (id)
+);
+
+alter table bcd_goods_repository comment '仓库表';
+
+drop table if exists bcd_goods_store;
+
+/*==============================================================*/
+/* Table: bcd_goods_store                                       */
+/*==============================================================*/
+create table bcd_goods_store
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   goods_id             int comment '商品id',
+   repository_id        int comment '仓库id',
+   store_id             int comment '店铺id',
+   quantity             int comment '数量',
+   perfect_quantity     int comment '理论库存',
+   alert_quantity       int comment '预警库存',
+   state                int comment '状态',
+   add_time             datetime comment '添加时间',
+   update_time          datetime comment '更新时间',
+   primary key (id)
+);
+
+alter table bcd_goods_store comment '商品库存表';
+
+drop table if exists bcd_goods_instore;
+
+/*==============================================================*/
+/* Table: bcd_goods_instore                                     */
+/*==============================================================*/
+create table bcd_goods_instore
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   goods_id             int comment '商品id',
+   batch_no             varchar(64) comment '批次号',
+   state                int comment '状态',
+   pur_price            int comment '采购价',
+   type                 int comment '入库类型 
+            5000正常采购入库
+            5001盘点入库
+            5002退货入库
+            5003调仓入库',
+   in_quantity          int comment '入库数量',
+   in_store_time        datetime comment '入库时间',
+   operator             int comment '操作人',
+   memo                 varchar(255) comment '备注',
+   source_id            int comment '入库来源 0pc端 1手机端 2paid 3其他',
+   primary key (id)
+);
+
+alter table bcd_goods_instore comment '商品入库明细表';
+
+drop table if exists bcd_goods_outstore;
+
+/*==============================================================*/
+/* Table: bcd_goods_outstore                                    */
+/*==============================================================*/
+create table bcd_goods_outstore
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   goods_id             int comment '商品id',
+   batch_no             varchar(64) comment '出库批次',
+   type                 int comment '出库类型
+            5100 正常出库
+            5101 盘点出库
+            5102 调仓出库',
+   repository_id        int comment '出库仓库',
+   out_quantity         int comment '出库数量',
+   out_store_time       datetime comment '出库时间',
+   operator             int comment '操作人',
+   memo                 varchar(255) comment '备注',
+   state                int comment '状态',
+   primary key (id)
+);
+
+alter table bcd_goods_outstore comment '商品出库表';
+
+drop table if exists bcd_goods_purchase;
+
+/*==============================================================*/
+/* Table: bcd_goods_purchase                                    */
+/*==============================================================*/
+create table bcd_goods_purchase
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   batch_no             varchar(0) comment '批次号',
+   type                 int comment '采购类型',
+   store_id             int comment '店铺id',
+   operator             int comment '操作人',
+   sum_quantity         int comment '采购总数量',
+   memo                 varchar(0) comment '备注',
+   state                int comment '状态',
+   add_time             datetime comment '添加时间',
+   update_time          datetime comment '更新时间',
+   primary key (id)
+);
+
+alter table bcd_goods_purchase comment '商品采购表';
+
+drop table if exists bcd_goods_purchase_item;
+
+/*==============================================================*/
+/* Table: bcd_goods_purchase_item                               */
+/*==============================================================*/
+create table bcd_goods_purchase_item
+(
+   id                   int not null AUTO_INCREMENT comment '主键id',
+   purchase_id          int comment '采购单id',
+   goods_id             int comment '商品id',
+   goods_no             varchar(64) comment '商品货号',
+   quantity             int comment '采购数量',
+   pur_price            int comment '采购价格',
+   state                int comment '状态',
+   primary key (id)
+);
+
+alter table bcd_goods_purchase_item comment '采购明细表';
