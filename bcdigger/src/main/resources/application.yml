@@ -62,8 +62,8 @@ spring:
       max-wait : 3000 #获取连接最大等待时间 ms  #default -1
       
 mybatis:  
-  type-aliases-package : com.bcdigger.*.entity  
-  mapper-locations : classpath:mappers/*.xml
+  type-aliases-package : com.bcdigger.**.entity  
+  mapper-locations : classpath:mappers/**.xml
   config-location : classpath:mybatis-config.xml
   
   

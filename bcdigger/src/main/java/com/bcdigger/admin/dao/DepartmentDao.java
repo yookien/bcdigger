@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bcdigger.admin.entity.Department;
-import com.bcdigger.admin.entity.SysMenu;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.core.dao.BaseDaoImpl;
 import com.github.pagehelper.Page;
@@ -41,8 +40,8 @@ public class DepartmentDao extends BaseDaoImpl<Department>{
 	}
 	
 	
-	public List<SysMenu> findSysMenuList(SysMenu sysMenu) {
-		return sqlSession.selectList("findSysMenuList", sysMenu);
+	public List<Department> findSysMenuList(Department department) {
+		return sqlSession.selectList("findDepartmentList", department);
 	}
 	
 }

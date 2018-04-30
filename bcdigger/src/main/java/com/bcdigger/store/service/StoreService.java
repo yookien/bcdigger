@@ -1,6 +1,5 @@
 package com.bcdigger.store.service;
 
-import com.bcdigger.admin.entity.SysMenu;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.store.entity.Store;
 /**

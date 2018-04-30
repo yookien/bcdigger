@@ -6,7 +6,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.bcdigger.admin.entity.SysMenu;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.core.dao.BaseDaoImpl;
 import com.bcdigger.store.entity.Store;
@@ -41,7 +40,7 @@ public class StoreDao extends BaseDaoImpl<Store>{
 	}
 	
 	
-	public List<SysMenu> findStoreList(Store store) {
+	public List<Store> findStoreList(Store store) {
 		return sqlSession.selectList("findStoreList", store);
 	}
 	
