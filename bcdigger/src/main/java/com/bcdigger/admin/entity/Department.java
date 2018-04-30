@@ -21,6 +21,9 @@ public class Department extends BaseEntity{
 	private Date  addTime;
 	private Date  updateTime;
 	private int  state;
+	//负责人
+	private String principal;
+	
 	public String getName() {
 		return name;
 	}
@@ -74,6 +77,12 @@ public class Department extends BaseEntity{
 	}
 	public void setState(int state) {
 		this.state = state;
+	}
+	public String getPrincipal() {
+		return principal;
+	}
+	public void setPrincipal(String principal) {
+		this.principal = principal;
 	}
 	
 }

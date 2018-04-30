@@ -27,7 +27,7 @@ public class DepartmentDao extends BaseDaoImpl<Department>{
 	public PageInfo<Department> findDepartments(PageInfo pageInfo, Department department) {
 		try{
 			Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-			List<Department> list= sqlSession.selectList("listPageByCondation", department);
+			List<Department> list= sqlSession.selectList("listDepartmentByCondation", department);
 			pageInfo.setTotal(page.getTotal());
 			pageInfo.setPages(page.getPages());
 			pageInfo.setIsFirstPage(page.getPageNum()==1?true:false);

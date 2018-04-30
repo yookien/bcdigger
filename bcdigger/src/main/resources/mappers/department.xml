@@ -4,7 +4,7 @@
 
 	<sql id="table"> bcd_department </sql>
 
-	<resultMap id="BaseResultMap" type="com.bcdigger.admin.entity.Department">
+	<resultMap id="BaseResultMap" type="department">
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="name" column="name" jdbcType="VARCHAR" />
 		<result property="adminId" column="admin_id" jdbcType="BIGINT"/>
@@ -15,6 +15,10 @@
 		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 		<result property="state" column="state" jdbcType="BIGINT"/>
+	</resultMap>
+	
+	<resultMap type="department" id="departmentResultMap" extends="BaseResultMap">
+		<result property="principal" column="admin_name" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<sql id="base_column_list">
@@ -83,7 +87,7 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="Department">
+	<update id="update" parameterType="department">
 		update
 		<include refid="table" />
 		<set>
@@ -121,6 +125,13 @@
 		<![CDATA[ order by id desc]]>
 	</select>
 
-
+	<select id="listDepartmentByCondation" parameterType="Department" resultMap="departmentResultMap">
+		select d.id, d.name, d.admin_id,d.parent_id,d.left_id,d.right_id,d.display_order,d.add_time,d.update_time,
+		d.state,a.name as admin_name
+		from
+		bcd_department d , bcd_admin a
+		where d.admin_id = a.id
+		<![CDATA[ order by d.display_order desc]]>
+	</select>
 
 </mapper>
