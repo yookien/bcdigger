@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bcdigger.goods.dao.GoodsRepositoryDao">
+
+	<sql id="table"> bcd_goods_repository </sql>
+
+	<resultMap id="BaseResultMap" type="goodsRepository">
+		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="name" column="name" jdbcType="VARCHAR" />
+		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
+		<result property="type " column="type" jdbcType="BIGINT"/>
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="isUse" column="is_use" jdbcType="BIGINT"/>
+		<result property="capacity" column="capacity" jdbcType="BIGINT"/>
+		<result property="quantity" column="quantity" jdbcType="BIGINT"/>
+		<result property="operator" column="operator" jdbcType="BIGINT"/>
+		<result property="state" column="state" jdbcType="BIGINT"/>
+		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<resultMap type="goodsRepository" id="goodsRepositoryResultMap" extends="BaseResultMap">
+		<!-- <result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
+		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" /> -->
+	</resultMap>
+	
+	<sql id="base_column_list">
+		id, name,store_id,type,address,is_use,capacity,quantity,operator,state,add_time,update_time
+	</sql>
+	
+	<sql id="condition_sql">
+	
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="name != null and name !='' and like == 1 ">
+			and name like concat('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="name != null and name !='' and like == null">
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+	
+	</sql>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Goods">
+		insert into
+		<include refid="table" />
+		(name,store_id,type,address,is_use,capacity,quantity,operator,state,add_time,update_time)
+		values (
+			#{name},#{storeId},#{type},#{address},#{isUse},#{capacity},#{quantity},#{operator},#{state},now(),now()
+		)
+	</insert>
+	
+	<update id="update" parameterType="goods">
+		update
+		<include refid="table" />
+		<set>
+			name= #{name} ,
+			store_id= #{storeId} ,
+			type= #{type } ,
+			address= #{address} ,
+			is_use= #{isUse} ,
+			capacity= #{capacity} ,
+			quantity= #{quantity} ,
+			operator= #{operator} ,
+			state= #{state} ,
+			add_time= #{addTime} ,
+			update_time= now()
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		where id = #{id}
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+
+
+</mapper>

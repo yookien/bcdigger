@@ -425,6 +425,8 @@ create table bcd_goods_instore
    id                   int not null AUTO_INCREMENT comment '主键id',
    goods_id             int comment '商品id',
    batch_no             varchar(64) comment '批次号',
+   store_id             int comment '店铺id',
+   repository_id        int comment '仓库id',
    state                int comment '状态',
    pur_price            int comment '采购价',
    type                 int comment '入库类型 
@@ -452,6 +454,7 @@ create table bcd_goods_outstore
    id                   int not null AUTO_INCREMENT comment '主键id',
    goods_id             int comment '商品id',
    batch_no             varchar(64) comment '出库批次',
+   store_id             int comment '店铺id',
    type                 int comment '出库类型
             5100 正常出库
             5101 盘点出库
@@ -462,6 +465,7 @@ create table bcd_goods_outstore
    operator             int comment '操作人',
    memo                 varchar(255) comment '备注',
    state                int comment '状态',
+   source_id            int comment '出库来源 0pc端 1手机端 2paid 3其他',
    primary key (id)
 );
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bcdigger.goods.dao.GoodsOutstoreDao">
+
+	<sql id="table"> bcd_goods_outstore </sql>
+
+	<resultMap id="BaseResultMap" type="goodsOutstore">
+		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+		<result property="batchNo" column="batch_no" jdbcType="VARCHAR" />
+		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
+		<result property="type" column="type" jdbcType="BIGINT"/>
+		<result property="repositoryId" column="repository_id" jdbcType="BIGINT"/>
+		<result property="out_quantity" column="out_quantity" jdbcType="BIGINT"/>
+		<result property="outStoreTime"  column="out_store_time"  jdbcType="TIMESTAMP"/>
+		<result property="operator" column="operator" jdbcType="BIGINT"/>
+		<result property="memo" column="memo" jdbcType="VARCHAR" />
+		<result property="state" column="state" jdbcType="BIGINT"/>
+		<result property="sourceId" column="source_id" jdbcType="BIGINT"/>
+	</resultMap>
+	
+	<resultMap type="goodsStore" id="goodsStoreResultMap" extends="BaseResultMap">
+		<!-- <result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
+		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" /> -->
+	</resultMap>
+	
+	<sql id="base_column_list">
+		id, goods_id,batch_no,store_id,type,repository_id,out_quantity,out_store_time,operator,memo,state,source_id
+	</sql>
+	
+	<sql id="condition_sql">
+	
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="goodsId != null and goodsId !=0">
+			and goods_id = #{goodsId,jdbcType=VARCHAR}
+		</if>
+		<if test="storeId != null and storeId !=0">
+			and store_id = #{storeId,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="GoodsInstore">
+		insert into
+		<include refid="table" />
+		(goods_id,batch_no,store_id,type,repository_id,out_quantity,out_store_time,operator,memo,state,source_id)
+		values (
+			#{goodsId},#{batchNo},#{storeId},#{type},#{repositoryId},#{outQuantity},#{outStoreTime},#{operator},#{memo},#{state},#{sourceId}
+		)
+	</insert>
+	
+	<update id="update" parameterType="goods">
+		update
+		<include refid="table" />
+		<set>
+			goods_id = #{goodsId} ,
+			batch_no = #{batchNo} ,
+			store_id = #{storeId} ,
+			type = #{type} ,
+			repository_id = #{repositoryId} ,
+			out_quantity = #{out_quantity} ,
+			out_store_time = #{outStoreTime} ,
+			operator = #{operator} ,
+			memo = #{memo} ,
+			state = #{state} ,
+			source_id = #{sourceId}
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		where id = #{id}
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+
+
+</mapper>

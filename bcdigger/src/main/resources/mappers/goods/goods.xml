@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bcdigger.goods.dao.GoodsDao">
+
+	<sql id="table"> bcd_goods </sql>
+
+	<resultMap id="BaseResultMap" type="goods">
+		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="catId" column="cat_id" jdbcType="BIGINT"/>
+		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" />
+		<result property=" goodName" column="good_name" jdbcType="VARCHAR" />
+		<result property="state " column="state" jdbcType="BIGINT"/>
+		<result property="smallImage" column="small_image" jdbcType="VARCHAR" />
+		<result property="middleImage" column="middle_image" jdbcType="VARCHAR" />
+		<result property="goodsImage" column="goods_image" jdbcType="VARCHAR" />
+		<result property="weight" column="weight" jdbcType="Double" />
+		<result property="unit" column="unit" jdbcType="VARCHAR" />
+		<result property="innerName" column="inner_name" jdbcType="VARCHAR" />
+		<result property="type  " column="type" jdbcType="BIGINT"/>
+		<result property="price " column="price" jdbcType="BIGINT"/>
+		<result property="marketPrice" column="market_price" jdbcType="BIGINT"/>
+		<result property="purPrice" column="pur_price" jdbcType="BIGINT"/>
+		<result property="goodsDesc" column="goods_desc" jdbcType="VARCHAR" />
+		<result property="displayOrder" column="display_order" jdbcType="BIGINT"/>
+		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<resultMap type="goods" id="goodsResultMap" extends="BaseResultMap">
+		<result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
+		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="base_column_list">
+		id, cat_id,goods_no,good_name,state,small_image,middle_image,goods_image,weight,unit,inner_name,
+		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time
+	</sql>
+	
+	<sql id="condition_sql">
+	
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="goodName != null and goodName !='' and like == 1 ">
+			and good_name like concat('%',#{goodName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="goodName != null and goodName !='' and like == null">
+			and good_name = #{goodName,jdbcType=VARCHAR}
+		</if>
+	
+	</sql>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Goods">
+		insert into
+		<include refid="table" />
+		(cat_id,goods_no,good_name,state,small_image,middle_image,goods_image,weight,unit,inner_name,
+		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time)
+		values (#{catId},#{goodsNo},#{goodName},#{state},#{smallImage},#{middleImage},#{goodsImage},#{weight},#{unit},#{innerName},
+			#{type},#{price},#{marketPrice},#{purPrice},#{goodsDesc},#{displayOrder},now(),now()
+		)
+	</insert>
+	
+	<update id="update" parameterType="goods">
+		update
+		<include refid="table" />
+		<set>
+			cat_id= #{catId} ,
+			goods_no = #{goodsNo} , 
+			good_name = #{goodName} , 
+			state = #{state} , 
+			small_image = #{smallImage} ,
+			middle_image = #{middleImage} , 
+			goods_image = #{goodsImage} , 
+			weight = #{weight} , 
+			unit = #{unit} , 
+			inner_name = #{innerName} , 
+			type = #{type} , 
+			price = #{price} , 
+			market_price = #{marketPrice} , 
+			pur_price = #{purPrice} , 
+			goods_desc = #{goodsDesc} , 
+			display_order = #{displayOrder} , 
+			add_time = #{addTime} , 
+			update_time = now()
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		where id = #{id}
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+
+
+</mapper>
