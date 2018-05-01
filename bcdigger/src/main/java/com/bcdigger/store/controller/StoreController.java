@@ -36,7 +36,7 @@ public class StoreController {
 	private StoreService storeService;
 	
 	
-	@RequestMapping(value ="/addStore",method=RequestMethod.POST)
+	@RequestMapping(value ="/addStore",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public Map<String, Object> addStore(Store store){
 		Map<String, Object> map = new HashMap<>();  

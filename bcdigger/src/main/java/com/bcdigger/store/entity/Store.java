@@ -47,9 +47,9 @@ public class Store extends BaseEntity {
 	//百度位置
 	private String   bmapPosition;
 	//百度x位置
-	private Double bmapPositionX;
+	private Double bmapPositionX=114.02;
 	//百度y位置
-	private Double   bmapPositionY;
+	private Double   bmapPositionY=22.54;
 	//搜索地址
 	private String   searchUrl;
 	//公交情况
