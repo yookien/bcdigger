@@ -11,7 +11,7 @@ import com.bcdigger.goods.entity.GoodsStore;
 import com.bcdigger.goods.service.GoodsStoreService;
 import com.bcdigger.common.page.PageInfo;
 
-@Service("GoodsStoreService")
+@Service("goodsStoreService")
 public class GoodsStoreServiceImpl implements GoodsStoreService {
 
 	@Autowired
@@ -47,17 +47,17 @@ public class GoodsStoreServiceImpl implements GoodsStoreService {
 	}
 
 	/**
-	 * 插入操作商品
+	 * 插入操作库存
 	 */
-	public int addGoodsStore(GoodsStore GoodsStore) {
-		return goodsStoreDao.insert(GoodsStore);
+	public int addGoodsStore(GoodsStore goodsStore) {
+		return goodsStoreDao.insert(goodsStore);
 	}
 
 	/**
-	 * 更新操作商品信息
+	 * 更新操作库存信息
 	 */
-	public int updateGoodsStore(GoodsStore GoodsStore) {
-		return goodsStoreDao.update(GoodsStore);
+	public int updateGoodsStore(GoodsStore goodsStore) {
+		return goodsStoreDao.update(goodsStore);
 	}
 
 }

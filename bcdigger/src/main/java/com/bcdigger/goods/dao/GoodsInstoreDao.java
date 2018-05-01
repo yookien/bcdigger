@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bcdigger.core.dao.BaseDaoImpl;
-import com.bcdigger.goods.entity.GoodsStore;
+import com.bcdigger.goods.entity.GoodsInstore;
 
-@Repository("goodsStoreDao")
-public class GoodsStoreDao extends BaseDaoImpl<GoodsStore> {
+@Repository("goodsInstoreDao")
+public class GoodsInstoreDao extends BaseDaoImpl<GoodsInstore> {
 
 	@Autowired
 	private SqlSession sqlSession;
