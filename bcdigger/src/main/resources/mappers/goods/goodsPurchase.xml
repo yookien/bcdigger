@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bcdigger.goods.dao.GoodsInstoreDao">
+<mapper namespace="com.bcdigger.goods.dao.GoodsPurchaseDao">
 
-	<sql id="table"> bcd_goods_instore </sql>
+	<sql id="table"> bcd_goods_purchase </sql>
 
-	<resultMap id="BaseResultMap" type="goodsInstore">
+	<resultMap id="BaseResultMap" type="goodsPurchase">
 		<id property="id" column="id" jdbcType="BIGINT"/>
-		<result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
 		<result property="batchNo" column="batch_no" jdbcType="VARCHAR" />
-		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
-		<result property="repositoryId" column="repository_id" jdbcType="BIGINT"/>
-		<result property="state" column="state" jdbcType="BIGINT"/>
-		<result property="purPrice" column="pur_price" jdbcType="BIGINT"/>
 		<result property="type" column="type" jdbcType="BIGINT"/>
-		<result property="inQuantity" column="in_quantity" jdbcType="BIGINT"/>
-		<result property="inStoreTime"  column="in_store_time"  jdbcType="TIMESTAMP"/>
+		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
 		<result property="operator" column="operator" jdbcType="BIGINT"/>
+		<result property="sumQuantity" column="sum_quantity" jdbcType="BIGINT"/>
 		<result property="memo" column="memo" jdbcType="VARCHAR" />
-		<result property="sourceId" column="source_id" jdbcType="BIGINT"/>
+		<result property="state" column="state" jdbcType="BIGINT"/>
+		<result property="addTime"  column="add_time"  jdbcType="TIMESTAMP"/>
+		<result property="updateTime"  column="update_time"  jdbcType="TIMESTAMP"/>
 	</resultMap>
 	
-	<resultMap type="goodsStore" id="goodsStoreResultMap" extends="BaseResultMap">
+	<resultMap type="goodsPurchase" id="goodsStoreResultMap" extends="BaseResultMap">
 		<!-- <result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
 		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" /> -->
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id, goods_id,batch_no,store_id,repository_id,state,pur_price,type,in_quantity,in_store_time,operator,memo,source_id
+		id, batch_no,type,store_id,operator,sum_quantity,memo,state,add_time,update_time
 	</sql>
 	
 	<sql id="condition_sql">
@@ -34,8 +31,8 @@
 		<if test="id != null">
 			and id = #{id,jdbcType=BIGINT}
 		</if>
-		<if test="goodsId != null and goodsId !=0">
-			and goods_id = #{goodsId,jdbcType=BIGINT}
+		<if test="batchNo != null and batchNo !=0">
+			and batch_no = #{batchNo,jdbcType=VARCHAR}
 		</if>
 		<if test="storeId != null and storeId !=0">
 			and store_id = #{storeId,jdbcType=BIGINT}
@@ -45,9 +42,9 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="GoodsInstore">
 		insert into
 		<include refid="table" />
-		(goods_id,batch_no,store_id,repository_id,state,pur_price,type,in_quantity,in_store_time,operator,memo,source_id)
+		(batch_no,type,store_id,operator,sum_quantity,memo,state,add_time,update_time)
 		values (
-			#{goodsId},#{batchNo},#{storeId},#{repositoryId},#{state},#{purPrice},#{type},#{inQuantity},now(),#{operator},#{memo},#{sourceId}
+			#{batchNo},#{type},#{storeId},#{operator},#{sumQuantity},#{memo},#{state},now(),now()
 		)
 	</insert>
 	
@@ -55,18 +52,15 @@
 		update
 		<include refid="table" />
 		<set>
-			goods_id = #{goodsId} ,
-			batch_no = #{batchNo} ,batch_no
-			store_id = #{storeId} ,
-			repository_id = #{repositoryId} ,
-			state = #{state} ,
-			pur_price = #{purPrice} ,
+			batch_no = #{batchNo} ,
 			type = #{type} ,
-			in_quantity = #{inQuantity} ,
-			in_store_time = #{inStoreTime} ,
+			store_id = #{storeId} ,
 			operator = #{operator} ,
+			sum_quantity = #{sumQuantity} ,
 			memo = #{memo} ,
-			source_id = #{sourceId}
+			state = #{state} ,
+			add_time = #{addTime} ,
+			update_time = now()
 		</set>
 		<where>
 			id = #{id}

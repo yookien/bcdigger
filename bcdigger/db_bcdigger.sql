@@ -290,7 +290,7 @@ create table bcd_store
    bmap_position        varchar(25) not null comment '百度位置',
    bmap_positionX       decimal(12,6) not null comment '百度x位置',
    bmap_positionY       decimal(12,6) not null comment '百度y位置',
-   search_url           int(4) not null comment '搜索地址',
+   search_url           varchar(100) not null comment '搜索地址',
    bus                  varchar(100) not null comment '公交情况',
    subway               varchar(50) not null comment '地铁情况',
    nearby               varchar(80) not null comment '附近建筑',

@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bcdigger.goods.dao.GoodsStoreDao">
+<mapper namespace="com.bcdigger.goods.dao.GoodsPurchaseItemDao">
 
-	<sql id="table"> bcd_goods_store </sql>
+	<sql id="table"> bcd_goods_purchase_item </sql>
 
-	<resultMap id="BaseResultMap" type="goodsStore">
+	<resultMap id="BaseResultMap" type="goodsPurchaseItem">
 		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="purchaseId" column="purchase_id" jdbcType="BIGINT"/>
 		<result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
-		<result property="repositoryId" column="repository_id" jdbcType="BIGINT"/>
-		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
+		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" />
 		<result property="quantity" column="quantity" jdbcType="BIGINT"/>
-		<result property="perfectQuantity" column="perfect_quantity" jdbcType="BIGINT"/>
-		<result property="alertQuantity" column="alert_quantity" jdbcType="BIGINT"/>
+		<result property="purPrice" column="pur_price" jdbcType="BIGINT"/>
 		<result property="state" column="state" jdbcType="BIGINT"/>
-		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
-		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	
-	<resultMap type="goodsStore" id="goodsStoreResultMap" extends="BaseResultMap">
+	<resultMap type="goodsPurchaseItem" id="goodsStoreResultMap" extends="BaseResultMap">
 		<!-- <result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
 		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" /> -->
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id, goods_id,repository_id,store_id,quantity,perfect_quantity,alert_quantity,state,add_time,update_time
+		id, purchase_id,goods_id,goods_no,quantity,pur_price,state
 	</sql>
 	
 	<sql id="condition_sql">
@@ -31,20 +28,17 @@
 		<if test="id != null">
 			and id = #{id,jdbcType=BIGINT}
 		</if>
-		<if test="goodsId != null and goodsId !=0">
-			and goods_id = #{goodsId,jdbcType=BIGINT}
-		</if>
-		<if test="storeId != null and storeId !=0">
-			and store_id = #{storeId,jdbcType=BIGINT}
+		<if test="purchaseId != null and purchaseId !=0">
+			and purchase_id = #{purchaseId,jdbcType=BIGINT}
 		</if>
 	</sql>
 	
-	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Goods">
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="GoodsInstore">
 		insert into
 		<include refid="table" />
-		(goods_id,repository_id,store_id,quantity,perfect_quantity,alert_quantity,state,add_time,update_time)
+		(purchase_id,goods_id,goods_no,quantity,pur_price,state)
 		values (
-			#{goodsId},#{repositoryId},#{storeId},#{quantity},#{perfectQuantity},#{alertQuantity},#{state},now(),now()
+			#{purchaseId},#{goodsId},#{goodsNo},#{quantity},#{purPrice},#{state}
 		)
 	</insert>
 	
@@ -52,15 +46,12 @@
 		update
 		<include refid="table" />
 		<set>
+			purchase_id = #{purchaseId} ,
 			goods_id = #{goodsId} ,
-			repository_id = #{repositoryId} ,
-			store_id = #{storeId} ,
+			goods_no = #{goodsNo} ,
 			quantity = #{quantity} ,
-			perfect_quantity = #{perfectQuantity} ,
-			alert_quantity = #{alertQuantity} ,
-			state = #{state} ,
-			add_time = #{addTime} ,
-			update_time = now()
+			pur_price = #{purPrice} ,
+			state = #{state}
 		</set>
 		<where>
 			id = #{id}
