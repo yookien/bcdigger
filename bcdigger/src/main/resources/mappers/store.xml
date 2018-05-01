@@ -38,7 +38,7 @@
 		<result property="storeType" column="store_type" jdbcType="BIGINT"/>
 		<result property="isBooking" column="is_booking" jdbcType="BIGINT"/>
 		<result property="openTime" column="open_time" jdbcType="TIMESTAMP"/>
-		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+		<result property="addTime" column="create_time" jdbcType="TIMESTAMP"/>
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	
@@ -46,7 +46,7 @@
 		id,store_code,chinese_name,phone, mobile, address, direction, open_hour, close_hour, english_name, english_address,
 		location_image, store_images ,store_province ,store_city, city_area, is_open, bmap_position, bmap_positionX, bmap_positionY,
 		search_url, bus, subway ,nearby ,email, store_image1 ,store_image2, store_image3, store_image4, appoint_limit, 
-		store_type, is_booking ,open_time ,add_time, update_time
+		store_type, is_booking ,open_time ,create_time, update_time
 	</sql>
 	
 	<sql id="condition_sql">
@@ -104,8 +104,11 @@
 	
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="store">
 		insert into
-		<include refid="base_column_list" />
-		(<include refid="table" />)
+		<include refid="table" />
+		(store_code,chinese_name,phone, mobile, address, direction, open_hour, close_hour, english_name, english_address,
+		location_image, store_images ,store_province ,store_city, city_area, is_open, bmap_position, bmap_positionX, bmap_positionY,
+		search_url, bus, subway ,nearby ,email, store_image1 ,store_image2, store_image3, store_image4, appoint_limit, 
+		store_type, is_booking ,open_time ,create_time, update_time)
 		values (
 			#{storeCode},#{chineseName},#{phone},#{mobile},#{address},#{direction},#{openHour},#{closeHour},#{englishName},#{englishAddress},
 			#{locationImage},#{storeImages},#{storeProvince},#{storeCity},#{cityArea},#{isOpen},#{bmapPosition},#{bmapPositionX},#{bmapPositionY},
@@ -171,6 +174,15 @@
 	</select>
 	
 	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+	
+	<select id="listStoreByCondation" parameterType="java.util.Map" resultMap="BaseResultMap">
 		select <include refid="base_column_list" /> from
 		<include refid="table" />
 		<where>

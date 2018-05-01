@@ -27,7 +27,7 @@ public class StoreDao extends BaseDaoImpl<Store>{
 	public PageInfo<Store> findStores(PageInfo pageInfo, Store store) {
 		try{
 			Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-			List<Store> list= sqlSession.selectList("listPageByCondation", store);
+			List<Store> list= sqlSession.selectList("listStoreByCondation", store);
 			pageInfo.setTotal(page.getTotal());
 			pageInfo.setPages(page.getPages());
 			pageInfo.setIsFirstPage(page.getPageNum()==1?true:false);
