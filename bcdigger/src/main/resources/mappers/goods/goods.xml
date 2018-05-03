@@ -13,7 +13,7 @@
 		<result property="smallImage" column="small_image" jdbcType="VARCHAR" />
 		<result property="middleImage" column="middle_image" jdbcType="VARCHAR" />
 		<result property="goodsImage" column="goods_image" jdbcType="VARCHAR" />
-		<result property="weight" column="weight" jdbcType="Double" />
+		<result property="weight" column="weight" jdbcType="DOUBLE" />
 		<result property="unit" column="unit" jdbcType="VARCHAR" />
 		<result property="innerName" column="inner_name" jdbcType="VARCHAR" />
 		<result property="type  " column="type" jdbcType="BIGINT"/>

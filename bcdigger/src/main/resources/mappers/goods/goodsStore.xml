@@ -39,7 +39,7 @@
 		</if>
 	</sql>
 	
-	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Goods">
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsStore">
 		insert into
 		<include refid="table" />
 		(goods_id,repository_id,store_id,quantity,perfect_quantity,alert_quantity,state,add_time,update_time)
@@ -48,7 +48,7 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="goods">
+	<update id="update" parameterType="goodsStore">
 		update
 		<include refid="table" />
 		<set>
@@ -59,7 +59,6 @@
 			perfect_quantity = #{perfectQuantity} ,
 			alert_quantity = #{alertQuantity} ,
 			state = #{state} ,
-			add_time = #{addTime} ,
 			update_time = now()
 		</set>
 		<where>
