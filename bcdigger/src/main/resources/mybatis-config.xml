@@ -26,7 +26,7 @@
           
         <setting name="jdbcTypeForNull" value="NULL"/>  
           
-    </settings>  
+    </settings>
   
     <typeAliases>  
         <typeAlias alias="Integer" type="java.lang.Integer" />  
@@ -54,5 +54,27 @@
         <typeAlias alias="goodsRepository" type="com.bcdigger.goods.entity.GoodsRepository" />
         <typeAlias alias="goodsStore" type="com.bcdigger.goods.entity.GoodsStore" />
         
-    </typeAliases>  
+    </typeAliases> 
+    
+    
+        
+    <mappers>
+    
+        <!--<mapper resource="mappers/admin.xml"/>
+    	<mapper resource="mappers/AdminRole.xml"/>
+    	<mapper resource="mappers/AdminRoleRef.xml"/>
+    	<mapper resource="mappers/department.xml"/>
+    	<mapper resource="mappers/RoleMenuRef.xml"/>
+    	<mapper resource="mappers/store.xml"/>-->
+    	
+    	<mapper resource="mappers/goods/goodsStore.xml"/>
+    	<mapper resource="mappers/goods/goodsRepository.xml"/>
+    	<mapper resource="mappers/goods/goodsPurchaseItem.xml"/>
+    	<mapper resource="mappers/goods/goodsPurchase.xml"/>
+    	<mapper resource="mappers/goods/goodsOutstore.xml"/>
+    	<mapper resource="mappers/goods/goodsInstore.xml"/>
+    	<mapper resource="mappers/goods/goods.xml"/>
+    	
+    </mappers>
+    
 </configuration>
