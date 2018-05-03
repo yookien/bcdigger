@@ -8,7 +8,7 @@
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="name" column="name" jdbcType="VARCHAR" />
 		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
-		<result property="type " column="type" jdbcType="BIGINT"/>
+		<result property="type" column="type" jdbcType="BIGINT"/>
 		<result property="address" column="address" jdbcType="VARCHAR" />
 		<result property="isUse" column="is_use" jdbcType="BIGINT"/>
 		<result property="capacity" column="capacity" jdbcType="BIGINT"/>
@@ -42,7 +42,7 @@
 	
 	</sql>
 	
-	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Goods">
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsRepository">
 		insert into
 		<include refid="table" />
 		(name,store_id,type,address,is_use,capacity,quantity,operator,state,add_time,update_time)
@@ -51,7 +51,7 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="goods">
+	<update id="update" parameterType="goodsRepository">
 		update
 		<include refid="table" />
 		<set>

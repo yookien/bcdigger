@@ -8,27 +8,22 @@
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="catId" column="cat_id" jdbcType="BIGINT"/>
 		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" />
-		<result property=" goodName" column="good_name" jdbcType="VARCHAR" />
-		<result property="state " column="state" jdbcType="BIGINT"/>
+		<result property="goodName" column="good_name" jdbcType="VARCHAR" />
+		<result property="state" column="state" jdbcType="BIGINT"/>
 		<result property="smallImage" column="small_image" jdbcType="VARCHAR" />
 		<result property="middleImage" column="middle_image" jdbcType="VARCHAR" />
 		<result property="goodsImage" column="goods_image" jdbcType="VARCHAR" />
 		<result property="weight" column="weight" jdbcType="DOUBLE" />
 		<result property="unit" column="unit" jdbcType="VARCHAR" />
 		<result property="innerName" column="inner_name" jdbcType="VARCHAR" />
-		<result property="type  " column="type" jdbcType="BIGINT"/>
-		<result property="price " column="price" jdbcType="BIGINT"/>
+		<result property="type" column="type" jdbcType="BIGINT"/>
+		<result property="price" column="price" jdbcType="BIGINT"/>
 		<result property="marketPrice" column="market_price" jdbcType="BIGINT"/>
 		<result property="purPrice" column="pur_price" jdbcType="BIGINT"/>
 		<result property="goodsDesc" column="goods_desc" jdbcType="VARCHAR" />
 		<result property="displayOrder" column="display_order" jdbcType="BIGINT"/>
 		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-	</resultMap>
-	
-	<resultMap type="goods" id="goodsResultMap" extends="BaseResultMap">
-		<result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
-		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<sql id="base_column_list">
@@ -50,7 +45,7 @@
 	
 	</sql>
 	
-	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="Goods">
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goods">
 		insert into
 		<include refid="table" />
 		(cat_id,goods_no,good_name,state,small_image,middle_image,goods_image,weight,unit,inner_name,

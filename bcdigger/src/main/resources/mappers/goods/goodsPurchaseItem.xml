@@ -33,7 +33,7 @@
 		</if>
 	</sql>
 	
-	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="GoodsInstore">
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsPurchaseItem">
 		insert into
 		<include refid="table" />
 		(purchase_id,goods_id,goods_no,quantity,pur_price,state)
@@ -42,7 +42,7 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="goods">
+	<update id="update" parameterType="goodsPurchaseItem">
 		update
 		<include refid="table" />
 		<set>

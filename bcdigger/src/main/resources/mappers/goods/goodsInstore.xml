@@ -42,7 +42,7 @@
 		</if>
 	</sql>
 	
-	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="GoodsInstore">
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsInstore">
 		insert into
 		<include refid="table" />
 		(goods_id,batch_no,store_id,repository_id,state,pur_price,type,in_quantity,in_store_time,operator,memo,source_id)
@@ -51,12 +51,12 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="goods">
+	<update id="update" parameterType="goodsInstore">
 		update
 		<include refid="table" />
 		<set>
 			goods_id = #{goodsId} ,
-			batch_no = #{batchNo} ,batch_no
+			batch_no = #{batchNo} ,
 			store_id = #{storeId} ,
 			repository_id = #{repositoryId} ,
 			state = #{state} ,

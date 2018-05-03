@@ -11,7 +11,7 @@
 		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
 		<result property="type" column="type" jdbcType="BIGINT"/>
 		<result property="repositoryId" column="repository_id" jdbcType="BIGINT"/>
-		<result property="out_quantity" column="out_quantity" jdbcType="BIGINT"/>
+		<result property="outQuantity" column="out_quantity" jdbcType="BIGINT"/>
 		<result property="outStoreTime"  column="out_store_time"  jdbcType="TIMESTAMP"/>
 		<result property="operator" column="operator" jdbcType="BIGINT"/>
 		<result property="memo" column="memo" jdbcType="VARCHAR" />
@@ -41,7 +41,7 @@
 		</if>
 	</sql>
 	
-	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="GoodsInstore">
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsOutstore">
 		insert into
 		<include refid="table" />
 		(goods_id,batch_no,store_id,type,repository_id,out_quantity,out_store_time,operator,memo,state,source_id)
@@ -50,7 +50,7 @@
 		)
 	</insert>
 	
-	<update id="update" parameterType="goods">
+	<update id="update" parameterType="goodsOutstore">
 		update
 		<include refid="table" />
 		<set>
@@ -59,7 +59,7 @@
 			store_id = #{storeId} ,
 			type = #{type} ,
 			repository_id = #{repositoryId} ,
-			out_quantity = #{out_quantity} ,
+			out_quantity = #{outQuantity} ,
 			out_store_time = #{outStoreTime} ,
 			operator = #{operator} ,
 			memo = #{memo} ,
