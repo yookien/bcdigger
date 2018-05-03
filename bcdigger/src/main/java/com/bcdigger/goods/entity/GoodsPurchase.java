@@ -16,7 +16,7 @@ public class GoodsPurchase extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 	private String batchNo;//批次号
 	private int   type;//采购类型
-	private int   store_id;//店铺id
+	private int   storeId;//店铺id
 	private int   operator;//操作人
 	private int   sumQuantity;//采购总数量
 	private String   memo    ;//备注
@@ -35,11 +35,12 @@ public class GoodsPurchase extends BaseEntity{
 	public void setType(int type) {
 		this.type = type;
 	}
-	public int getStore_id() {
-		return store_id;
+
+	public int getStoreId() {
+		return storeId;
 	}
-	public void setStore_id(int store_id) {
-		this.store_id = store_id;
+	public void setStoreId(int storeId) {
+		this.storeId = storeId;
 	}
 	public int getOperator() {
 		return operator;

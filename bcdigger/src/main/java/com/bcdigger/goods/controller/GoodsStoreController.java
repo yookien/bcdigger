@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.core.annotation.AdminAuth;
-import com.bcdigger.goods.entity.GoodsStore;
-import com.bcdigger.goods.service.GoodsStoreService;
+import com.bcdigger.goods.entity.GoodsInstore;
+import com.bcdigger.goods.service.GoodsInstoreService;
 
 /**
  * 
- * ClassName: GoodsGoodsStoreController
+ * ClassName: GoodsInstoreGoodsInstoreController
  * @Description: 库存Controller
  * @author ipui
  * @date 2018年5月3日
@@ -31,14 +31,14 @@ import com.bcdigger.goods.service.GoodsStoreService;
 public class GoodsStoreController {
 	
 	@Autowired
-	private GoodsStoreService goodsStoreService;
+	private GoodsInstoreService goodsInstoreService;
 	
-	@RequestMapping(value ="/addGoodsStore",method={RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value ="/addGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public Map<String, Object> addGoodsStore(GoodsStore goodsStore){
+	public Map<String, Object> addGoodsInstore(GoodsInstore GoodsInstore){
 		Map<String, Object> map = new HashMap<>();  
 		try{
-			int result = goodsStoreService.addGoodsStore(goodsStore);
+			int result = goodsInstoreService.addGoodsInstore(GoodsInstore);
 			map.put("result", result);//登录成功
 		}catch(Exception e){
 			map.put("result", 0);//系统异常
@@ -55,17 +55,17 @@ public class GoodsStoreController {
 	 * @throws
 	 * @date 2018年3月25日
 	 */
-	@RequestMapping(value ="/getGoodsStore",method={RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value ="/getGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public Map<String, Object> getGoodsStore(GoodsStore goodsStore) {
+	public Map<String, Object> getGoodsInstore(GoodsInstore GoodsInstore) {
 		Map<String, Object> map = new HashMap<>();
 		try{
-			if( goodsStore==null || goodsStore.getId()<=0){
+			if( GoodsInstore==null || GoodsInstore.getId()<=0){
 				return null;
 			}
-			goodsStore = goodsStoreService.getGoodsStore(goodsStore.getId());
+			GoodsInstore = goodsInstoreService.getGoodsInstore(GoodsInstore.getId());
 			map.put("result", 1);//登录成功
-			map.put("GoodsStore", goodsStore);
+			map.put("GoodsInstore", GoodsInstore);
 		}catch(Exception e){
 			map.put("result", 0);//系统异常
 			e.printStackTrace();
@@ -76,21 +76,21 @@ public class GoodsStoreController {
 	/**
 	 * 
 	 * @Description: 更新门店信息
-	 * @param GoodsStore
+	 * @param GoodsInstore
 	 * @return Map<String,Object>
 	 * @date 2018年3月25日
 	 */
-	@RequestMapping(value ="/updateGoodsStore",method={RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value ="/updateGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public Map<String, Object> updateGoodsStore(GoodsStore goodsStore){
+	public Map<String, Object> updateGoodsInstore(GoodsInstore GoodsInstore){
 		Map<String, Object> map = new HashMap<>();  
 		try{
 			// 参数校验，待完善
-			if(goodsStore==null){
+			if(GoodsInstore==null){
 				map.put("result", -1);// 参数为空
 				return map;
 			}
-			int result = goodsStoreService.updateGoodsStore(goodsStore);
+			int result = goodsInstoreService.updateGoodsInstore(GoodsInstore);
 			map.put("result", result);//更新成功
 		}catch(Exception e){
 			map.put("result", 0);//系统异常
@@ -106,9 +106,9 @@ public class GoodsStoreController {
 	 * @return String
 	 * @date 2018年3月26日
 	 */
-	@RequestMapping(value ="/goodsGtoreIndex")
+	@RequestMapping(value ="/GoodsInstoreGtoreIndex")
 	public String sysMenusIndex() {
-		return "/goods/goodsStore_index";
+		return "/GoodsInstore/GoodsInstore_index";
 	}
 
 	/**
@@ -117,8 +117,8 @@ public class GoodsStoreController {
 	 * @return Map<String,Object>  
 	 * @date 2018年3月25日
 	 */
-	@RequestMapping(value ="/getGoodsStores",method={RequestMethod.GET,RequestMethod.POST})
-	public String getGoodsStores(GoodsStore goodsStore, PageInfo pageInfo,ModelMap map) {
+	@RequestMapping(value ="/getGoodsInstores",method={RequestMethod.GET,RequestMethod.POST})
+	public String getGoodsInstores(GoodsInstore GoodsInstore, PageInfo pageInfo,ModelMap map) {
 		try{
 			if(pageInfo==null){
 				pageInfo=new PageInfo();
@@ -126,12 +126,12 @@ public class GoodsStoreController {
 			//设置每页显示个数
 			pageInfo.setPageSize(10);
 			
-			PageInfo<GoodsStore> goodsStorePages = goodsStoreService.getGoodsStore(goodsStore, pageInfo);
-			map.addAttribute("pageInfo", goodsStorePages);
+			PageInfo<GoodsInstore> GoodsInstorePages = goodsInstoreService.getGoodsInstore(GoodsInstore, pageInfo);
+			map.addAttribute("pageInfo", GoodsInstorePages);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "/goods/goodsStore_list";
+		return "/GoodsInstore/GoodsInstore_list";
 	}
 
 }
