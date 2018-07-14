@@ -11,6 +11,8 @@ import com.bcdigger.common.entity.BaseEntity;
 * @date 2018年4月29日
  */
 public class Store extends BaseEntity {
+	
+	private static final long serialVersionUID = 1743202230250183805L;
 	/*
 	 * 门店编码
 	 */
@@ -75,6 +77,9 @@ public class Store extends BaseEntity {
 	private Date openTime;//开业时间
 	private Date addTime;
 	private Date updateTime;
+	
+	// 金蝶内码id
+	private int kingdeeCustId;
 	
 	public String getStoreCode() {
 		return storeCode;
@@ -280,6 +285,11 @@ public class Store extends BaseEntity {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-	
+	public int getKingdeeCustId() {
+		return kingdeeCustId;
+	}
+	public void setKingdeeCustId(int kingdeeCustId) {
+		this.kingdeeCustId = kingdeeCustId;
+	}
 	
 }

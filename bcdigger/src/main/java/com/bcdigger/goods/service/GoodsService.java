@@ -15,4 +15,6 @@ public interface GoodsService {
 	
 	public int updateGoods(Goods goods);
 	
+	public void addOrUpdateGoods(Goods goods);
+	
 }

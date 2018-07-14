@@ -57,5 +57,29 @@ public class GoodsServiceImpl implements GoodsService {
 	public int updateGoods(Goods goods) {
 		return goodsDao.update(goods);
 	}
+	/**
+	 * 添加或更新商品信息
+	 */
+	public void addOrUpdateGoods(Goods goods){
+		try{
+			// 校验参数
+			if(goods==null || goods.getGoodsNo()==null || goods.getGoodsNo().equals("")){
+				return;
+			}
+			// 根据货号查询商品是否存在
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("goodsNo", goods.getGoodsNo());
+			Goods goodsTemp = goodsDao.getBy(params);
+			if( goodsTemp == null ){
+				// 添加商品
+				goodsDao.insert(goods);
+			} else {
+				// 更新商品
+				goodsDao.update(goods);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 }

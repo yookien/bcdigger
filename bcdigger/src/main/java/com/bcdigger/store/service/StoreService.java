@@ -43,4 +43,15 @@ public interface StoreService {
 	 * @return
 	 */
 	public PageInfo<Store> getStores(Store store,PageInfo pageInfo);
+	
+	/**
+	 * 
+	 * @Description: 添加或更新门店
+	 * @param store void  
+	 * @throws
+	 * @author ipui
+	 * @date 2018年7月14日
+	 */
+	public void addOrUpdateStore(Store store);
+	
 }

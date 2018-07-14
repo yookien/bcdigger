@@ -1,5 +1,8 @@
 package com.bcdigger.store.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +41,29 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public PageInfo<Store> getStores(Store store, PageInfo pageInfo) {
-		
 		return storeDao.findStores(pageInfo, store);
 	}
 	
-	
+	public void addOrUpdateStore(Store store){
+		try{
+			// 校验参数
+			if(store==null || store.getStoreCode()==null || store.getStoreCode().equals("")){
+				return;
+			}
+			// 根据货号查询商品是否存在
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("storeCode", store.getStoreCode());
+			Store storeTemp = storeDao.getBy(params);
+			if( storeTemp == null ){
+				// 添加商品
+				storeDao.insert(store);
+			} else {
+				// 更新商品
+				storeDao.update(store);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 }

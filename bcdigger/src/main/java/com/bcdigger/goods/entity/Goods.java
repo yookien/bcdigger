@@ -23,7 +23,7 @@ public class Goods extends BaseEntity{
 	private String middleImage;//商品大图
 	private String goodsImage;//商品主图
 	private int weight;//重量
-	private int unit;//单位
+	private String unit;//单位
 	private String innerName;//全名
 	private int type  ;//类型
 	private int price ;//售价
@@ -33,6 +33,10 @@ public class Goods extends BaseEntity{
 	private int displayOrder;//显示顺序
 	private Date addTime;//添加时间
 	private Date updateTime;//更新时间
+	
+	// 金蝶内码id
+	private int kingdeeCustId;
+		
 	public int getCatId() {
 		return catId;
 	}
@@ -81,10 +85,10 @@ public class Goods extends BaseEntity{
 	public void setWeight(int weight) {
 		this.weight = weight;
 	}
-	public int getUnit() {
+	public String getUnit() {
 		return unit;
 	}
-	public void setUnit(int unit) {
+	public void setUnit(String unit) {
 		this.unit = unit;
 	}
 	public String getInnerName() {
@@ -144,7 +148,11 @@ public class Goods extends BaseEntity{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
+	public int getKingdeeCustId() {
+		return kingdeeCustId;
+	}
+	public void setKingdeeCustId(int kingdeeCustId) {
+		this.kingdeeCustId = kingdeeCustId;
+	}
 
 }
