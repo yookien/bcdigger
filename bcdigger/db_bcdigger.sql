@@ -268,45 +268,45 @@ drop table if exists bcd_store;
 /* Table: bcd_store                                             */
 /*==============================================================*/
 
-create table bcd_store
-(
-   id                   int(11) not null AUTO_INCREMENT comment '主键id',
-   store_code           varchar(50) default NULL comment '门店编码',
-   chinese_name         varchar(50) default NULL comment '中文名称',
-   phone                varchar(20) default NULL comment '电话',
-   mobile               varchar(100) default NULL comment '负责人手机',
-   address              varchar(255) default NULL comment '地址',
-   direction            varchar(255) default NULL comment '地区',
-   open_hour            varchar(10) default NULL comment '开业时间',
-   close_hour           varchar(10) default NULL comment '停业时间',
-   english_name         varchar(50) default NULL,
-   english_address      varchar(255) default NULL,
-   location_image       varchar(100) default NULL comment '位置示意图',
-   store_images         varchar(500) not null default '' comment '门店主图',
-   store_province       varchar(50) not null default '' comment '门店所属省',
-   store_city           varchar(50) not null default '' comment '门店所属城市名',
-   city_area            varchar(50) not null default '' comment '城市下的区域',
-   is_open              tinyint(4) not null default 1 comment '是否在开',
-   bmap_position        varchar(25) not null comment '百度位置',
-   bmap_positionX       decimal(12,6) not null comment '百度x位置',
-   bmap_positionY       decimal(12,6) not null comment '百度y位置',
-   search_url           varchar(100) not null comment '搜索地址',
-   bus                  varchar(100) not null comment '公交情况',
-   subway               varchar(50) not null comment '地铁情况',
-   nearby               varchar(80) not null comment '附近建筑',
-   email                varchar(50) not null comment '邮箱',
-   store_image1         varchar(100) not null comment '店面图片1',
-   store_image2         varchar(100) not null comment '店面图片2',
-   store_image3         varchar(100) not null comment '店面图片3',
-   store_image4         varchar(100) not null comment '店面图片4',
-   appoint_limit        int(11) unsigned not null default 0 comment '预约限制',
-   store_type           int unsigned not null default 0 comment '门店类型：0-自营店，1-写字楼店，2-商场店，3-加盟店',
-   is_booking           int default 0 comment '是否预约',
-   open_time            datetime comment '开店时间',
-   create_time          datetime comment '添加时间',
-   update_time          datetime comment '更新时间',
-   primary key (id)
-);
+CREATE TABLE `bcd_store` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `store_code` varchar(50) DEFAULT NULL COMMENT '门店编码',
+  `chinese_name` varchar(50) DEFAULT NULL COMMENT '中文名称',
+  `phone` varchar(20) DEFAULT NULL COMMENT '电话',
+  `mobile` varchar(100) DEFAULT NULL COMMENT '负责人手机',
+  `address` varchar(255) DEFAULT NULL COMMENT '地址',
+  `direction` varchar(255) DEFAULT NULL COMMENT '地区',
+  `open_hour` varchar(10) DEFAULT NULL COMMENT '开业时间',
+  `close_hour` varchar(10) DEFAULT NULL COMMENT '停业时间',
+  `english_name` varchar(50) DEFAULT NULL,
+  `english_address` varchar(255) DEFAULT NULL,
+  `location_image` varchar(100) DEFAULT NULL COMMENT '位置示意图',
+  `store_images` varchar(500) NOT NULL DEFAULT '' COMMENT '门店主图',
+  `store_province` varchar(50) NOT NULL DEFAULT '' COMMENT '门店所属省',
+  `store_city` varchar(50) NOT NULL DEFAULT '' COMMENT '门店所属城市名',
+  `city_area` varchar(50) NOT NULL DEFAULT '' COMMENT '城市下的区域',
+  `is_open` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否在开',
+  `bmap_position` varchar(25) NOT NULL COMMENT '百度位置',
+  `bmap_positionX` decimal(12,6) NOT NULL COMMENT '百度x位置',
+  `bmap_positionY` decimal(12,6) NOT NULL COMMENT '百度y位置',
+  `search_url` varchar(100) NOT NULL COMMENT '搜索地址',
+  `bus` varchar(100) NOT NULL COMMENT '公交情况',
+  `subway` varchar(50) NOT NULL COMMENT '地铁情况',
+  `nearby` varchar(80) NOT NULL COMMENT '附近建筑',
+  `email` varchar(50) NOT NULL COMMENT '邮箱',
+  `store_image1` varchar(100) NOT NULL COMMENT '店面图片1',
+  `store_image2` varchar(100) NOT NULL COMMENT '店面图片2',
+  `store_image3` varchar(100) NOT NULL COMMENT '店面图片3',
+  `store_image4` varchar(100) NOT NULL COMMENT '店面图片4',
+  `appoint_limit` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '预约限制',
+  `store_type` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '门店类型：0-自营店，1-写字楼店，2-商场店，3-加盟店',
+  `is_booking` int(11) DEFAULT '0' COMMENT '是否预约',
+  `open_time` datetime DEFAULT NULL COMMENT '开店时间',
+  `create_time` datetime DEFAULT NULL COMMENT '添加时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `kingdee_cust_id` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表';
 
 alter table bcd_store comment '门店表';
 
@@ -340,29 +340,29 @@ drop table if exists bcd_goods;
 /*==============================================================*/
 /* Table: bcd_goods                                             */
 /*==============================================================*/
-create table bcd_goods
-(
-   id                   int not null AUTO_INCREMENT comment '主键id',
-   cat_id               int comment '分类id',
-   goods_no             varchar(32) comment '商品货号',
-   good_name            varchar(64) comment '商品名称',
-   state                int comment '状态 0不可用 1可用',
-   small_image          varchar(64) comment '商品小图',
-   middle_image         varchar(64) comment '商品大图',
-   goods_image          varchar(64) comment '商品主图',
-   weight               double comment '重量',
-   unit                 varchar(32) comment '单位',
-   inner_name           varchar(255) comment '全名',
-   type                 int comment '类型',
-   price                int comment '售价',
-   market_price         int comment '市场价',
-   pur_price            int comment '采购价',
-   goods_desc           text comment '商品描述',
-   display_order        int comment '显示顺序',
-   add_time             datetime comment '添加时间',
-   update_time          datetime comment '更新时间',
-   primary key (id)
-);
+CREATE TABLE `bcd_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `cat_id` int(11) DEFAULT NULL COMMENT '分类id',
+  `goods_no` varchar(32) DEFAULT NULL COMMENT '商品货号',
+  `good_name` varchar(64) DEFAULT NULL COMMENT '商品名称',
+  `state` int(11) DEFAULT NULL COMMENT '状态 0不可用 1可用',
+  `small_image` varchar(64) DEFAULT NULL COMMENT '商品小图',
+  `middle_image` varchar(64) DEFAULT NULL COMMENT '商品大图',
+  `goods_image` varchar(64) DEFAULT NULL COMMENT '商品主图',
+  `weight` double DEFAULT NULL COMMENT '重量',
+  `unit` varchar(32) DEFAULT NULL COMMENT '单位',
+  `inner_name` varchar(255) DEFAULT NULL COMMENT '全名',
+  `type` int(11) DEFAULT NULL COMMENT '类型',
+  `price` int(11) DEFAULT NULL COMMENT '售价',
+  `market_price` int(11) DEFAULT NULL COMMENT '市场价',
+  `pur_price` int(11) DEFAULT NULL COMMENT '采购价',
+  `goods_desc` text COMMENT '商品描述',
+  `display_order` int(11) DEFAULT NULL COMMENT '显示顺序',
+  `add_time` datetime DEFAULT NULL COMMENT '添加时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `kingdee_cust_id` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
 
 alter table bcd_goods comment '商品表';
 
