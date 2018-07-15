@@ -18,13 +18,15 @@ public class KaptchaConfig {
         Properties properties=new Properties();
         properties.setProperty("kaptcha.border", "no");
         properties.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.NoNoise");
-        properties.setProperty("kaptcha.border.color", "105,179,90");
-        properties.setProperty("kaptcha.textproducer.font.color","40,96,144");
+        //properties.setProperty("kaptcha.border.color", "105,179,90");
+        properties.setProperty("kaptcha.textproducer.font.color","255,215,0");
+        properties.setProperty("kaptcha.noise.color","white");
         properties.setProperty("kaptcha.image.width", "125");
         properties.setProperty("kaptcha.image.height", "45");
         properties.setProperty("kaptcha.session.key", "code");
         properties.setProperty("kaptcha.textproducer.char.length", "4");
-        properties.setProperty("kaptcha.textproducer.font.names", "微软雅黑,宋体,Arial,Courier");
+        properties.setProperty("kaptcha.textproducer.char.string", "0123456789");
+        properties.setProperty("kaptcha.textproducer.font.names", "微软雅黑");
         properties.setProperty("kaptcha.obscurificator.impl", "com.google.code.kaptcha.impl.ShadowGimpy");
         Config config=new Config(properties);
         defaultKaptcha.setConfig(config);

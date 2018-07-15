@@ -524,7 +524,7 @@ drop table if exists bcd_goods_order;
 create table bcd_goods_order
 (
    id                   int not null auto_increment,
-   order_id             varchar(32),
+   order_no            varchar(32),
    order_user_id        int,
    store_id             int,
    order_type           int,
