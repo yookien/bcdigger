@@ -415,6 +415,7 @@ create table bcd_goods_store
 
 alter table bcd_goods_store comment '商品库存表';
 
+
 drop table if exists bcd_goods_instore;
 
 /*==============================================================*/
@@ -422,7 +423,9 @@ drop table if exists bcd_goods_instore;
 /*==============================================================*/
 create table bcd_goods_instore
 (
-   id                   int not null AUTO_INCREMENT comment '主键id',
+   id                   int not null auto_increment comment '主键id',
+   goods_order_id       int comment '订货单id',
+   goods_order_item_id  int comment '订货明细id',
    goods_id             int comment '商品id',
    batch_no             varchar(64) comment '批次号',
    store_id             int comment '店铺id',
@@ -443,6 +446,7 @@ create table bcd_goods_instore
 );
 
 alter table bcd_goods_instore comment '商品入库明细表';
+
 
 drop table if exists bcd_goods_outstore;
 
@@ -511,3 +515,48 @@ create table bcd_goods_purchase_item
 );
 
 alter table bcd_goods_purchase_item comment '采购明细表';
+
+drop table if exists bcd_goods_order;
+
+/*==============================================================*/
+/* Table: bcd_goods_order                                       */
+/*==============================================================*/
+create table bcd_goods_order
+(
+   id                   int not null auto_increment,
+   order_id             varchar(32),
+   order_user_id        int,
+   store_id             int,
+   order_type           int,
+   add_time             datetime,
+   update_time          datetime,
+   memo                 text,
+   state                int,
+   primary key (id)
+);
+
+alter table bcd_goods_order comment '商品订货表';
+
+drop table if exists bcd_goods_order_item;
+
+/*==============================================================*/
+/* Table: bcd_goods_order_item                                  */
+/*==============================================================*/
+create table bcd_goods_order_item
+(
+   id                   int not null auto_increment,
+   order_id             int,
+   order_no             varchar(32),
+   goods_id             int,
+   goods_no             varchar(32),
+   order_quantity       int,
+   instore_quantity     int,
+   instore_time         datetime,
+   add_time             datetime,
+   update_time          datetime,
+   primary key (id)
+);
+
+alter table bcd_goods_order_item comment '订货明细表';
+
+
