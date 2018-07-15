@@ -22,10 +22,10 @@
 	            	<td>${(admin.mobile)!}</td>
 	            	<td>${(admin.email)!}</td>
 	            	<td><#if (admin.state)?? && admin.state==1>正常<#else>停用</#if></td>
-	            	<td><a href="###" onclick="javascript:editAdmin(${(admin.id)!0});" data-toggle="modal" data-target="#adminModal" class="fa fa-pencil-square" style="font-size:20px" title="修改操作员信息"></a>
+	            	<td>
+	            		<button onclick="javascript:editAdmin(${(admin.id)!0});" class="btn btn-info" data-toggle="modal" data-target="#adminModal" id="btn_${(admin.id)!}">修改</button>
 		            	<span style="margin-right:20px;margin-left:10px"></span>
 		            	<a href="###" onclick="javascript:disableAdmin(${(admin.id)!});" class="fa fa-close" style="font-size:20px;color:red" title="失效"></a>
-		            	
 		            	<span style="margin-right:20px;margin-left:10px"></span>
 		            	<a href="###" onclick="ajaxAdminRoleRef(${(admin.id)!})">权限</a>
 		            	<button style="display:none;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#adminRoleModal" id="btn_${(admin.id)!}">权限</button>

@@ -35,14 +35,14 @@
 					</#list>
 				</#if>     
                 
-                <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+              <!--   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="javascript:goto('/admin/adminIndex')">管理员列表</a></li>
                       <li><a href="javascript:goto('/admin/sysMenusIndex')">菜单管理</a></li>
                       <li><a href="javascript:goto('/admin/adminRoleIndex')">角色管理</a></li>
                       <li><a href="javascript:goto('/admin/roleMenuRefIndex')">角色权限管理</a></li>
                     </ul>
-                  </li>
+                  </li> -->
                 <!--
                   <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">

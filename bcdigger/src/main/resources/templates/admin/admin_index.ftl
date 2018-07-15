@@ -1,7 +1,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>操作管理员管理 </h2>
+        <h2>管理员管理 </h2>
         <div class="clearfix"></div>
       </div>
       	<div class="well" style="overflow: auto">
@@ -19,7 +19,7 @@
 			    	<input id="start_time"  name="startTime" type="hidden" >
 			    	<input id="end_time" name="endTime" type="hidden" >
 			 	</div>
-			 	<button type="button" style="float:left;margin-left:15px" class="btn btn-info" onclick="getAdmins()">查询</button>
+			 	<button type="button" style="float:left;margin-left:15px" class="btn btn btn-primary" onclick="getAdmins()">查询</button>
 			</div>
 		   	
 		    <div class="col-md-2 col-sm-2 col-xs-12">

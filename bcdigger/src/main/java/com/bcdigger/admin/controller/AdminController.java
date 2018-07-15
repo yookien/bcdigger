@@ -165,6 +165,7 @@ public class AdminController {
 		try{
 			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
 			adminId=1;
+			Admin admin=adminService.getAdmin(adminId);
 			List<SysMenu> menuList=getUserMenu(adminId);
 			List<SysMenu> level1List= new ArrayList<SysMenu>();
 			List<SysMenu> level2List= new ArrayList<SysMenu>();
@@ -185,6 +186,7 @@ public class AdminController {
 					}
 				}
 			}
+			map.addAttribute("admin", admin);
 			map.addAttribute("level1List", level1List);
 			map.addAttribute("level2List", level2List);
 			map.addAttribute("level3List", level3List);
