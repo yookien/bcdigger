@@ -42,6 +42,10 @@
 		<if test="goodName != null and goodName !='' and like == null">
 			and good_name = #{goodName,jdbcType=VARCHAR}
 		</if>
+		
+		<if test="goodsNo != null and goodsNo !='' ">
+			and goods_no = #{goodsNo,jdbcType=VARCHAR}
+		</if>
 	
 	</sql>
 	
