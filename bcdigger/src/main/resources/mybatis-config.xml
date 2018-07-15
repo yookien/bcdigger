@@ -54,6 +54,10 @@
         <typeAlias alias="goodsRepository" type="com.bcdigger.goods.entity.GoodsRepository" />
         <typeAlias alias="goodsStore" type="com.bcdigger.goods.entity.GoodsStore" />
         
+        <typeAlias alias="goodsOrder" type="com.bcdigger.order.entity.GoodsOrder" />
+        <typeAlias alias="goodsOrderItem" type="com.bcdigger.order.entity.GoodsOrderItem" />
+        
+        
     </typeAliases> 
     
     
