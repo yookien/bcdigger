@@ -302,7 +302,7 @@ CREATE TABLE `bcd_store` (
   `store_type` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '门店类型：0-自营店，1-写字楼店，2-商场店，3-加盟店',
   `is_booking` int(11) DEFAULT '0' COMMENT '是否预约',
   `open_time` datetime DEFAULT NULL COMMENT '开店时间',
-  `create_time` datetime DEFAULT NULL COMMENT '添加时间',
+  `add_time` datetime DEFAULT NULL COMMENT '添加时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `kingdee_cust_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -532,6 +532,7 @@ create table bcd_goods_order
    update_time          datetime,
    memo                 text,
    state                int,
+   kingdee_cust_id      int,
    primary key (id)
 );
 
