@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bcdigger.order.dao.GoodsOrderDao">
+
+	<sql id="table"> bcd_goods_order </sql>
+
+	<resultMap id="BaseResultMap" type="com.bcdigger.order.entity.GoodsOrder">
+		<id property="id" column="id" jdbcType="BIGINT"/>
+		<result property="orderNo" column="order_no" jdbcType="VARCHAR" />
+		<result property="orderUserId" column="order_user_id" jdbcType="BIGINT" />
+		<result property="storeId" column="store_id" jdbcType="BIGINT" />
+		<result property="orderType" column="order_type" jdbcType="BIGINT" />
+		<result property="state" column="state" jdbcType="BIGINT" />
+		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+		<result property="memo" column="memo" jdbcType="VARCHAR" />
+		<result property="kingdeeCustId" column="kingdee_cust_id" jdbcType="BIGINT" />
+	</resultMap>
+	
+	<sql id="base_column_list">
+		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id
+	</sql>
+	
+	<sql id="condition_sql">
+	
+		<if test="id != null">
+			and id = #{id,jdbcType=BIGINT}
+		</if>
+		<if test="orderNo != null and orderNo !='' and like == 1 ">
+			and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orderNo != null and orderNo !='' and like == null">
+			and order_no = #{orderNo,jdbcType=VARCHAR}
+		</if>
+	
+	</sql>
+	
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsOrder">
+		insert into
+		<include refid="table" />
+		(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id)
+		values (
+			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{now()},#{now()},#{memo},#{kingdeeCustId}
+		)
+	</insert>
+	
+	<update id="update" parameterType="goodsOrder">
+		update
+		<include refid="table" />
+		<set>
+			order_no = #{orderNo},
+			order_user_id= #{orderUserId},
+			store_id = #{storeId},
+			order_type = #{orderType},
+			state= #{state},
+			memo= #{memo},
+			kingdee_cust_id= #{kingdeeCustId},
+			update_time= now()
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="getById" parameterType="Integer" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		where id = #{id}
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+	
+	<select id="listGoodsOrderByCondation" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id desc]]>
+	</select>
+
+</mapper>
