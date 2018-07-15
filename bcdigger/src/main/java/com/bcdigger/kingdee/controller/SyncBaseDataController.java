@@ -2,6 +2,8 @@ package com.bcdigger.kingdee.controller;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -50,20 +52,24 @@ public class SyncBaseDataController {
 	private StoreService storeService;
 	
 	@RequestMapping(value ="/autoSyncBaseData",method={RequestMethod.GET,RequestMethod.POST})
-	public void autoSyncBaseData() throws Exception {
+	public Map<String, Object> autoSyncBaseData() throws Exception {
+		Map<String, Object> map = new HashMap<>(); 
 		try {
 			// 同步36小时内更新的资料
 			Date now = new Date();
-			modifyDate = DateTime.formatDateTime(DateTime.subtractMinute(now, 60 * 36));
+			modifyDate = DateTime.formatDateTime(DateTime.subtractMinute(now, 60 * 24 * 365));
 			// 同步物料
-			syncGoodsInfo();
+			// syncGoodsInfo();
 
 			// 同步客户信息
 			syncCustomer();
-
+			
+			map.put("result", 1);// 同步成功
 		} catch (Exception e) {
+			map.put("result", 0);// 系统异常
 			e.printStackTrace();
 		}
+		return map;
 	}
 	
 	public void syncGoodsInfo() throws Exception {
@@ -94,16 +100,15 @@ public class SyncBaseDataController {
 				// 采购入库单保存参数
 				JSONObject json = new JSONObject();
 				JSONObject objjson = new JSONObject();
-				objjson.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.org_hetai));
+				objjson.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
 				objjson.put("FormId", "BD_MATERIAL");
 				objjson.put("TopRowCount", 0);
 				objjson.put("Limit", 2000);
 				objjson.put("StartRow", startRow * nextNums);
-				objjson.put("FilterString", " FModifyDate >= '" + modifyDate +"' and FUSEORGID.FNUMBER='" + KingdeeStdLib.org_hetai + "' ");// 标准的SQL语句
+				objjson.put("FilterString", " FModifyDate >= '" + modifyDate +"' and FUSEORGID.FNUMBER='" + KingdeeStdLib.saleOrgId + "' ");// 标准的SQL语句
 				objjson.put("OrderString", "FMaterialID ASC");
 				objjson.put("FieldKeys",
-						"FMaterialID,FNumber,FName,FForbidStatus,FModifyDate,FSpecification,FBaseUnitId,FWEIGHTUNITID,FVOLUMEUNITID,FExpUnit,FGROSSWEIGHT,FVOLUME,FExpPeriod,F_kd_Base,F_kd_CheckBox,FCreateDate,FIsVmiBusiness,FDefaultVendor");// ,F_kd_Base
-																																																					// =
+						"FMaterialID,FNumber,FName,FForbidStatus,FModifyDate,FSpecification,FBaseUnitId,FWEIGHTUNITID,FVOLUMEUNITID,FExpUnit,FGROSSWEIGHT,FVOLUME,FExpPeriod,FCreateDate,FDefaultVendor");
 				json.put("data", objjson);
 
 				StringEntity entity = new StringEntity(json.toString(), "utf-8");
@@ -141,36 +146,36 @@ public class SyncBaseDataController {
 							continue;
 						}
 						goods = new Goods();
-
-						// 0FMaterialID,1FNumber,2FName,3FForbidStatus,4FModifyDate,5FSpecification,6FBaseUnitId,7FWEIGHTUNITID,8FVOLUMEUNITID,
-						// 9FExpUnit,10FGROSSWEIGHT,11FVOLUME,12FExpPeriod,13FMALLID,14FORBIDFLY
 						
-						// 0FMaterialID,1FNumber,2FName,3FForbidStatus,4FModifyDate,5FSpecification,6FBaseUnitId,7FWEIGHTUNITID,8FVOLUMEUNITID,
-						//9FExpUnit,10FGROSSWEIGHT,11FVOLUME,12FExpPeriod,13F_kd_Base,14F_kd_CheckBox,15FCreateDate,16FIsVmiBusiness,17FDefaultVendor
-						
+						// 0FMaterialID,1FNumber,2FName,3FForbidStatus,4FModifyDate,5FSpecification,6FBaseUnitId,
+						// 7FWEIGHTUNITID,8FVOLUMEUNITID,9FExpUnit,10FGROSSWEIGHT,11FVOLUME,12FExpPeriod,13FCreateDate,14FDefaultVendor
 						// 解析参数
 						String goodsNo = info.getString(1);// 商品货号
 						String goodName = info.getString(2);// 商品名称
 						int kingdeeCustId = info.getInteger(0);// 物料金蝶系统内码
-						String createDate = info.getString(15);// 创建时间
-						Date addTime = DateTime.parseDate(createDate);
+						String createDate = info.getString(13);// 创建时间
+						
+						Date addTime = new Date();
+						if( createDate != null && createDate.length() >= 8 ){
+							addTime = DateTime.parseDate(createDate);
+						}
+						
 						String modifyDate = info.getString(4);
-						Date updateTime = DateTime.parseDate(modifyDate);
+						Date updateTime = new Date();
+						if( modifyDate != null && modifyDate.length() >= 8 ){
+							updateTime = DateTime.parseDate(modifyDate);
+						}
 
 						int baseUnitId = info.getInteger(6);// 计量单位
 						int weightUnitId = info.getInteger(7);// 重量单位
-						int volumeUnitId = info.getInteger(8);// 尺寸单位
+
 						String expUnit = info.getString(9);// 保质期单位
+						
 						int grossweight = info.getInteger(10);// 重量
 						int volume = info.getInteger(11);// 体积
 						int expPeriod = info.getInteger(12);// 保质期
-						// 保质期统一换算为天为单位
-						if (expUnit != null && (expUnit.equals("Y") || expUnit.equals("y"))) {
-							expPeriod = expPeriod * 365;
-						} else if (expUnit != null && (expUnit.equals("M") || expUnit.equals("m"))) {
-							expPeriod = expPeriod * 30;
-						}
 
+						goods.setGoodsNo(goodsNo);
 						goods.setGoodName(goodName);
 						goods.setKingdeeCustId(kingdeeCustId);
 						goods.setWeight(grossweight);
@@ -178,8 +183,7 @@ public class SyncBaseDataController {
 						goods.setAddTime(addTime);
 						goods.setState(1);
 						goods.setUnit("PCS");
-						goods.setGoodsNo(goodsNo);
-
+						
 						// 调用接口保存
 						goodsService.addOrUpdateGoods(goods);
 					}
@@ -224,7 +228,7 @@ public class SyncBaseDataController {
 
 			JSONObject json = new JSONObject();
 			JSONObject objjson = new JSONObject();
-			objjson.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.org_hetai));
+			objjson.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
 			objjson.put("FormId", "BD_Customer");// 客户信息
 			objjson.put("TopRowCount", 0);
 			// objjson.put("Limit", 2000);
@@ -257,8 +261,8 @@ public class SyncBaseDataController {
 				Store store = null;
 				for (int i = 0; i < infos.size(); i++) {
 					info = infos.getJSONArray(i);
-					System.out.println("FCustId:" + info.getInteger(0) + " FNumber:" + info.getString(1) + " FName:"
-							+ info.getString(2));
+					//System.out.println("FCustId:" + info.getInteger(0) + " FNumber:" + info.getString(1) + " FName:"
+					//		+ info.getString(2));
 
 					// "0FCustId,1FNumber,2FName,3FCustTypeId,4FSALDEPTID,5FShortName,6FTContact,7FTEL,8FMOBILE,9FFAX,10FADDRESS,11FModifyDate,12FCreateDate");
 					// 解析参数，保存客户信息
@@ -272,7 +276,8 @@ public class SyncBaseDataController {
 					store.setAddress(info.getString(10));
 					store.setUpdateTime(DateTime.parseDate(info.getString(11)));
 					store.setAddTime(DateTime.parseDate(info.getString(12)));
-
+					System.out.println("FCustId:" + store.getKingdeeCustId() + " FNumber:" + store.getStoreCode() + " FName:"
+							+ store.getChineseName() );
 					storeService.addOrUpdateStore(store);
 				}
 			}

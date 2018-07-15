@@ -1,7 +1,5 @@
 package com.bcdigger.kingdee.util;
 
-import java.text.ParseException;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -112,40 +110,6 @@ public class KingdeeStdLib {
 	/**
 	 * 组织编码
 	 */
-	public static final String org_hetai=PropUtil.getProp().getProperty("KINGDEE_HETAI");
+	public static final String saleOrgId = PropUtil.getProp().getProperty("KINGDEE_SALE_ORG_ID");
 	
-	public static  int tax_rate=16;
-    /**
-     * 10周年画册税率10%
-     * @param goodsNo
-     * @return
-     * @throws ParseException
-     */
-	public static int getTax_rate(String goodsNo) throws ParseException {
-//		Date date_now=new Date();
-//		int nowTimeStamp=DateTime.getUnixTime(date_now);
-//		//比较5月1号之后
-//		Date mayDay=DateTime.parseDate("2018-05-01 06:00:00");
-//		int  mayTimeStamp=DateTime.getUnixTime(mayDay);
-//		//System.out.println("当前时间:"+nowTimeStamp+",五一时间:"+mayTimeStamp);
-//		String rateStr="";
-//		//五一之前税率17
-//		if(nowTimeStamp < mayTimeStamp){
-//			rateStr=PropUtil.getProp().getProperty("FENTRY_TAXRATE","17");
-//		}else{
-//			rateStr=PropUtil.getProp().getProperty("FENTRY_TAXRATE_MAY","16");
-//		}
-//		tax_rate=Integer.parseInt(rateStr);
-		if("DCDR40100".equals(goodsNo)||"DCDR50200".equals(goodsNo)){
-			return 10;
-		}
-		
-		return tax_rate;
-	}
-
-	public static void setTax_rate(int taxRate) {
-		tax_rate=taxRate;
-	}
-
-
 }

@@ -18,7 +18,6 @@ import com.github.tobato.fastdfs.FdfsClientConfig;
 public class BCDiggerApp {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new SpringApplicationBuilder(BCDiggerApp.class).web(true).run(args);
 	}
 
