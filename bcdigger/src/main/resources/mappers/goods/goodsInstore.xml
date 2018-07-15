@@ -7,6 +7,8 @@
 	<resultMap id="BaseResultMap" type="goodsInstore">
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+		<result property="goodsOrderId" column="goods_order_id" jdbcType="BIGINT"/>
+		<result property="goodsOrderItemId" column="goods_order_item_id" jdbcType="BIGINT"/>
 		<result property="batchNo" column="batch_no" jdbcType="VARCHAR" />
 		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
 		<result property="repositoryId" column="repository_id" jdbcType="BIGINT"/>

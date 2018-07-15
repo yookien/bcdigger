@@ -14,6 +14,8 @@ public class GoodsInstore extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 	
 	private int goodsId;//商品id
+	private int goodsOrderId;//订货单id
+	private int goodsOrderItemId;//订货明细id
 	private String batchNo;//批次号
 	private int state   ;//状态
 	private int purPrice;//采购价
@@ -97,6 +99,18 @@ public class GoodsInstore extends BaseEntity{
 	}
 	public void setSourceId(int sourceId) {
 		this.sourceId = sourceId;
+	}
+	public int getGoodsOrderId() {
+		return goodsOrderId;
+	}
+	public void setGoodsOrderId(int goodsOrderId) {
+		this.goodsOrderId = goodsOrderId;
+	}
+	public int getGoodsOrderItemId() {
+		return goodsOrderItemId;
+	}
+	public void setGoodsOrderItemId(int goodsOrderItemId) {
+		this.goodsOrderItemId = goodsOrderItemId;
 	}
 	
 
