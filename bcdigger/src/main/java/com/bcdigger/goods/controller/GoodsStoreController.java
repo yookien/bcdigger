@@ -33,6 +33,7 @@ public class GoodsStoreController {
 	@Autowired
 	private GoodsInstoreService goodsInstoreService;
 	
+	
 	@RequestMapping(value ="/addGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public Map<String, Object> addGoodsInstore(GoodsInstore GoodsInstore){

@@ -59,10 +59,10 @@ public class SyncBaseDataController {
 			Date now = new Date();
 			modifyDate = DateTime.formatDateTime(DateTime.subtractMinute(now, 60 * 24 * 365));
 			// 同步物料
-			// syncGoodsInfo();
+			syncGoodsInfo();
 
 			// 同步客户信息
-			syncCustomer();
+			//syncCustomer();
 			
 			map.put("result", 1);// 同步成功
 		} catch (Exception e) {

@@ -1,3 +1,4 @@
+SET GLOBAL max_user_connections = 1000; 
 drop table if exists bcd_admin;
 
 /*==============================================================*/
@@ -282,32 +283,32 @@ CREATE TABLE `bcd_store` (
   `english_name` varchar(50) DEFAULT NULL,
   `english_address` varchar(255) DEFAULT NULL,
   `location_image` varchar(100) DEFAULT NULL COMMENT '位置示意图',
-  `store_images` varchar(500) NOT NULL DEFAULT '' COMMENT '门店主图',
-  `store_province` varchar(50) NOT NULL DEFAULT '' COMMENT '门店所属省',
-  `store_city` varchar(50) NOT NULL DEFAULT '' COMMENT '门店所属城市名',
-  `city_area` varchar(50) NOT NULL DEFAULT '' COMMENT '城市下的区域',
-  `is_open` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否在开',
-  `bmap_position` varchar(25) NOT NULL COMMENT '百度位置',
-  `bmap_positionX` decimal(12,6) NOT NULL COMMENT '百度x位置',
-  `bmap_positionY` decimal(12,6) NOT NULL COMMENT '百度y位置',
-  `search_url` varchar(100) NOT NULL COMMENT '搜索地址',
-  `bus` varchar(100) NOT NULL COMMENT '公交情况',
-  `subway` varchar(50) NOT NULL COMMENT '地铁情况',
-  `nearby` varchar(80) NOT NULL COMMENT '附近建筑',
-  `email` varchar(50) NOT NULL COMMENT '邮箱',
-  `store_image1` varchar(100) NOT NULL COMMENT '店面图片1',
-  `store_image2` varchar(100) NOT NULL COMMENT '店面图片2',
-  `store_image3` varchar(100) NOT NULL COMMENT '店面图片3',
-  `store_image4` varchar(100) NOT NULL COMMENT '店面图片4',
-  `appoint_limit` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '预约限制',
-  `store_type` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '门店类型：0-自营店，1-写字楼店，2-商场店，3-加盟店',
+  `store_images` varchar(500) DEFAULT NULL COMMENT '门店主图',
+  `store_province` varchar(50) DEFAULT NULL COMMENT '门店所属省',
+  `store_city` varchar(50) DEFAULT NULL COMMENT '门店所属城市名',
+  `city_area` varchar(50) DEFAULT NULL COMMENT '城市下的区域',
+  `is_open` tinyint(4) DEFAULT '1' COMMENT '是否在开',
+  `bmap_position` varchar(25) DEFAULT NULL COMMENT '百度位置',
+  `bmap_positionX` decimal(12,6) DEFAULT NULL COMMENT '百度x位置',
+  `bmap_positionY` decimal(12,6) DEFAULT NULL COMMENT '百度y位置',
+  `search_url` varchar(100) DEFAULT NULL COMMENT '搜索地址',
+  `bus` varchar(100) DEFAULT NULL COMMENT '公交情况',
+  `subway` varchar(50) DEFAULT NULL COMMENT '地铁情况',
+  `nearby` varchar(80) DEFAULT NULL COMMENT '附近建筑',
+  `email` varchar(50) DEFAULT NULL COMMENT '邮箱',
+  `store_image1` varchar(100) DEFAULT NULL COMMENT '店面图片1',
+  `store_image2` varchar(100) DEFAULT NULL COMMENT '店面图片2',
+  `store_image3` varchar(100) DEFAULT NULL COMMENT '店面图片3',
+  `store_image4` varchar(100) DEFAULT NULL COMMENT '店面图片4',
+  `appoint_limit` int(11) unsigned DEFAULT '0' COMMENT '预约限制',
+  `store_type` int(10) unsigned DEFAULT '0' COMMENT '门店类型：0-自营店，1-写字楼店，2-商场店，3-加盟店',
   `is_booking` int(11) DEFAULT '0' COMMENT '是否预约',
   `open_time` datetime DEFAULT NULL COMMENT '开店时间',
   `add_time` datetime DEFAULT NULL COMMENT '添加时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `kingdee_cust_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表'
 
 alter table bcd_store comment '门店表';
 

@@ -14,7 +14,7 @@ public class GoodsOrderItem extends BaseEntity {
 	
 	private static final long serialVersionUID = 1821765353504460055L;
 
-	private int orderId;
+	private int goodsOrderId;
 	
 	private String orderNo;
 	
@@ -32,12 +32,12 @@ public class GoodsOrderItem extends BaseEntity {
 	
 	private Date updateTime;
 
-	public int getOrderId() {
-		return orderId;
+	public int getGoodsOrderId() {
+		return goodsOrderId;
 	}
 
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
+	public void setGoodsOrderId(int goodsOrderId) {
+		this.goodsOrderId = goodsOrderId;
 	}
 
 	public String getOrderNo() {
