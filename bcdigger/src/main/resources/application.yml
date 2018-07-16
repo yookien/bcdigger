@@ -19,9 +19,9 @@ spring:
     template-loader-path: classpath:/templates
   
   datasource : 
-    url : jdbc:mysql://183.234.125.42:13308/db_bcdigger?autoReconnect=true&useSSL=false
-    username : root
-    password : 123456
+    url : jdbc:mysql://111.230.254.52:3306/db_bcdigger?autoReconnect=true&useSSL=false
+    username : rwdb
+    password : rwd@2018!
     driver-class-name : com.mysql.jdbc.Driver
     type : com.alibaba.druid.pool.DruidDataSource
     # 初始化大小，最小，最大
