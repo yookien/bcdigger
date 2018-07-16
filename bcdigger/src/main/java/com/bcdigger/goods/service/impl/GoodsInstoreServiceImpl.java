@@ -1,6 +1,7 @@
 package com.bcdigger.goods.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bcdigger.goods.dao.GoodsInstoreDao;
 import com.bcdigger.goods.entity.GoodsInstore;
+import com.bcdigger.goods.entity.GoodsInstoreBiz;
 import com.bcdigger.goods.service.GoodsInstoreService;
 import com.bcdigger.common.page.PageInfo;
 
@@ -58,5 +60,19 @@ public class GoodsInstoreServiceImpl implements GoodsInstoreService {
 	public int updateGoodsInstore(GoodsInstore goodsInstore) {
 		return goodsInstoreDao.update(goodsInstore);
 	}
-
+	
+	
+	/**
+	 * 获取收货审核列表
+	 * @Title: getGoodsInstoreBizs   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: PageInfo<GoodsInstoreBiz>      
+	 * @throws
+	 */
+	public PageInfo<GoodsInstoreBiz> getGoodsInstoreBizs(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo){
+		
+		return goodsInstoreDao.getGoodsInstoreBizs(goodsInstoreBiz, pageInfo);
+	}
 }

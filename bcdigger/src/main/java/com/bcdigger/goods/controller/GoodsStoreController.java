@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.core.annotation.AdminAuth;
 import com.bcdigger.goods.entity.GoodsInstore;
+import com.bcdigger.goods.entity.GoodsInstoreBiz;
 import com.bcdigger.goods.service.GoodsInstoreService;
 
 /**
@@ -134,5 +135,30 @@ public class GoodsStoreController {
 		}
 		return "/GoodsInstore/GoodsInstore_list";
 	}
-
+	
+	
+	@RequestMapping(value ="/goodsInstoreAuditIndex")
+	public String goodsInstoreAuditIndex() {
+		return "/goods/instore_audit_index";
+	}
+	
+	/**
+	 * @Description: 分页查询菜单信息
+	 * @param pageNum
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/getGoodsInstoreAudits",method={RequestMethod.GET,RequestMethod.POST})
+	public String getGoodsInstoreAudits(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo,ModelMap map) {
+		try{
+			if(pageInfo==null){
+				pageInfo=new PageInfo();
+			}
+			PageInfo<GoodsInstoreBiz> GoodsInstorePages = goodsInstoreService.getGoodsInstoreBizs(goodsInstoreBiz, pageInfo);
+			map.addAttribute("pageInfo", GoodsInstorePages);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "/goods/instore_audit_list";
+	}
 }

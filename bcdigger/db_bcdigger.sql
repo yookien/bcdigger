@@ -441,6 +441,8 @@ create table bcd_goods_instore
             5003调仓入库',
    in_quantity          int comment '入库数量',
    in_store_time        datetime comment '入库时间',
+   add_time        datetime comment '添加时间',
+   update_time        datetime comment '更新时间',
    operator             int comment '操作人',
    memo                 varchar(255) comment '备注',
    source_id            int comment '入库来源 0pc端 1手机端 2paid 3其他',
@@ -535,6 +537,7 @@ create table bcd_goods_order
    memo                 text,
    state                int,
    kingdee_cust_id      int,
+   kingdee_cust_no    	varchar(64),
    primary key (id)
 );
 
@@ -548,7 +551,7 @@ drop table if exists bcd_goods_order_item;
 create table bcd_goods_order_item
 (
    id                   int not null auto_increment,
-   order_id             int,
+   goods_order_id             int,
    order_no             varchar(32),
    goods_id             int,
    goods_no             varchar(32),

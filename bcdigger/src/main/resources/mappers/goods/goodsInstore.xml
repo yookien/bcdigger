@@ -17,9 +17,25 @@
 		<result property="type" column="type" jdbcType="BIGINT"/>
 		<result property="inQuantity" column="in_quantity" jdbcType="BIGINT"/>
 		<result property="inStoreTime"  column="in_store_time"  jdbcType="TIMESTAMP"/>
+		<result property="addTime"  column="add_time"  jdbcType="TIMESTAMP"/>
+		<result property="updateTime"  column="update_time"  jdbcType="TIMESTAMP"/>
 		<result property="operator" column="operator" jdbcType="BIGINT"/>
 		<result property="memo" column="memo" jdbcType="VARCHAR" />
 		<result property="sourceId" column="source_id" jdbcType="BIGINT"/>
+	</resultMap>
+	
+	
+	<resultMap id="BizResultMap" type="goodsInstoreBiz">
+		<result property="goodsOrderId" column="goods_order_id" jdbcType="BIGINT"/>
+		<result property="orderNo" column="order_no" jdbcType="VARCHAR" />
+		<result property="storeId" column="store_id" jdbcType="BIGINT"/>
+		<result property="storeChineseName" column="store_chinese_name" jdbcType="VARCHAR" />
+		<result property="orderState" column="order_state" jdbcType="BIGINT"/>
+		<result property="kingdeeCustId" column="kingdee_cust_id" jdbcType="BIGINT" />
+		<result property="kingdeeCustNo" column="kingdee_cust_no" jdbcType="VARCHAR" />
+		<result property="inQuantity" column="in_quantity" jdbcType="BIGINT" />
+		<result property="operatorName" column="operator_name" jdbcType="VARCHAR" />
+		<result property="updateTime"  column="update_time"  jdbcType="TIMESTAMP"/>
 	</resultMap>
 	
 	<resultMap type="goodsStore" id="goodsStoreResultMap" extends="BaseResultMap">
@@ -47,9 +63,9 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsInstore">
 		insert into
 		<include refid="table" />
-		(goods_id,batch_no,store_id,repository_id,state,pur_price,type,in_quantity,in_store_time,operator,memo,source_id)
+		(goods_id,batch_no,store_id,repository_id,state,pur_price,type,in_quantity,in_store_time,add_time,update_time,operator,memo,source_id)
 		values (
-			#{goodsId},#{batchNo},#{storeId},#{repositoryId},#{state},#{purPrice},#{type},#{inQuantity},now(),#{operator},#{memo},#{sourceId}
+			#{goodsId},#{batchNo},#{storeId},#{repositoryId},#{state},#{purPrice},#{type},#{inQuantity},now(),now(),now(),#{operator},#{memo},#{sourceId}
 		)
 	</insert>
 	
@@ -62,6 +78,7 @@
 			store_id = #{storeId} ,
 			repository_id = #{repositoryId} ,
 			state = #{state} ,
+			update_time=now(),
 			pur_price = #{purPrice} ,
 			type = #{type} ,
 			in_quantity = #{inQuantity} ,
@@ -97,6 +114,27 @@
 		</where>
 		<![CDATA[ order by id desc]]>
 	</select>
-
+	
+	<select id="listByBiz" parameterType="goodsInstoreBiz" resultMap="BizResultMap">
+		select go.id as goods_order_id,go.store_id as store_id,s.chinese_name as store_chinese_name,
+		go.order_no as order_no,go.kingdee_cust_id,go.kingdee_cust_no,go.state as order_state,
+		sum(gi.in_quantity)as in_quantity,gi.update_time,a.name as operator_name
+ 		from bcd_goods_order go 
+		left join bcd_goods_order_item goi on go.id = goi.goods_order_id
+		left join bcd_goods_instore gi on goi.id = gi.goods_order_item_id
+		left join bcd_store s on go.store_id=s.id
+		left join bcd_admin a on gi.operator=a.id
+		<where>
+			<if test="storeChineseName != null and storeChineseName !=''">
+				and s.chinese_name like concat('%',#{storeChineseName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="operatorName != null and operatorName !=''">
+				and a.name like concat('%',#{operatorName,jdbcType=VARCHAR},'%')
+			</if>
+			and go.state = 10020 and gi.state=1
+		</where>
+		group by go.id
+		<![CDATA[ order by gi.update_time asc]]>
+	</select>
 
 </mapper>

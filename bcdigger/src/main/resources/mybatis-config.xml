@@ -48,6 +48,7 @@
         <typeAlias alias="goods" type="com.bcdigger.goods.entity.Goods" />
         <typeAlias alias="goodsCategory" type="com.bcdigger.goods.entity.GoodsCategory" />
         <typeAlias alias="goodsInstore" type="com.bcdigger.goods.entity.GoodsInstore" />
+        <typeAlias alias="goodsInstoreBiz" type="com.bcdigger.goods.entity.GoodsInstoreBiz" />
         <typeAlias alias="goodsOutstore" type="com.bcdigger.goods.entity.GoodsOutstore" />
         <typeAlias alias="goodsPurchase" type="com.bcdigger.goods.entity.GoodsPurchase" />
         <typeAlias alias="goodsPurchaseItem" type="com.bcdigger.goods.entity.GoodsPurchaseItem" />
