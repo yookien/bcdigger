@@ -6,6 +6,7 @@
 
 	<resultMap id="BaseResultMap" type="com.bcdigger.admin.entity.Admin">
 		<id property="id" column="id" jdbcType="BIGINT"/>
+		<id property="storeId" column="store_id" jdbcType="BIGINT"/>
 		<result property="nickname" column="nickname" jdbcType="VARCHAR" />
 		<result property="name" column="name" jdbcType="VARCHAR" />
 		<result property="password" column="password" jdbcType="VARCHAR" />

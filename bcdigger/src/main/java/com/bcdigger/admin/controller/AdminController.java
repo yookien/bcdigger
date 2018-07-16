@@ -164,7 +164,7 @@ public class AdminController {
 	public String index(HttpServletRequest request,ModelMap map) {
 		try{
 			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
-			adminId=1;
+			//adminId=1;
 			Admin admin=adminService.getAdmin(adminId);
 			List<SysMenu> menuList=getUserMenu(adminId);
 			List<SysMenu> level1List= new ArrayList<SysMenu>();

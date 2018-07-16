@@ -6,6 +6,7 @@ drop table if exists bcd_admin;
 create table bcd_admin
 (
    id             int comment 'Ö÷¼üid',
+   store_id		  int comment 'ËùÊôÃÅµêid',		
    name                 varchar(64) comment 'Ãû³Æ',
    nickname             varchar(64) comment 'êÇ³Æ',
    password             varchar(64) comment 'ÃÜÂë',

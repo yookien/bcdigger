@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bcdigger.admin.entity.Admin;
+import com.bcdigger.admin.service.AdminService;
+import com.bcdigger.common.constant.CacheConstant;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.core.annotation.AdminAuth;
 import com.bcdigger.order.entity.GoodsOrder;
@@ -28,7 +33,8 @@ public class GoodsOrderController {
 	
 	@Autowired
 	private GoodsOrderService goodsOrderService;
-	
+	@Autowired
+	private AdminService adminService;
 	
 	@RequestMapping(value ="/addGoodsOrder",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
@@ -67,6 +73,7 @@ public class GoodsOrderController {
 	@RequestMapping(value ="/getGoodsOrder",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public Map<String, Object> getGoodsOrder(GoodsOrder goodsOrder) {
+		
 		Map<String, Object> map = new HashMap<>();
 		try{
 			if( goodsOrder==null || goodsOrder.getId()<=0){
@@ -129,7 +136,13 @@ public class GoodsOrderController {
 	 * @date 2018年3月25日
 	 */
 	@RequestMapping(value ="/getGoodsOrders",method={RequestMethod.GET,RequestMethod.POST})
-	public String getGoodsOrders(GoodsOrder goodsOrder, PageInfo pageInfo,ModelMap map) {
+	public String getGoodsOrders(GoodsOrder goodsOrder, PageInfo pageInfo,ModelMap map,HttpServletRequest request) {
+		Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+		Admin admin = adminService.getAdmin(adminId);
+		if(admin!=null) {
+			//goodsOrder.setOrderUserId(adminId);
+			goodsOrder.setStoreId(admin.getStoreId());
+		}
 		try{
 			if(pageInfo==null){
 				pageInfo=new PageInfo();

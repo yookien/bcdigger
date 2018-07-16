@@ -7,6 +7,7 @@ import com.bcdigger.common.entity.BaseEntity;
 public class Admin extends BaseEntity{
 	
 	private String nickname;
+	private int storeId;
 	private String name;
 	private String password;
 	private Short sex;
@@ -214,6 +215,14 @@ public class Admin extends BaseEntity{
 
 	public void setUserPermissionStr(String userPermissionStr) {
 		this.userPermissionStr = userPermissionStr;
+	}
+
+	public int getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(int storeId) {
+		this.storeId = storeId;
 	}
 	
 	
