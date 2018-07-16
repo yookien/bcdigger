@@ -27,8 +27,9 @@
     <link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
     <link href="/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
-    <!-- bootstrap-daterangepicker -->
-    <link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    
+    <!-- prettify -->
+    <link href="/css/prettify.css" rel="stylesheet" />
 
   </head>
 
@@ -122,12 +123,14 @@
     <script src="/vendors/jqvmap/dist/jquery.vmap.js"></script>
     <script src="/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
     <script src="/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="/vendors/moment/min/moment.min.js"></script>
-    <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+    
+    <!--typeahead Scripts -->
+    <script src="/js/bootstrap-typeahead.js" type="text/javascript"></script>
+    <script src="/js/prettify.js" type="text/javascript"></script>
+    <script src="/js/mockjax.js" type="text/javascript"></script>
 	
   </body>
 </html>

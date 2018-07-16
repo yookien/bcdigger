@@ -1,12 +1,12 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>订单管理 </h2>
+        <h2>订货单管理 </h2>
         <div class="clearfix"></div>
       </div>
       
       <div style="float:right;margin:0px 50px;font-size:20px">
-      	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="addOrderEvent()">添加订单</button>
+      	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="addOrderEvent()">添加订货单</button>
       </div>
 
 	  <div class="x_content" id="order_datas">
@@ -17,243 +17,71 @@
 
 
 
-<!-- 添加订单 -->
+<!-- 添加订货单 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> 
-    <div class="modal-dialog" role="document">  
+    <div class="modal-dialog" role="document" style="width:70%">  
         <div class="modal-content">  
             <div class="modal-header">  
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">  
                     <span aria-hidden="true"><i class="fa fa-times"></i></span>  
                 </button>  
-                <h4 class="modal-title" id="myModalLabel">添加订单</h4>
+                <h4 class="modal-title" id="myModalLabel">添加订货单</h4>
             </div>
             <div class="modal-body">  
                    <form class="form-horizontal form-label-left input_mask" id="addOrEditOrderForm">
 						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">订单编号</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6 ">
-	                        <input type="text" class="form-control" id="OrderCode" name="OrderCode" placeholder="订单编号">
+	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货单编号</label>
+	                      <div class="col-md-2 col-sm-2 col-xs-3 ">
+	                        <input type="text" class="form-control" id="OrderCode" name="OrderCode" placeholder="订货单编号">
 	                      </div>
 	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">订单名称</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6">
-	                        <input type="text" class="form-control" id="chineseName" name="chineseName" placeholder="订单名称">
-	                      </div>
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">电话</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6 ">
-	                        <input type="text" class="form-control" id="phone" name="phone" placeholder="电话">
+	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货单日期</label>
+	                      <div class="col-md-2 col-sm-2 col-xs-3">
+	                        <input type="text" class="form-control" id="chineseName" name="chineseName" placeholder="订货单名称">
 	                      </div>
 	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">手机</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6">
-	                        <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机">
-	                      </div>
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">地址</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="address" name="address" placeholder="地址">
-	                      </div>
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">大区</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6 ">
-	                        <input type="text" class="form-control" id="direction" name="direction" placeholder="大区">
+	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">客户</label>
+	                      <div class="col-md-2 col-sm-2 col-xs-3">
+	                        <input type="text" class="form-control" id="chineseName" name="chineseName" placeholder="订货单名称">
 	                      </div>
 	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">所属省</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6">
-	                        <input type="text" class="form-control" id="OrderProvince" name="OrderProvince" placeholder="所属省">
+	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">客户</label>
+	                      <div class="col-md-2 col-sm-2 col-xs-3">
+	                        <input type="text" class="form-control" id="chineseName" name="chineseName" placeholder="订货单名称">
 	                      </div>
 	                      
 						</div>
+					
+						<table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+	                      <thead>
+	                        <tr>
+	                          <th>物料编码</th>
+	                          <th>物料名称</th>
+	                          <th>规格型号</th>
+	                          <th>销售单位</th>
+	                          <th>销售数量</th>
+	                          <th>要货日期</th>
+	                          <th>备注</th>
+	                        </tr>
+	                      </thead>
+	                      <tbody>
+	                        <tr>
+	                          <td><input type="text" class="form-control" id="goodsNo1" name="chineseName" autocomplete="off"></td>
+	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
+	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
+	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
+	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
+	                          <td>
+	                          	<input id="single_cal4" class="form-control has-feedback-left" aria-describedby="inputSuccess2Status4" type="text">
+								<span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+								<span id="inputSuccess2Status4" class="sr-only">(success)</span>
+	                          </td>
+	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
+	                        </tr>
+	                        
+	                       </tbody>
+						</table>
 						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">所属城市</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6">
-	                        <input type="text" class="form-control" id="OrderCity" name="OrderCity" placeholder="所属城市">
-	                      </div>
-	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">城市区域</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6">
-	                        <input type="text" class="form-control" id="cityArea" name="cityArea" placeholder="城市区域">
-	                      </div>
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">开业时间</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6 ">
-	                        <input type="text" class="form-control" id="openHour" name="openHour" placeholder="开业时间">
-	                      </div>
-	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">停业时间</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6">
-	                        <input type="text" class="form-control" id="closeHour" name="closeHour" placeholder="停业时间">
-	                      </div>
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">英文名称</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="englishName" name="englishName" placeholder="英文名称">
-	                      </div>
-	                    </div> 
-	                    
-	                    
-	                    <div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">英文地址</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12">
-	                        <input type="text" class="form-control" id="englishAddress" name="englishAddress" placeholder="英文地址">
-	                      </div>
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">位置示意图</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12">
-	                        <input type="text" class="form-control" id="locationImage" name="locationImage" placeholder="位置示意图">
-	                      </div>
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">订单主图</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12">
-	                        <input type="text" class="form-control" id="OrderImages" name="OrderImages" placeholder="订单主图">
-	                      </div>
-						</div>
-						
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">百度位置</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12">
-	                        <input type="text" class="form-control" id="bmapPosition" name="bmapPosition" placeholder="百度位置">
-	                      </div>
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">搜索地址</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="searchUrl" name="searchUrl" placeholder="搜索地址">
-	                      </div>
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">公交情况</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="bus" name="bus" placeholder="公交情况">
-	                      </div>
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">地铁情况</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="subway" name="subway" placeholder="地铁情况">
-	                      </div>
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">附近建筑</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="nearby" name="nearby" placeholder="附近建筑">
-	                      </div>
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">邮箱</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="email" name="email" placeholder="邮箱">
-	                      </div>
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">店面图片1</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="OrderImage1" name="OrderImage1" placeholder="店面图片1">
-	                      </div>
-	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">店面图片2</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="OrderImage2" name="OrderImage2" placeholder="店面图片2">
-	                      </div>
-	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">店面图片3</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="OrderImage3" name="OrderImage3" placeholder="店面图片3">
-	                      </div>
-	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-12 ">店面图片4</label>
-	                      <div class="col-md-10 col-sm-10 col-xs-12 ">
-	                        <input type="text" class="form-control" id="OrderImage4" name="OrderImage4" placeholder="店面图片4">
-	                      </div>
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">预约限制</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-6 ">
-	                        <input type="text" class="form-control" id="appointLimit" name="appointLimit" value="1" placeholder="预约限制">
-	                      </div>
-	                      
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">订单类型</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-86 ">
-	                         <select id="OrderType" name="OrderType" class="form-control" required>
-	                            <option value="0">自营</option>
-	                            <option value="1">写字楼店</option>
-	                            <option value="2">商场店</option>
-	                            <option value="3">加盟店</option>
-	                          </select>
-	                      </div>
-	                      
-						</div>
-						
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">是否预约</label>
-	                      <input id="isBooking" name="isBooking" value="0" type="hidden">
-	                        <div class="col-md-4 col-sm-4 col-xs-6 ">
-	                          <div class="btn-group" data-toggle="buttons">
-	                            <label name="state_label" onclick="clickRadioBtn(this)" targetId="isBooking" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-	                              <input  type="radio"  value="1" data-parsley-multiple="isBooking"> &nbsp; 是 &nbsp;
-	                            </label>
-	                            <label name="state_label" onclick="clickRadioBtn(this)" targetId="isBooking" class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-	                              <input  type="radio"  value="0" data-parsley-multiple="isBooking"> 否
-	                            </label>
-	                          </div>
-	                        </div>
-	                      <!--
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">开业时间</label>
-	                      <div class="col-md-4 col-sm-4 col-xs-86 ">
-	                        <input type="text" class="form-control" id="openTime" name="openTime" placeholder="开业时间">
-	                      </div>-->
-						</div>
-						
-						<div class="form-group">
-	                      <label class="control-label col-md-2 col-sm-2 col-xs-6 ">是否开业</label>
-	                      
-	                        <input id="isOpen" name="isOpen" type="hidden" value="0">
-	                        <div class="col-md-4 col-sm-4 col-xs-6">
-	                          <div class="btn-group" data-toggle="buttons">
-	                            <label name="state_label" onclick="clickRadioBtn(this)" targetId="isOpen" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-	                              <input  type="radio"  value="1" data-parsley-multiple="isOpen"> &nbsp; 是 &nbsp;
-	                            </label>
-	                            <label name="state_label" onclick="clickRadioBtn(this)" targetId="isOpen" class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-	                              <input  type="radio"  value="0" data-parsley-multiple="isOpen"> 否
-	                            </label>
-	                          </div>
-	                        </div>
-						</div>
-						  
 					   <input type="hidden" name="id" id="Order_id" value="0"> 
                  </form>
             </div>
@@ -272,15 +100,56 @@ var ajax_pars='';
 var ajax_contents='order_datas';
 
 $(function(){
-	// 查询订单信息
+	// 查询订货单信息
 	getOrder();
 	// 初始化参数校验
 	initValidator();
+	
+	// 初始化日历
+	initDaterangepicker('single_cal4');
+	
+	initGoodsNo('goodsNo1');
 });
 
-// 分页查询订单信息
+function displayResult(item, val, text) {
+console.log(item);
+	alert('You selected <strong>' + val + '</strong>: <strong>' + text + '</strong>');
+}
+
+// 初始化联想查询货号
+function initGoodsNo(id){
+	$('#'+id).typeahead({
+        source: [
+		     { id: 1, full_name: 'Toronto', first_two_letters: 'To' },
+		    { id: 2, full_name: 'Montreal', first_two_letters: 'Mo' },
+		    { id: 3, full_name: 'New York', first_two_letters: 'Ne' },
+		    { id: 4, full_name: 'Buffalo', first_two_letters: 'Bu' },
+		    { id: 5, full_name: 'Boston', first_two_letters: 'Bo' },
+		    { id: 6, full_name: 'Columbus', first_two_letters: 'Co' },
+		    { id: 7, full_name: 'Dallas', first_two_letters: 'Da' },
+		    { id: 8, full_name: 'Vancouver', first_two_letters: 'Va' },
+		    { id: 9, full_name: 'Seattle', first_two_letters: 'Se' },
+		    { id: 10, full_name: 'Los Angeles', first_two_letters: 'Lo' }
+	    ],
+	    display: 'full_name',
+        itemSelected: displayResult
+    });
+
+}
+
+// 初始化日历
+function initDaterangepicker(id){
+	$('#'+id).daterangepicker({
+	  singleDatePicker: true,
+	  singleClasses: "picker_4"
+	}, function(start, end, label) {
+	  console.log(start.toISOString(), end.toISOString(), label);
+	});
+}
+
+// 分页查询订货单信息
 function getOrder(){
-	ajax_request_url='/order/getOrders';
+	ajax_request_url='/order/getGoodsOrders';
 	$.ajax({
 		url: ajax_request_url,
 		type:'POST',
@@ -296,18 +165,18 @@ function getOrder(){
 
 
 
-// 打开新增订单页面
+// 打开新增订货单页面
 function addOrderEvent(){
 	// 重设form
 	$('#addOrEditOrderForm')[0].reset();
-	$('#myModalLabel').html('添加订单信息');
+	$('#myModalLabel').html('添加订货单信息');
 	$("#save_btn").unbind();
 	$("#save_btn").click(function(){
 	  	addOrder();
 	});
 }
 
-// 添加订单信息
+// 添加订货单信息
 function addOrder(){
 	$("#addOrEditOrderForm").bootstrapValidator('validate');//提交验证  
     if ($("#addOrEditOrderForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
@@ -330,11 +199,11 @@ function addOrder(){
 }
 
 
-// 打开编辑订单页面
+// 打开编辑订货单页面
 function editOrder(id){
 	// 重设form
 	$('#addOrEditOrderForm')[0].reset();
-	$('#myModalLabel').html('编辑订单信息');
+	$('#myModalLabel').html('编辑订货单信息');
 	if(isNaN(id) || id<=0){
 		return;
 	}
@@ -475,7 +344,7 @@ function editOrder(id){
 	})
 }
 
-// 添加用户订单
+// 添加用户订货单
 function updateOrder(){
 	$("#addOrEditOrderForm").bootstrapValidator('validate');//提交验证  
     if ($("#addOrEditOrderForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
@@ -499,7 +368,7 @@ function updateOrder(){
 
 
 
-// 初始化 添加、编辑订单校验
+// 初始化 添加、编辑订货单校验
 function initValidator(){
 
 	$('#addOrEditOrderForm').bootstrapValidator({
@@ -513,14 +382,14 @@ function initValidator(){
 	    	name: {
 	        	validators: {
 	            	notEmpty: {
-	                	message: '请输入订单名称'
+	                	message: '请输入订货单名称'
 	            	}
 	        	}
 	       	},
 	        adminId: {
 	        	validators: {
 	            	notEmpty: {
-	                        message: '请选择订单负责人'
+	                        message: '请选择订货单负责人'
 	                }
 	            }
 	        },
