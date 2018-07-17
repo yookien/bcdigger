@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
@@ -1402,6 +1403,16 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
 
 		return value;
 
+	}
+	/**
+	 * 获取当天0点0分
+	 * 
+	 * @return
+	 */
+	public static Date getTodayStartTime() {
+		long current=System.currentTimeMillis();//当前时间毫秒数
+		long zero=current/(1000*3600*24)*(1000*3600*24)-TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+		return new Timestamp(zero);
 	}
 
 	public static void main(String[] args) {

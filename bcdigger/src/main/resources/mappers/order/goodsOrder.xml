@@ -40,7 +40,7 @@
 		<include refid="table" />
 		(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id)
 		values (
-			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{now()},#{now()},#{memo},#{kingdeeCustId}
+			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{addTime},#{updateTime},#{memo},#{kingdeeCustId}
 		)
 	</insert>
 	
@@ -93,5 +93,13 @@
 		</where>
 		<![CDATA[ order by id desc]]>
 	</select>
+	
+	<select id="countGoodsOrder" parameterType="java.util.Map" resultType="Integer">
+		select count(*) 
+		from
+		<include refid="table" />
+		where add_time >= #{addTime,jdbcType=TIMESTAMP}
+	</select>
+	
 
 </mapper>

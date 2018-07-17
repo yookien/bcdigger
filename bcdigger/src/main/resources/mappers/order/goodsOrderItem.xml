@@ -38,7 +38,7 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsOrderItem">
 		insert into
 		<include refid="table" />
-		(goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,create_time, update_time)
+		(goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,add_time, update_time)
 		values (
 			#{goodsOrderId},#{orderNo},#{goodsId},#{goodsNo},#{orderQuantity},#{instoreQuantity},#{instoreTime},now(),now()
 		)

@@ -153,7 +153,7 @@ public class SyncBaseDataController {
 						// 7FWEIGHTUNITID,8FVOLUMEUNITID,9FExpUnit,10FGROSSWEIGHT,11FVOLUME,12FExpPeriod,13FCreateDate,14FDefaultVendor
 						// 解析参数
 						String goodsNo = info.getString(1);// 商品货号
-						String goodName = info.getString(2);// 商品名称
+						String goodsName = info.getString(2);// 商品名称
 						int kingdeeCustId = info.getInteger(0);// 物料金蝶系统内码
 						String createDate = info.getString(13);// 创建时间
 						
@@ -178,7 +178,7 @@ public class SyncBaseDataController {
 						int expPeriod = info.getInteger(12);// 保质期
 
 						goods.setGoodsNo(goodsNo);
-						goods.setGoodName(goodName);
+						goods.setGoodsName(goodsName);
 						goods.setKingdeeCustId(kingdeeCustId);
 						goods.setWeight(grossweight);
 						goods.setUpdateTime(updateTime);

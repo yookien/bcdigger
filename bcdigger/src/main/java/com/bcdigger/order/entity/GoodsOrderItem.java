@@ -26,12 +26,14 @@ public class GoodsOrderItem extends BaseEntity {
 	
 	private int instoreQuantity;
 	
-	private int instoreTime;
+	private Date instoreTime;
 	
 	private Date addTime;
 	
 	private Date updateTime;
-
+	
+	private String memo;
+	
 	public int getGoodsOrderId() {
 		return goodsOrderId;
 	}
@@ -80,11 +82,11 @@ public class GoodsOrderItem extends BaseEntity {
 		this.instoreQuantity = instoreQuantity;
 	}
 
-	public int getInstoreTime() {
+	public Date getInstoreTime() {
 		return instoreTime;
 	}
 
-	public void setInstoreTime(int instoreTime) {
+	public void setInstoreTime(Date instoreTime) {
 		this.instoreTime = instoreTime;
 	}
 
@@ -103,5 +105,12 @@ public class GoodsOrderItem extends BaseEntity {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-	
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
 }

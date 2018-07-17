@@ -2,6 +2,8 @@ package com.bcdigger.order.entity;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 /**
  * ClassName: GoodsOrderItemModel
  * 
@@ -13,53 +15,53 @@ public class GoodsOrderItemModel {
 	/**
 	 * 货号列表
 	 */
-	private List<String> goodsNos;
+	private List<String> goodsNo;
 
 	/**
 	 * 数量列表
 	 */
-	private List<Integer> quantitys;
+	private List<Integer> quantity;
 
 	/**
 	 * 要货时间列表
 	 */
-	private List<String> instoreTimes;
+	private List<String> instoreTime;
 
 	/**
 	 * 备注列表
 	 */
-	private List<String> memos;
+	private List<String> memo;
 
-	public List<String> getGoodsNos() {
-		return goodsNos;
+	public List<String> getGoodsNo() {
+		return goodsNo;
 	}
 
-	public void setGoodsNos(List<String> goodsNos) {
-		this.goodsNos = goodsNos;
+	public void setGoodsNo(List<String> goodsNo) {
+		this.goodsNo = goodsNo;
 	}
 
-	public List<Integer> getQuantitys() {
-		return quantitys;
+	public List<Integer> getQuantity() {
+		return quantity;
 	}
 
-	public void setQuantitys(List<Integer> quantitys) {
-		this.quantitys = quantitys;
+	public void setQuantity(List<Integer> quantity) {
+		this.quantity = quantity;
 	}
 
-	public List<String> getInstoreTimes() {
-		return instoreTimes;
+	public List<String> getInstoreTime() {
+		return instoreTime;
 	}
 
-	public void setInstoreTimes(List<String> instoreTimes) {
-		this.instoreTimes = instoreTimes;
+	public void setInstoreTime(List<String> instoreTime) {
+		this.instoreTime = instoreTime;
 	}
 
-	public List<String> getMemos() {
-		return memos;
+	public List<String> getMemo() {
+		return memo;
 	}
 
-	public void setMemos(List<String> memos) {
-		this.memos = memos;
+	public void setMemo(List<String> memo) {
+		this.memo = memo;
 	}
 
 }

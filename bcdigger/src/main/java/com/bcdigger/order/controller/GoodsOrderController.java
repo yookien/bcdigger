@@ -2,6 +2,7 @@ package com.bcdigger.order.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,16 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bcdigger.admin.entity.Admin;
 import com.bcdigger.admin.service.AdminService;
 import com.bcdigger.common.constant.CacheConstant;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.core.annotation.AdminAuth;
 import com.bcdigger.order.entity.GoodsOrder;
+import com.bcdigger.order.entity.GoodsOrderItem;
+import com.bcdigger.order.entity.GoodsOrderItemModel;
 import com.bcdigger.order.service.GoodsOrderService;
 
 
@@ -28,7 +33,7 @@ import com.bcdigger.order.service.GoodsOrderService;
 //@RestController  //只返回值，不放回页面渲染
 @EnableAutoConfiguration
 @RequestMapping("/order")
-@AdminAuth  // 门店管理全部需要登录鉴权
+@AdminAuth  // 订货单管理全部需要登录鉴权
 public class GoodsOrderController {
 	
 	@Autowired
@@ -38,23 +43,68 @@ public class GoodsOrderController {
 	
 	@RequestMapping(value ="/addGoodsOrder",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public Map<String, Object> addGoodsOrder(GoodsOrder goodsOrder){
+	public Map<String, Object> addGoodsOrder(HttpServletRequest request, GoodsOrder goodsOrder,
+			GoodsOrderItemModel orderItemModel,GoodsOrderItem goodsOrderItem){
 		Map<String, Object> map = new HashMap<>();  
 		try{
+			// 获取用户登录信息
+			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+			if(adminId == null || adminId < 1){
+				map.put("result", 10001);// 用户未登录
+				return map;
+			}
+			Admin admin=adminService.getAdmin(adminId);
+			if( admin == null || admin.getId() < 1){
+				map.put("result", 10001);// 用户未登录
+				return map;
+			}
+			if( admin.getStoreId() < 1){
+				map.put("result", 10002);// 用户未绑定订货单
+				return map;
+			}
 			// 参数校验，待完善
 			if(goodsOrder == null){
-				map.put("result", -1);// 参数为空
+				map.put("result", 10003);// 参数为空
 				return map;
 			}
-			if(StringUtils.isBlank(goodsOrder.getOrderNo())){
+			goodsOrder.setOrderUserId(admin.getId());
+			goodsOrder.setStoreId(admin.getStoreId());
+			/**if(StringUtils.isBlank(goodsOrder.getOrderNo())){
 				map.put("result", -2);// 菜单名称不能为空
 				return map;
+			}*/
+			
+			if( orderItemModel != null ){
+				// 货号列表
+				List<String> goodsNos = orderItemModel.getGoodsNo();
+				// 数量列表
+				List<Integer> quantitys = orderItemModel.getQuantity();
+				// 要货时间列表
+				List<String> instoreTimes = orderItemModel.getInstoreTime();
+				// 备注列表
+				List<String> memos = orderItemModel.getMemo();
+				
+				// 参数不合法
+				if(goodsNos==null || goodsNos.size()<1 || quantitys == null 
+					|| instoreTimes == null || memos == null
+					|| goodsNos.size() != quantitys.size()
+					|| goodsNos.size() != instoreTimes.size() 
+					|| goodsNos.size() != memos.size() ){
+					map.put("result", 10004);// 参数校验失败
+					return map;
+				}
+				
+			} else {
+				map.put("result", 10005);// 订单明细数据为空
+				return map;
 			}
-			Date now=new Date();
-			goodsOrder.setAddTime(now);
-			goodsOrder.setUpdateTime(now);
-			int result = goodsOrderService.addGoodsOrder(goodsOrder);
-			map.put("result", result);//登录成功
+			
+			JSONObject json = goodsOrderService.addGoodsOrder(goodsOrder,orderItemModel);
+			if(json ==null ){
+				map.put("result", 0);
+			} else {
+				map.put("result", json.get("result"));
+			}
 		}catch(Exception e){
 			map.put("result", 0);//系统异常
 			e.printStackTrace();
@@ -64,7 +114,7 @@ public class GoodsOrderController {
 	
 	
 	/**
-	 * @Description: 根据id查询门店信息
+	 * @Description: 根据id查询订货单信息
 	 * @param id
 	 * @return Map<String,Object>  
 	 * @throws
@@ -91,7 +141,7 @@ public class GoodsOrderController {
 	
 	/**
 	 * 
-	 * @Description: 更新门店信息
+	 * @Description: 更新订货单信息
 	 * @param GoodsOrder
 	 * @return Map<String,Object>
 	 * @date 2018年3月25日
@@ -118,7 +168,7 @@ public class GoodsOrderController {
 	}
 	
 	/**
-	 * @Description:打开门店管理首页
+	 * @Description:打开订货单管理首页
 	 * @param request
 	 * @return
 	 * @return String
@@ -140,7 +190,7 @@ public class GoodsOrderController {
 		Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
 		Admin admin = adminService.getAdmin(adminId);
 		if(admin!=null) {
-			//goodsOrder.setOrderUserId(adminId);
+			goodsOrder.setOrderUserId(adminId);
 			goodsOrder.setStoreId(admin.getStoreId());
 		}
 		try{

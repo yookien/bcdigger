@@ -1,7 +1,9 @@
 package com.bcdigger.order.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.order.entity.GoodsOrder;
+import com.bcdigger.order.entity.GoodsOrderItemModel;
 
 
 public interface GoodsOrderService {
@@ -13,7 +15,8 @@ public interface GoodsOrderService {
 	 * @param GoodsOrder
 	 * @return
 	 */
-	public int addGoodsOrder(GoodsOrder goodsOrder);
+	public JSONObject addGoodsOrder(GoodsOrder goodsOrder,GoodsOrderItemModel orderItemModel);
+	
 	/**
 	 * 更新订单信息
 	 * <p>Title: updateGoodsOrder</p>  

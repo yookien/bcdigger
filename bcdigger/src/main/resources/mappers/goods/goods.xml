@@ -8,7 +8,7 @@
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="catId" column="cat_id" jdbcType="BIGINT"/>
 		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" />
-		<result property="goodName" column="good_name" jdbcType="VARCHAR" />
+		<result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
 		<result property="state" column="state" jdbcType="BIGINT"/>
 		<result property="smallImage" column="small_image" jdbcType="VARCHAR" />
 		<result property="middleImage" column="middle_image" jdbcType="VARCHAR" />
@@ -27,7 +27,7 @@
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id, cat_id,goods_no,good_name,state,small_image,middle_image,goods_image,weight,unit,inner_name,
+		id, cat_id,goods_no,goods_name,state,small_image,middle_image,goods_image,weight,unit,inner_name,
 		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time
 	</sql>
 	
@@ -36,11 +36,11 @@
 		<if test="id != null">
 			and id = #{id,jdbcType=BIGINT}
 		</if>
-		<if test="goodName != null and goodName !='' and like == 1 ">
-			and good_name like concat('%',#{goodName,jdbcType=VARCHAR},'%')
+		<if test="goodsName != null and goodsName !='' and like == 1 ">
+			and goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%')
 		</if>
-		<if test="goodName != null and goodName !='' and like == null">
-			and good_name = #{goodName,jdbcType=VARCHAR}
+		<if test="goodsName != null and goodsName !='' and like == null">
+			and goods_name = #{goodsName,jdbcType=VARCHAR}
 		</if>
 		
 		<if test="goodsNo != null and goodsNo !='' ">
@@ -52,9 +52,9 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goods">
 		insert into
 		<include refid="table" />
-		(cat_id,goods_no,good_name,state,small_image,middle_image,goods_image,weight,unit,inner_name,
+		(cat_id,goods_no,goods_name,state,small_image,middle_image,goods_image,weight,unit,inner_name,
 		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time)
-		values (#{catId},#{goodsNo},#{goodName},#{state},#{smallImage},#{middleImage},#{goodsImage},#{weight},#{unit},#{innerName},
+		values (#{catId},#{goodsNo},#{goodsName},#{state},#{smallImage},#{middleImage},#{goodsImage},#{weight},#{unit},#{innerName},
 			#{type},#{price},#{marketPrice},#{purPrice},#{goodsDesc},#{displayOrder},now(),now()
 		)
 	</insert>
@@ -65,7 +65,7 @@
 		<set>
 			cat_id= #{catId} ,
 			goods_no = #{goodsNo} , 
-			good_name = #{goodName} , 
+			goods_name = #{goodsName} , 
 			state = #{state} , 
 			small_image = #{smallImage} ,
 			middle_image = #{middleImage} , 

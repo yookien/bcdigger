@@ -32,22 +32,22 @@
 						<div class="form-group">
 	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货单编号</label>
 	                      <div class="col-md-2 col-sm-2 col-xs-3 ">
-	                        <input type="text" class="form-control" id="OrderCode" name="OrderCode" placeholder="订货单编号">
+	                        <input type="text" class="form-control" id="orderNo">
 	                      </div>
 	                      
 	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货单日期</label>
 	                      <div class="col-md-2 col-sm-2 col-xs-3">
-	                        <input type="text" class="form-control" id="chineseName" name="chineseName" placeholder="订货单名称">
+	                        <input type="text" class="form-control" id="addTime">
 	                      </div>
 	                      
-	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">客户</label>
+	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">门店</label>
 	                      <div class="col-md-2 col-sm-2 col-xs-3">
-	                        <input type="text" class="form-control" id="chineseName" name="chineseName" placeholder="订货单名称">
+	                        <input type="text" class="form-control" id="storeName" >
 	                      </div>
 	                      
-	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">客户</label>
+	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货种类</label>
 	                      <div class="col-md-2 col-sm-2 col-xs-3">
-	                        <input type="text" class="form-control" id="chineseName" name="chineseName" placeholder="订货单名称">
+	                        <input type="text" class="form-control" id="orderType">
 	                      </div>
 	                      
 						</div>
@@ -66,17 +66,17 @@
 	                      </thead>
 	                      <tbody>
 	                        <tr>
-	                          <td><input type="text" class="form-control" id="goodsNo1" name="chineseName" autocomplete="off"></td>
-	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
-	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
-	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
-	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
+	                          <td><input type="text" class="form-control" id="goodsNo1" name="goodsNo" autocomplete="off"></td>
+	                          <td><input type="text" class="form-control" id="goodsNam1"></td>
+	                          <td><input type="text" class="form-control" id="chineseName"></td>
+	                          <td><input type="text" class="form-control" id="unit1"></td>
+	                          <td><input type="text" class="form-control" id="quantity1" name="quantity"></td>
 	                          <td>
-	                          	<input id="single_cal4" class="form-control has-feedback-left" aria-describedby="inputSuccess2Status4" type="text">
+	                          	<input id="single_cal4" name="instoreTime" class="form-control has-feedback-left" aria-describedby="inputSuccess2Status4" type="text">
 								<span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
 								<span id="inputSuccess2Status4" class="sr-only">(success)</span>
 	                          </td>
-	                          <td><input type="text" class="form-control" id="chineseName" name="chineseName"></td>
+	                          <td><input type="text" class="form-control" id="memo1" name="memo" value="无" placeholder="备注"></td>
 	                        </tr>
 	                        
 	                       </tbody>
@@ -182,7 +182,7 @@ function addOrder(){
     if ($("#addOrEditOrderForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
         var pars=$("#addOrEditOrderForm").serialize();
 		$.ajax({
-			url: '/order/addOrder',
+			url: '/order/addGoodsOrder',
 			type:'POST',
 			data: pars,
 			dataType:'JSON',

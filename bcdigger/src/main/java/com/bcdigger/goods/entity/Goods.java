@@ -17,7 +17,7 @@ public class Goods extends BaseEntity{
 	
 	private int catId;//分类id
 	private String goodsNo;//商品货号
-	private String  goodName;//商品名称
+	private String  goodsName;//商品名称
 	private int state ;//状态 0不可用 1可用
 	private String smallImage;//商品小图
 	private String middleImage;//商品大图
@@ -49,11 +49,11 @@ public class Goods extends BaseEntity{
 	public void setGoodsNo(String goodsNo) {
 		this.goodsNo = goodsNo;
 	}
-	public String getGoodName() {
-		return goodName;
+	public String getGoodsName() {
+		return goodsName;
 	}
-	public void setGoodName(String goodName) {
-		this.goodName = goodName;
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
 	}
 	public int getState() {
 		return state;

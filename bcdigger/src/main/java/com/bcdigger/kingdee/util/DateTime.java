@@ -31,6 +31,8 @@ public final class DateTime {
 	static final SimpleDateFormat SDF_NOY_DATE = new SimpleDateFormat("MM-dd");
 
 	static final SimpleDateFormat SSDF_DATE = new SimpleDateFormat("yyyy/M/d");
+	
+	static final SimpleDateFormat SSD_DATE = new SimpleDateFormat("M/d/yyyy");
 
 	static final SimpleDateFormat SDF_DATENO = new SimpleDateFormat("yyyyMMdd");
 
@@ -364,7 +366,11 @@ public final class DateTime {
 			return null;
 
 		if (str.length() == 10){
-			return SDF_DATE.parse(str);
+			if (str.indexOf("-") == -1){
+				return SSD_DATE.parse(str);
+			}else{
+				return SDF_DATE.parse(str);
+			}
 		}else if (str.length() == 8) {
 			if (str.indexOf(":") != -1){
 				return SDF_TIME.parse(str);

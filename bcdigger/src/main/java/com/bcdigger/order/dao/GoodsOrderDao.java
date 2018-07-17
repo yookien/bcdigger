@@ -41,5 +41,16 @@ public class GoodsOrderDao extends BaseDaoImpl<GoodsOrder>{
 		return pageInfo;
 	}
 	
+	public int countGoodsOrder(GoodsOrder goodsOrder) throws Exception {
+		int orderNum = 0;
+		try{
+			orderNum = sqlSession.selectOne("countGoodsOrder", goodsOrder);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new Exception();
+		}
+		return orderNum;
+	}
+	
 	
 }
