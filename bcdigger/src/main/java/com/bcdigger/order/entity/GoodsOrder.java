@@ -1,6 +1,7 @@
 package com.bcdigger.order.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bcdigger.common.entity.BaseEntity;
 
@@ -42,6 +43,8 @@ public class GoodsOrder extends BaseEntity {
 	 * 门店名称
 	 */
 	private String storeName;
+	
+	private List<GoodsOrderItem> orderItemList;
 	
 
 	public String getOrderNo() {
@@ -130,6 +133,14 @@ public class GoodsOrder extends BaseEntity {
 
 	public void setKingdeeCustNo(int kingdeeCustNo) {
 		this.kingdeeCustNo = kingdeeCustNo;
+	}
+
+	public List<GoodsOrderItem> getOrderItemList() {
+		return orderItemList;
+	}
+
+	public void setOrderItemList(List<GoodsOrderItem> orderItemList) {
+		this.orderItemList = orderItemList;
 	}
 	
 }

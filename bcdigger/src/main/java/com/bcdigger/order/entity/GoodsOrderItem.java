@@ -34,6 +34,12 @@ public class GoodsOrderItem extends BaseEntity {
 	
 	private String memo;
 	
+	// 非数据库字段
+	/**
+	 * 商品金蝶内码
+	 */
+	private String goodsKingDeeCustId;
+	
 	public int getGoodsOrderId() {
 		return goodsOrderId;
 	}
@@ -113,4 +119,13 @@ public class GoodsOrderItem extends BaseEntity {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+
+	public String getGoodsKingDeeCustId() {
+		return goodsKingDeeCustId;
+	}
+
+	public void setGoodsKingDeeCustId(String goodsKingDeeCustId) {
+		this.goodsKingDeeCustId = goodsKingDeeCustId;
+	}
+	
 }

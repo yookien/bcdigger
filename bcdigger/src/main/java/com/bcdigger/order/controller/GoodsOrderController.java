@@ -207,5 +207,41 @@ public class GoodsOrderController {
 		}
 		return "/order/order_list";
 	}
+	
+	
+	
+	@RequestMapping(value ="/goodsOrderAuditingIndex")
+	public String goodsOrderAuditingIndex() {
+		return "/order/order_auditing_index";
+	}
+
+	/**
+	 * @Description: 分页查询菜单信息
+	 * @param pageNum
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/getGoodsOrdersForAuditing",method={RequestMethod.GET,RequestMethod.POST})
+	public String getGoodsOrdersForAuditing(GoodsOrder goodsOrder, PageInfo pageInfo,ModelMap map,HttpServletRequest request) {
+		Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+		Admin admin = adminService.getAdmin(adminId);
+		if(admin!=null) {
+			goodsOrder.setOrderUserId(adminId);
+			goodsOrder.setStoreId(admin.getStoreId());
+		}
+		try{
+			if(pageInfo==null){
+				pageInfo=new PageInfo();
+			}
+			//设置每页显示个数
+			pageInfo.setPageSize(10);
+			
+			PageInfo<GoodsOrder> goodsOrderPages = goodsOrderService.getGoodsOrders(goodsOrder, pageInfo);
+			map.addAttribute("pageInfo", goodsOrderPages);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "/order/order_auditing_list";
+	}
 
 }
