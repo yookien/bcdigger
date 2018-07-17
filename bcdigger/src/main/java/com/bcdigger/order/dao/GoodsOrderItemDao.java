@@ -41,4 +41,13 @@ public class GoodsOrderItemDao extends BaseDaoImpl<GoodsOrderItem>{
 		return pageInfo;
 	}
 	
+	public List<GoodsOrderItem> getGoodsOrderItems(GoodsOrderItem goodsOrderItem) {
+		List<GoodsOrderItem> list = null;
+		try{
+			list= sqlSession.selectList("getGoodsOrderItems", goodsOrderItem);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

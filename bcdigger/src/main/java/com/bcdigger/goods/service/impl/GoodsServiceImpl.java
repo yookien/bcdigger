@@ -70,10 +70,11 @@ public class GoodsServiceImpl implements GoodsService {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("goodsNo", goods.getGoodsNo());
 			Goods goodsTemp = goodsDao.getBy(params);
-			if( goodsTemp == null ){
+			if( goodsTemp == null || goodsTemp.getId() <= 0){
 				// 添加商品
 				goodsDao.insert(goods);
 			} else {
+				goods.setId(goodsTemp.getId());
 				// 更新商品
 				goodsDao.update(goods);
 			}

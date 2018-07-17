@@ -36,13 +36,17 @@ public class GoodsOrder extends BaseEntity {
 	 */
 	private int kingdeeCustId;
 	
-	private int kingdeeCustNo;
+	private String kingdeeCustNo;
 	
 	// 非数据库字段
 	/**
 	 * 门店名称
 	 */
 	private String storeName;
+	
+	private int storeKingdeeCustId;
+	
+	private String storeKingdeeCustNo;
 	
 	private List<GoodsOrderItem> orderItemList;
 	
@@ -127,11 +131,11 @@ public class GoodsOrder extends BaseEntity {
 		this.storeName = storeName;
 	}
 
-	public int getKingdeeCustNo() {
+	public String getKingdeeCustNo() {
 		return kingdeeCustNo;
 	}
 
-	public void setKingdeeCustNo(int kingdeeCustNo) {
+	public void setKingdeeCustNo(String kingdeeCustNo) {
 		this.kingdeeCustNo = kingdeeCustNo;
 	}
 
@@ -141,6 +145,22 @@ public class GoodsOrder extends BaseEntity {
 
 	public void setOrderItemList(List<GoodsOrderItem> orderItemList) {
 		this.orderItemList = orderItemList;
+	}
+
+	public int getStoreKingdeeCustId() {
+		return storeKingdeeCustId;
+	}
+
+	public void setStoreKingdeeCustId(int storeKingdeeCustId) {
+		this.storeKingdeeCustId = storeKingdeeCustId;
+	}
+
+	public String getStoreKingdeeCustNo() {
+		return storeKingdeeCustNo;
+	}
+
+	public void setStoreKingdeeCustNo(String storeKingdeeCustNo) {
+		this.storeKingdeeCustNo = storeKingdeeCustNo;
 	}
 	
 }

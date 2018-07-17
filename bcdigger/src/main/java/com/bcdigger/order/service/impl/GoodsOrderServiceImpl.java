@@ -39,6 +39,8 @@ import com.bcdigger.order.entity.GoodsOrder;
 import com.bcdigger.order.entity.GoodsOrderItem;
 import com.bcdigger.order.entity.GoodsOrderItemModel;
 import com.bcdigger.order.service.GoodsOrderService;
+import com.bcdigger.store.dao.StoreDao;
+import com.bcdigger.store.entity.Store;
 
 
 @Service("goodsOrderService")
@@ -55,6 +57,9 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 	
 	@Autowired
 	private GoodsDao goodsDao;
+	
+	@Autowired
+	private StoreDao storeDao;
 	
 	@Override
 	public JSONObject addGoodsOrder(GoodsOrder goodsOrder, GoodsOrderItemModel orderItemModel) {
@@ -180,6 +185,48 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 		return goodsOrderDao.findGoodsOrders(pageInfo, goodsOrder);
 	}
 	
+	public int auditingGoodsOrder(GoodsOrder goodsOrder){
+		try{
+			if( goodsOrder == null){
+				return 0;
+			}
+			if(goodsOrder.getState() == GoodsOrderStateConstant.SUCCESS_AUDIT_STATE){
+				GoodsOrder goodsOrderTemp = this.goodsOrderDao.getById(goodsOrder.getId());
+				if( goodsOrderTemp == null || goodsOrderTemp.getId() <= 0){
+					return 0;
+				}
+				GoodsOrderItem goodsOrderItem = new GoodsOrderItem();
+				goodsOrderItem.setGoodsOrderId(goodsOrderTemp.getId());
+				List<GoodsOrderItem> orderItemList=this.goodsOrderItemDao.getGoodsOrderItems(goodsOrderItem);
+				if( orderItemList == null || orderItemList.size() <= 0){
+					return 0;
+				}
+				goodsOrderTemp.setOrderItemList(orderItemList);
+				
+				Store store = storeDao.getById(goodsOrderTemp.getStoreId());
+				if( store != null && store.getKingdeeCustId() >0 ){
+					goodsOrderTemp.setStoreKingdeeCustId(store.getKingdeeCustId());
+					goodsOrderTemp.setStoreKingdeeCustNo(store.getStoreCode());
+				}
+				// 审核通过调用方法推送到金蝶
+				String resultStr = putOrder(goodsOrderTemp);
+				
+				//	goodsOrder.setKingdeeCustId(goodsOrderTemp.getKingdeeCustId());
+				//	goodsOrder.setKingdeeCustNo(goodsOrderTemp.getKingdeeCustNo());
+				// 审核订单
+				//goodsOrderDao.auditingGoodsOrder(goodsOrder);
+			} else {
+				// 审核订单
+				goodsOrderDao.auditingGoodsOrder(goodsOrder);
+			}
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
 	
 	private static String sessionValue = "";
 	private static String aspnetsessionValue = "";
@@ -212,12 +259,12 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 
 			JSONObject jsonData = new JSONObject();
 			JSONObject jsonModel = new JSONObject();
+			
 			jsonModel.put("FBillTypeID", KingdeeUtil.getFNumber("XSDD01_SYS"));// 标准销售单
-
 			jsonModel.put("FDate", KingdeeUtil.getDateForString(goodsOrder.getAddTime()));
-			// jsonModel.put("FSaleOrgId",getFNumber("100")); //销售组织
-			jsonModel.put("FBillNo", goodsOrder.getOrderNo());
-			//jsonModel.put("FCustId", KingdeeUtil.getFNumber(tOrder.getKingdeeShop()));// 平台？
+			jsonModel.put("FSaleOrgId",KingdeeUtil.getFNumber("00")); //销售组织
+			jsonModel.put("FBillNo", "");//goodsOrder.getOrderNo()
+			jsonModel.put("FCustId", KingdeeUtil.getFNumber(goodsOrder.getStoreKingdeeCustNo()));// 客户
 			//jsonModel.put("FSaleDeptId", KingdeeUtil.getFNumber(tOrder.getKd_dept())); // 销售部门
 			//jsonModel.put("FSalerId", KingdeeUtil.getFNumber(tOrder.getKd_salerNo())); // 销售员
 			/**jsonModel.put("F_PAEZ_ZZYH", tOrder.getReceiver());// 收货人
@@ -231,7 +278,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			JSONObject jsFinance = new JSONObject();
 			jsFinance.put("FSettleCurrId", KingdeeUtil.getFNumber("PRE001"));// 结算币别
 			jsFinance.put("FExchangeTypeId", KingdeeUtil.getFNumber("HLTX01_SYS"));
-			jsFinance.put("FExchangeRate", 1); // 汇率
+			jsFinance.put("FExchangeRate", 1.00); // 汇率
 			// jsFinance.put("FRecConditionId", value); //收款条件
 			// jsFinance.put("FSettleModeId",KingdeeUtil.getFNumber(String.valueOf(tOrder.getPayType())));//支付方式
 
@@ -241,18 +288,18 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			List<GoodsOrderItem> orderItemList = goodsOrder.getOrderItemList();
 			for (GoodsOrderItem item : orderItemList) {
 				JSONObject jsEntry = new JSONObject();
-				jsEntry.put("FMaterialId", KingdeeUtil.getFNumber(item.getGoodsKingDeeCustId())); // 物料单号
+				jsEntry.put("FMaterialId", KingdeeUtil.getFNumber(item.getGoodsNo())); // 物料单号
 				jsEntry.put("FUnitID", KingdeeUtil.getFNumber("Pcs"));// 单位
 				// 数量
 				jsEntry.put("FQty", item.getOrderQuantity());
-				jsEntry.put("FTaxPrice", 0); // 支付单价
+				jsEntry.put("FTaxPrice", 0.0); // 支付单价
 				jsEntry.put("FEntryTaxRate", 0);
-				jsEntry.put("FTaxAmount", 0);// 税额
-				jsEntry.put("FDiscount", 0);// 折扣额
-				jsEntry.put("FAllAmount", 0);// 销售额
+				//jsEntry.put("FTaxAmount", 16.00);// 税额
+				//jsEntry.put("FDiscount", 0);// 折扣额
+				//jsEntry.put("FAllAmount", 0);// 销售额
 
 				jsEntry.put("FDeliveryDate", KingdeeUtil.getDateForString(item.getInstoreTime()));
-				// jsEntry.put("FSettleOrgIds",getFNumber("100"));
+				jsEntry.put("FSettleOrgIds",KingdeeUtil.getFNumber("00"));
 				jsArrEntry.add(jsEntry);
 			}
 			jsonModel.put("FSaleOrderEntry", jsArrEntry);
@@ -272,6 +319,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			if (result.getStatusLine().getStatusCode() == 200) {
 				// 读取服务器返回过来的json字符串数据
 				str = EntityUtils.toString(result.getEntity());
+				System.out.println("result:"+str);
 				return str;
 			}
 		} catch (Exception e) {

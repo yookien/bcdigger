@@ -243,5 +243,26 @@ public class GoodsOrderController {
 		}
 		return "/order/order_auditing_list";
 	}
+	
+	@RequestMapping(value ="/auditingGoodsOrder",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> auditingGoodsOrder(GoodsOrder goodsOrder){
+		Map<String, Object> map = new HashMap<>();  
+		try{
+			// 参数校验，待完善
+			if(goodsOrder == null){
+				map.put("result", -1);// 参数为空
+				return map;
+			}
+			Date now=new Date();
+			goodsOrder.setUpdateTime(now);
+			int result = goodsOrderService.auditingGoodsOrder(goodsOrder);
+			map.put("result", result);//更新成功
+		}catch(Exception e){
+			map.put("result", 0);//系统异常
+			e.printStackTrace();
+		}
+		return map;
+	}
 
 }

@@ -25,6 +25,18 @@ public interface GoodsOrderService {
 	 * @return
 	 */
 	public int updateGoodsOrder(GoodsOrder goodsOrder);
+	
+	/**
+	 * @Description: 审核订单
+	 * @param goodsOrder
+	 * @return int  
+	 * @throws
+	 * @author ipui
+	 * @date 2018年7月17日
+	 */
+	public int auditingGoodsOrder(GoodsOrder goodsOrder);
+	
+	
 	/**
 	 * 根据id查找订单信息
 	 * <p>Title: getGoodsOrderById</p>  

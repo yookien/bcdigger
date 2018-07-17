@@ -52,5 +52,15 @@ public class GoodsOrderDao extends BaseDaoImpl<GoodsOrder>{
 		return orderNum;
 	}
 	
+	public int auditingGoodsOrder(GoodsOrder goodsOrder) throws Exception {
+		int result = 0;
+		try{
+			result = sqlSession.update("auditingGoodsOrder", goodsOrder);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new Exception();
+		}
+		return result;
+	}
 	
 }
