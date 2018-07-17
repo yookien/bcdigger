@@ -27,7 +27,7 @@
 	                  	</#if>
                   	</td>
                   	<td>
-	                  	<#if order.state==10000>
+	                  	<#if order.state == 10000>
 	                  		<a href="###" onclick="editOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >审核</a>
 					  	<#else>
 					  		<a href="###" onclick="editOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
