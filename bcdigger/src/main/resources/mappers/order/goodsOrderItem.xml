@@ -18,7 +18,7 @@
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id,goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,create_time, update_time
+		id,goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,add_time, update_time
 	</sql>
 	
 	<sql id="condition_sql">
