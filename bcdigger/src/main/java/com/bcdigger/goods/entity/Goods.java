@@ -24,6 +24,7 @@ public class Goods extends BaseEntity{
 	private String goodsImage;//商品主图
 	private int weight;//重量
 	private String unit;//单位
+	private String model;//规格型号
 	private String innerName;//全名
 	private int type  ;//类型
 	private int price ;//售价
@@ -52,7 +53,7 @@ public class Goods extends BaseEntity{
 	public String getGoodsName() {
 		return goodsName;
 	}
-	public void setGoodsName(String goodsName) {
+	public void setGoodName(String goodsName) {
 		this.goodsName = goodsName;
 	}
 	public int getState() {
@@ -78,6 +79,13 @@ public class Goods extends BaseEntity{
 	}
 	public void setGoodsImage(String goodsImage) {
 		this.goodsImage = goodsImage;
+	}
+	
+	public String getModel() {
+		return model;
+	}
+	public void setModel(String model) {
+		this.model = model;
 	}
 	public int getWeight() {
 		return weight;
