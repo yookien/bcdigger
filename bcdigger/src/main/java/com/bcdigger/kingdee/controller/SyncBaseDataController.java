@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -52,6 +53,7 @@ public class SyncBaseDataController {
 	private StoreService storeService;
 	
 	@RequestMapping(value ="/autoSyncBaseData",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
 	public Map<String, Object> autoSyncBaseData() throws Exception {
 		Map<String, Object> map = new HashMap<>(); 
 		try {
