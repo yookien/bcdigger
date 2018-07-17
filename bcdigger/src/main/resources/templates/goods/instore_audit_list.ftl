@@ -24,7 +24,7 @@
                   	<td>${(goodsInstoreBiz.inQuantity)!0}</td>
                   	<td><#if (goodsInstoreBiz.updateTime)??>${goodsInstoreBiz.updateTime?string("yyyy-MM-dd")}</#if></td>
                   	<td>
-                  		<a href="###" onclick="editStore(${(goodsInstoreBiz.goodsOrderId)!0})" name="auditInstore" data-toggle="modal" data-target="#myModal" goodsOrderId="${(goodsInstoreBiz.goodsOrderId)!}" >查看</a>
+                  		<a href="###" onclick="auditInstore(${(goodsInstoreBiz.goodsOrderId)!0})" name="auditInstore" data-toggle="modal" data-target="#myModal" goodsOrderId="${(goodsInstoreBiz.goodsOrderId)!}" >审核</a>
 				  	</td>
                 </tr>
 		 	</#list>

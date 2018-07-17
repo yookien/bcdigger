@@ -1,6 +1,7 @@
 package com.bcdigger.goods.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import com.bcdigger.core.annotation.AdminAuth;
 import com.bcdigger.goods.entity.GoodsInstore;
 import com.bcdigger.goods.entity.GoodsInstoreBiz;
 import com.bcdigger.goods.service.GoodsInstoreService;
+import com.bcdigger.order.entity.GoodsOrderItem;
+import com.bcdigger.order.service.GoodsOrderItemService;
 
 /**
  * 
@@ -33,6 +36,8 @@ public class GoodsStoreController {
 	
 	@Autowired
 	private GoodsInstoreService goodsInstoreService;
+	@Autowired
+	private GoodsOrderItemService goodsOrderItemService;
 	
 	
 	@RequestMapping(value ="/addGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
@@ -160,5 +165,49 @@ public class GoodsStoreController {
 			e.printStackTrace();
 		}
 		return "/goods/instore_audit_list";
+	}
+	
+	/**
+	 * @Description: 根据goodsOrderId查找具体的收货信息
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/getGoodsInstoreInfo",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> getGoodsInstoreAudits(GoodsInstoreBiz goodsInstoreBiz) {
+		Map<String, Object> map = new HashMap<>();
+		List<GoodsInstoreBiz> list = goodsInstoreService.getGoodsInstoreInfo(goodsInstoreBiz);
+		map.put("list",list);
+		map.put("result", 1);
+		return map;
+	}
+	
+	/**
+	 * @Description: 根据goodsOrderId查找具体的收货信息
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/updateInstoreInfo",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> updateInstoreInfo(GoodsInstoreBiz goodsInstoreBiz) {
+		Map<String, Object> map = new HashMap<>();
+		GoodsInstore goodsInstore = goodsInstoreService.getGoodsInstore(goodsInstoreBiz.getGoodsInstoreId());
+		if(goodsInstoreBiz.getAuditType()==1) {//审核通过
+			//更新订单明细信息
+			GoodsOrderItem goodsOrderItem = goodsOrderItemService.getGoodsOrderItemById(goodsInstoreBiz.getGoodsOrderItemId());
+			goodsOrderItem.setInstoreQuantity(goodsOrderItem.getInstoreQuantity()+goodsInstoreBiz.getInQuantity());
+			goodsOrderItemService.updateGoodsOrderItem(goodsOrderItem);
+			//更新入库信息
+			goodsInstore.setState(1);
+			goodsInstoreService.updateGoodsInstore(goodsInstore);
+			//同步金蝶系统数据（待补充）
+			
+			
+		}else {//审核不通过
+			goodsInstore.setState(2);
+			goodsInstoreService.updateGoodsInstore(goodsInstore);
+		}
+		map.put("result", 1);
+		return map;
 	}
 }

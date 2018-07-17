@@ -28,5 +28,16 @@ public interface GoodsInstoreService {
 	 * @throws
 	 */
 	public PageInfo<GoodsInstoreBiz> getGoodsInstoreBizs(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo);
+	
+	/**
+	 * 根据订货单id查找具体收货信息
+	 * @Title: getGoodsInstoreBizs   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: List<GoodsInstoreBiz>      
+	 * @throws
+	 */
+	public List<GoodsInstoreBiz> getGoodsInstoreInfo(GoodsInstoreBiz goodsInstoreBiz);
 
 }

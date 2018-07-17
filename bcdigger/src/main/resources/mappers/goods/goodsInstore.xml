@@ -36,6 +36,19 @@
 		<result property="inQuantity" column="in_quantity" jdbcType="BIGINT" />
 		<result property="operatorName" column="operator_name" jdbcType="VARCHAR" />
 		<result property="updateTime"  column="update_time"  jdbcType="TIMESTAMP"/>
+		<result property="orderType" column="order_type" jdbcType="BIGINT" />
+		
+		<result property="goodsInstoreId" column="goods_instore_id" jdbcType="BIGINT" />
+		<result property="goodsNo" column="goods_no" jdbcType="VARCHAR" />
+		<result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
+		<result property="unit" column="unit" jdbcType="VARCHAR" />
+		<result property="model" column="model" jdbcType="VARCHAR" />
+		<result property="orderQuantity" column="order_quantity" jdbcType="BIGINT" />
+		<result property="instoreQuantity" column="instore_quantity" jdbcType="BIGINT" />
+		<result property="instoreTime"  column="instore_time"  jdbcType="TIMESTAMP"/>
+		<result property="memo" column="memo" jdbcType="VARCHAR" />
+		<result property="goodsOrderItemId" column="goods_order_item_id" jdbcType="BIGINT" />
+		
 	</resultMap>
 	
 	<resultMap type="goodsStore" id="goodsStoreResultMap" extends="BaseResultMap">
@@ -115,8 +128,8 @@
 		<![CDATA[ order by id desc]]>
 	</select>
 	
-	<select id="listByBiz" parameterType="goodsInstoreBiz" resultMap="BizResultMap">
-		select go.id as goods_order_id,go.store_id as store_id,s.chinese_name as store_chinese_name,
+	<select id="listBizs" parameterType="goodsInstoreBiz" resultMap="BizResultMap">
+		select go.id as goods_order_id,go.store_id as store_id,s.chinese_name as store_chinese_name,go.order_type,
 		go.order_no as order_no,go.kingdee_cust_id,go.kingdee_cust_no,go.state as order_state,
 		sum(gi.in_quantity)as in_quantity,gi.update_time,a.name as operator_name
  		from bcd_goods_order go 
@@ -131,10 +144,30 @@
 			<if test="operatorName != null and operatorName !=''">
 				and a.name like concat('%',#{operatorName,jdbcType=VARCHAR},'%')
 			</if>
-			and go.state = 10020 and gi.state=1
+			and go.state = 10020 and gi.state=0
 		</where>
 		group by go.id
 		<![CDATA[ order by gi.update_time asc]]>
+	</select>
+	
+	<select id="listBizByOrderId" parameterType="goodsInstoreBiz" resultMap="BizResultMap">
+		select go.id as goods_order_id,go.store_id as store_id,s.chinese_name as store_chinese_name,go.order_type,
+		go.order_no as order_no,go.kingdee_cust_id,go.kingdee_cust_no,go.state as order_state,
+		gi.in_quantity as in_quantity,gi.update_time,a.name as operator_name,
+		gi.id as goods_instore_id,goi.goods_no,g.goods_name,g.unit,g.model,goi.order_quantity,
+		goi.instore_quantity,goi.instore_time,goi.memo,goi.id as goods_order_item_id
+ 		from bcd_goods_order go 
+		left join bcd_goods_order_item goi on go.id = goi.goods_order_id
+		left join bcd_goods_instore gi on goi.id = gi.goods_order_item_id
+		left join bcd_goods g on goi.goods_id = g.id
+		left join bcd_store s on go.store_id=s.id
+		left join bcd_admin a on gi.operator=a.id
+		<where>
+			<if test="goodsOrderId != null and goodsOrderId !=''">
+				and go.id = #{goodsOrderId,jdbcType=BIGINT}
+			</if>
+			and go.state = 10020 and gi.state=0
+		</where>
 	</select>
 
 </mapper>

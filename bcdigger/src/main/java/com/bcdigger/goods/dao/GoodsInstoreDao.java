@@ -33,7 +33,7 @@ public class GoodsInstoreDao extends BaseDaoImpl<GoodsInstore> {
 		
 		try{
 			Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-			List<SysMenu> list= sqlSession.selectList("listByBiz", goodsInstoreBiz);
+			List<GoodsInstoreBiz> list= sqlSession.selectList("listBizs", goodsInstoreBiz);
 			pageInfo.setTotal(page.getTotal());
 			pageInfo.setPages(page.getPages());
 			pageInfo.setIsFirstPage(page.getPageNum()==1?true:false);
@@ -44,5 +44,23 @@ public class GoodsInstoreDao extends BaseDaoImpl<GoodsInstore> {
 		}
 		return pageInfo;
 	}
-
+	
+	/**
+	 * 根据订货单id查找具体收货信息
+	 * @Title: getGoodsInstoreBizs   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: List<GoodsInstoreBiz>      
+	 * @throws
+	 */
+	public List<GoodsInstoreBiz> getGoodsInstoreInfo(GoodsInstoreBiz goodsInstoreBiz) {
+		List<GoodsInstoreBiz> list = null;
+		try{
+			list= sqlSession.selectList("listBizByOrderId", goodsInstoreBiz);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

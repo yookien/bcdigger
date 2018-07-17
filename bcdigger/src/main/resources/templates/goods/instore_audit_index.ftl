@@ -10,10 +10,10 @@
       		<div class="col-md-10 col-sm-10 col-xs-12">
       		 
         		<label class="control-label" style="float:left;padding-top: 8px;">门店名称： </label>
-            	<input id="search_store_name" name="goodsInstoreBiz.storeChineseName" class="form-control"  type="text" style="float:left;width:250px;margin-right:15px">
+            	<input id="search_store_name" name="storeChineseName" class="form-control"  type="text" style="float:left;width:250px;margin-right:15px">
             	
             	<label class="control-label" style="float:left;padding-top: 8px;">收货人姓名： </label>
-            	<input id="search_operator_name" name="goodsInstoreBiz.operatorName" class="form-control"  type="text" style="float:left;width:150px;margin-right:15px">
+            	<input id="search_operator_name" name="operatorName" class="form-control"  type="text" style="float:left;width:150px;margin-right:15px">
            		
 			 	<button type="button" style="float:left;margin-left:15px" class="btn btn btn-primary" onclick="getGoodsInStoreAudits()">查询</button>
 			</div>
@@ -29,22 +29,54 @@
 
 
 <!-- 收货单审核 -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> 
-    <div class="modal-dialog" role="document">  
+<div class="modal fade"  id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> 
+    <div class="modal-dialog" role="document" style="width:800px">  
         <div class="modal-content">  
             <div class="modal-header">  
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">  
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">  
                     <span aria-hidden="true"><i class="fa fa-times"></i></span>  
-                </button>  
-                <h4 class="modal-title" id="myModalLabel">收货单审核</h4>
+                </button>
+                <h1 class="modal-title" id="myModalLabel" style="text-align:center;">弈杰收货单</h1>
             </div>
             <div class="modal-body">
-            	<h2>弈杰收货单</h2>  
-      			<div></div>
+            	<form class="form-horizontal form-label-left input_mask" id="auditInstoreForm">
+            		<input type="hidden" id="admin_id" name="id">
+            		<div class="col-md-12 col-sm-12 col-xs-12 form-group">
+            			<p class="control-label col-md-3 col-sm-3 col-xs-12" stype="text-align: left;">订货单编号：<small id="goodsOrderNoSpan"> SKJD001</small></p>
+            			<div class="control-label col-md-3 col-sm-3 col-xs-12">单据日期： <small id="updateTimeSpan">2018-07-01</small></div>
+            			<div class="control-label col-md-3 col-sm-3 col-xs-12">订货单种类：<small id="orderTypeSpan">牛奶</small></div>
+            			<div class="control-label col-md-3 col-sm-3 col-xs-12">订货单状态：<small id="orderStateSpan">收货中</small></div>
+                     </div>
+                     <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                     	<div class="control-label col-md-3 col-sm-3 col-xs-12">客      户： <small id="storeChineseNameSpan">中央厨房</small></div>
+            			<div class="control-label col-md-3 col-sm-3 col-xs-12">下  单   人：<small id="operatorNameSpan"> 张三</small></div>
+            			<!-- <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+            			<label class="control-label col-md-3 col-sm-3 col-xs-12"></label> -->
+            		</div>
+            		<table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>序号</th>
+                          <th>物料编码</th>
+                          <th>物料名称</th>
+                          <th>规格型号</th>
+                          <th>销售单位</th>
+                          <th>订货总数量</th>
+                          <th>已收货数量</th>
+                          <th>本次收货数量</th>
+                          <th>要货日期</th>
+                          <th>备注</th>
+                        </tr>
+                      </thead>
+                      <tbody id="instoreInfoTbody">
+                        
+                      </tbody>
+                    </table>
+            	</form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="close_btn">暂不审核</button>  
-                <button type="button" class="btn btn-primary" id="save_btn">审核通过</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="not_audit_btn">审核不通过</button>  
+                <button type="button" class="btn btn-primary" id="audit_btn">审核通过</button>
             </div>
         </div>  
     </div>  
@@ -64,6 +96,8 @@ $(function(){
 // 分页查询需审核的收货信息
 function getGoodsInStoreAudits(){
 	ajax_request_url='/goods/getGoodsInstoreAudits';
+	ajax_pars=$("#searchForm").serialize();
+//	alert(ajax_pars);
 	$.ajax({
 		url: ajax_request_url,
 		type:'POST',
@@ -78,209 +112,86 @@ function getGoodsInStoreAudits(){
 }
 
 
-
-// 打开收货明细信息
-function addStoreEvent(){
+// 打开审核收货详细model
+function auditInstore(id){
 	// 重设form
-	$('#addOrEditStoreForm')[0].reset();
-	$('#myModalLabel').html('添加门店信息');
-	$("#save_btn").unbind();
-	$("#save_btn").click(function(){
-	  	addStore();
-	});
-}
-
-// 添加门店信息
-function addStore(){
-	$("#addOrEditStoreForm").bootstrapValidator('validate');//提交验证  
-    if ($("#addOrEditStoreForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-        var pars=$("#addOrEditStoreForm").serialize();
-		$.ajax({
-			url: '/store/addStore',
-			type:'POST',
-			data: pars,
-			dataType:'JSON',
-			success:function (json) {
-				if(json.result==1){
-					getStore();
-					$("#close_btn").click();
-				}else{
-					alert(json.result);
-				}
-			}
-		})
-    } 
-}
-
-
-// 打开编辑门店页面
-function editStore(id){
-	// 重设form
-	$('#addOrEditStoreForm')[0].reset();
-	$('#myModalLabel').html('编辑门店信息');
+	$('#auditInstoreForm')[0].reset();
+	//$('#myModalLabel').html('编辑门店信息');
 	if(isNaN(id) || id<=0){
 		return;
 	}
-	var pars='id='+id;
+	var pars='goodsOrderId='+id;
 	$.ajax({
-		url: '/store/getStore',
+		url: '/goods/getGoodsInstoreInfo',
 		type:'POST',
 		data: pars,
 		dataType:'json',
 		success:function (json) {
 			if(json.result==1){
-				var store=json.store;
-				if(store == undefined){
+				var list=json.list;
+				if(list == undefined){
 					return;
 				}
-				if(store.storeCode != null && store.storeCode != undefined){
-					$('#storeCode').val(store.storeCode);
+				var instoreInfos = eval(list);
+				var html = ""
+				for (var i in instoreInfos ){
+					if(i==0){
+						$('#goodsOrderNoSpan').text(instoreInfos[i].goodsOrderNo);
+						$('#updateTimeSpan').text(instoreInfos[i].updateTime);
+						$('#orderTypeSpan').text(instoreInfos[i].orderType);
+						$('#orderStateSpan').text("收货中");
+						$('#storeChineseNameSpan').text(instoreInfos[i].storeChineseName);
+						$('#operatorNameSpan').text(instoreInfos[i].operatorName);
+					}
+					html=html +"<tr><th scope='row'>"+(i+1)+"</th><td>"+instoreInfos[i].goodsNo+"</td>"+
+					"<td>"+instoreInfos[i].goodsName+"</td>"+
+					"<td>"+instoreInfos[i].model+"</td>"+
+					"<td>"+instoreInfos[i].unit+"</td>"+
+					"<td>"+instoreInfos[i].orderQuantity+"</td>"+
+					"<td>"+instoreInfos[i].instoreQuantity+"</td>"+
+					"<td style='color:red'>"+instoreInfos[i].inQuantity+"</td>"+
+					"<td>"+instoreInfos[i].instoreTime+"</td>"+
+					"<td>"+instoreInfos[i].memo+"</td></tr>"
 				}
-				if(store.chineseName != null && store.chineseName != undefined){
-					$('#chineseName').val(store.chineseName);
-				}
-				if(store.phone != null && store.phone != undefined){
-					$('#phone').val(store.phone);
-				}
+				$('#instoreInfoTbody').html(html);
 				
-				if(store.mobile != null && store.mobile != undefined){
-					$('#mobile').val(store.mobile);
-				}
-				if(store.address != null && store.address != undefined){
-					$('#address').val(store.address);
-				}
-				if(store.direction != null && store.direction != undefined){
-					$('#direction').val(store.direction);
-				}
-				
-				if(store.openHour != null && store.openHour != undefined){
-					$('#openHour').val(store.openHour);
-				}
-				if(store.closeHour != null && store.closeHour != undefined){
-					$('#closeHour').val(store.closeHour);
-				}
-				if(store.englishName != null && store.englishName != undefined){
-					$('#englishName').val(store.englishName);
-				}
-				
-				
-				
-				if(store.englishAddress != null && store.englishAddress != undefined){
-					$('#englishAddress').val(store.englishAddress);
-				}
-				if(store.locationImage != null && store.locationImage != undefined){
-					$('#locationImage').val(store.locationImage);
-				}
-				if(store.storeImages != null && store.storeImages != undefined){
-					$('#storeImages').val(store.storeImages);
-				}
-				
-				if(store.storeProvince != null && store.storeProvince != undefined){
-					$('#storeProvince').val(store.storeProvince);
-				}
-				if(store.storeCity != null && store.storeCity != undefined){
-					$('#storeCity').val(store.storeCity);
-				}
-				if(store.cityArea != null && store.cityArea != undefined){
-					$('#cityArea').val(store.cityArea);
-				}
-				
-				if(!isNaN(store.isOpen)){
-					$("[targetId='isOpen']").each(function(){
-						if($(this).find("[type='radio']").attr('value')==store.isOpen){
-							$(this).attr("class","btn btn-primary");
-						}else{
-							$(this).attr("class","btn btn-default");
-						}
-				    })
-					$("#isOpen").val(store.isOpen);
-				}
-				
-				if(store.bmapPosition != null && store.bmapPosition != undefined){
-					$('#bmapPosition').val(store.bmapPosition);
-				}
-				if(store.searchUrl != null && store.searchUrl != undefined){
-					$('#searchUrl').val(store.searchUrl);
-				}
-				if(store.bus != null && store.bus != undefined){
-					$('#bus').val(store.bus);
-				}
-				
-				if(store.subway != null && store.subway != undefined){
-					$('#subway').val(store.subway);
-				}
-				if(store.nearby != null && store.nearby != undefined){
-					$('#nearby').val(store.nearby);
-				}
-				if(store.email != null && store.email != undefined){
-					$('#email').val(store.email);
-				}
-				
-				if(store.storeImage1 != null && store.storeImage1 != undefined){
-					$('#storeImage1').val(store.storeImage1);
-				}
-				if(store.storeImage2 != null && store.storeImage2 != undefined){
-					$('#storeImage2').val(store.storeImage2);
-				}
-				if(store.storeImage3 != null && store.storeImage3 != undefined){
-					$('#storeImage3').val(store.storeImage3);
-				}
-				if(store.storeImage4 != null && store.storeImage4 != undefined){
-					$('#storeImage4').val(store.storeImage4);
-				}
-				
-				if(store.appointLimit != null && store.appointLimit != undefined){
-					$('#appointLimit').val(store.appointLimit);
-				}
-				
-				
-				if(!isNaN(store.isBooking)){
-					$("[targetId='isBooking']").each(function(){
-						if($(this).find("[type='radio']").attr('value')==store.isBooking){
-							$(this).attr("class","btn btn-primary");
-						}else{
-							$(this).attr("class","btn btn-default");
-						}
-				    })
-					$("#isBooking").val(store.isBooking);
-				}
-				
-				if(!isNaN(store.id)){
-					$('#store_id').val(store.id);
-				}
-				
-				$("#save_btn").unbind();
-				$("#save_btn").click(function(){
-				  	updateStore();
+				$("#audit_btn").unbind();
+				$("#not_audit_btn").unbind();
+				$("#audit_btn").click(function(){
+				  	updateInStore(1,instoreInfos);
+				});
+				$("#not_audit_btn").click(function(){
+				  	updateInStore(0,instoreInfos);
 				});
 			}
 		}
 	})
 }
 
-// 添加用户门店
-function updateStore(){
-	$("#addOrEditStoreForm").bootstrapValidator('validate');//提交验证  
-    if ($("#addOrEditStoreForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-        var pars=$("#addOrEditStoreForm").serialize();
+// 更新入库信息
+function updateInStore(auditType,instoreInfos){
+	
+	for (var i in instoreInfos ){
+		var pars = "auditType="+auditType+"&goodsOrderItemId="+instoreInfos[i].goodsOrderItemId+
+			"&goodsInstoreId="+instoreInfos[i].goodsInstoreId+
+			"&inQuantity="+instoreInfos[i].inQuantity;
+		alert(pars);
 		$.ajax({
-			url: '/store/updateStore',
+			url: '/goods/updateInstoreInfo',
 			type:'POST',
 			data: pars,
 			dataType:'JSON',
 			success:function (json) {
 				if(json.result==1){
-					getStore();
+					alert(json.result);
+					getGoodsInStoreAudits();
 					$("#close_btn").click();
 				}else{
 					alert(json.result);
 				}
 			}
 		})
-    } 
+	}
 }
-
-
-
 
 </script>
