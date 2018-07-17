@@ -101,5 +101,16 @@
 		where add_time >= #{addTime,jdbcType=TIMESTAMP}
 	</select>
 	
+	<update id="auditingGoodsOrder" parameterType="goodsOrder">
+		update
+		<include refid="table" />
+		<set>
+			state= #{state},
+			update_time= #{updateTime}
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
 
 </mapper>
