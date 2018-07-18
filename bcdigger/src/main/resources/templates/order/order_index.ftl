@@ -57,34 +57,32 @@
 						<table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
 	                      <thead>
 	                        <tr>
-	                          <th>物料编码</th>
-	                          <th>物料名称</th>
-	                          <th>规格型号</th>
-	                          <th>销售单位</th>
-	                          <th>销售数量</th>
-	                          <th>要货日期</th>
-	                          <th>备注</th>
+	                          <th width="15%">物料编码</th>
+	                          <th width="25%">物料名称</th>
+	                          <th width="12%">规格型号</th>
+	                          <th width="10%">销售单位</th>
+	                          <th width="10%">销售数量</th>
+	                          <th width="10%">要货日期</th>
+	                          <th width="18%">备注</th>
 	                        </tr>
 	                      </thead>
 	                      <tbody id="choose_goods_tbody">
-	                        <tr>
-	                          <td>
-	                          	<input type="text" class="form-control" id="goodsNo1" name="goodsNo" onclick="addGoodsInfoEvent()">
-	                          </td>
-	                          <td><input type="text" class="form-control" id="goodsNam1"></td>
-	                          <td><input type="text" class="form-control" id="chineseName"></td>
-	                          <td><input type="text" class="form-control" id="unit1"></td>
-	                          <td><input type="text" class="form-control" id="quantity1" name="quantity"></td>
-	                          <td>
-	                          	<input id="single_cal4" name="instoreTime" class="form-control has-feedback-left" aria-describedby="inputSuccess2Status4" type="text">
-								<span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-								<span id="inputSuccess2Status4" class="sr-only">(success)</span>
-	                          </td>
-	                          <td><input type="text" class="form-control" id="memo1" name="memo" value="无" placeholder="备注"></td>
-	                        </tr>
-	                        
-	                       </tbody>
-						</table>
+		                      	
+	                      </tbody>
+	                      		<tr>
+		                          <td>
+		                          	<input type="text" class="form-control" onclick="addGoodsInfoEvent()">
+		                          </td>
+		                          <td><input type="text" class="form-control"></td>
+		                          <td><input type="text" class="form-control"></td>
+		                          <td><input type="text" class="form-control"></td>
+		                          <td><input type="text" class="form-control"></td>
+		                          <td>
+		                          	<input class="form-control has-feedback-left" type="text">
+		                          </td>
+		                          <td><input type="text" class="form-control"value=""></td>
+		                        </tr>
+					    </table>
 						
 					   <input type="hidden" name="id" id="Order_id" value="0"> 
                  </form>
@@ -195,11 +193,29 @@ function getGoodsInfo(){
 	})
 }
 
+function getCheckBoxValues(name){
+	var checks = document.getElementsByName(name);
+	var values = "";
+	if(checks && checks.length>0 ){
+		for(var i=0;i<checks.length;i++){
+			if(checks[i].checked){
+				values+=checks[i].value;
+				if(i != checks.length-1){
+					values+=",";
+				}
+			}
+		}
+	}
+	values=values.substring(0,values.length-1);
+	return values;
+}
+
+
 function chooseGoods(){
-	var pars=$("#chooseGoodsInfoForm").serialize();
-	alert(unescape(pars));
+	var pars = getCheckBoxValues('goodsInfos');
+	
 	if( pars != undefined ){
-		var goodsInfos=pars.split('&');
+		var goodsInfos=pars.split(',');
 		var htmlStr="";
 		for (var i =0;i< goodsInfos.length;i++ ){
 			var goods = goodsInfos[i];
@@ -211,15 +227,16 @@ function chooseGoods(){
 				continue;
 			}
 			htmlStr=htmlStr + 
-					"<tr><td><input type='text' class='form-control' name='goodsNo' value='"+goodsAttr[0]+"'></td>"+
-					"<td>"+goodsAttr[1]+"</td>"+
-					"<td>"+goodsAttr[2]+"</td>"+
-					"<td>"+goodsAttr[3]+"</td>"+
-					"<td><input type='text' class='form-control' id='quantity1' name='quantity'></td>"+
-					"<td><input id='single_cal4' name='instoreTime'/></td>"+
+					"<tr><td><input type='text' class='form-control' readonly='readonly' name='goodsNo' value='"+goodsAttr[0]+"'></td>"+
+					"<td><input type='text' class='form-control' readonly='readonly' value='"+goodsAttr[1]+"'></td>"+
+					"<td><input type='text' class='form-control' readonly='readonly' value='"+goodsAttr[2]+"'></td>"+
+					"<td><input type='text' class='form-control' readonly='readonly' value='"+goodsAttr[3]+"'></td>"+
+					"<td><input type='text' class='form-control' name='quantity' value='0'></td>"+
+					"<td><input id='single_cal4' name='instoreTimeStr'/></td>"+
 					"<td><input type='text' class='form-control' id='memo1' name='memo' value='无'></td></tr>"
 		}
-		$("#choose_goods_tbody").append(pars);
+		
+		$("#choose_goods_tbody").append(htmlStr);
 	} else {
 		alert('请至少选择一个商品');
 	}
@@ -238,10 +255,10 @@ function addOrderEvent(){
 }
 
 // 添加订货单信息
-function addOrder(){
+function addOrder(){alert(1);
 	$("#addOrEditOrderForm").bootstrapValidator('validate');//提交验证  
     if ($("#addOrEditOrderForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-        var pars=$("#addOrEditOrderForm").serialize();
+        var pars=$("#addOrEditOrderForm").serialize();alert(pars);
 		$.ajax({
 			url: '/order/addGoodsOrder',
 			type:'POST',

@@ -87,7 +87,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			if(orderItemModel != null){
 				goodsNos = orderItemModel.getGoodsNo();
 				quantitys = orderItemModel.getQuantity();
-				instoreTimes = orderItemModel.getInstoreTime();
+				instoreTimes = orderItemModel.getInstoreTimeStr();
 				memos = orderItemModel.getMemo();
 				// 参数不合法
 				if(goodsNos==null || goodsNos.size()<1 || quantitys == null 

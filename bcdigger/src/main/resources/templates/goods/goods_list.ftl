@@ -13,7 +13,7 @@
 		<#if (pageInfo.list)?? && (pageInfo.list?size>0) >
 			<#list pageInfo.list as goods>
 				<tr>
-					<td><input type="checkbox" name="goodsIds" 
+					<td><input type="checkbox" name="goodsInfos" 
 					value="${(goods.goodsNo)!}|${(goods.goodsName)!}|${(goods.model)!}|${(goods.unit)!}" /></td>
 					<td>${(goods.goodsNo)!}</td>
                   	<td>${(goods.goodsName)!}</td>

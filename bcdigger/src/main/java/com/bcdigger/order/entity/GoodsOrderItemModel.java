@@ -25,7 +25,7 @@ public class GoodsOrderItemModel {
 	/**
 	 * 要货时间列表
 	 */
-	private List<String> instoreTime;
+	private List<String> instoreTimeStr;
 
 	/**
 	 * 备注列表
@@ -48,12 +48,12 @@ public class GoodsOrderItemModel {
 		this.quantity = quantity;
 	}
 
-	public List<String> getInstoreTime() {
-		return instoreTime;
+	public List<String> getInstoreTimeStr() {
+		return instoreTimeStr;
 	}
 
-	public void setInstoreTime(List<String> instoreTime) {
-		this.instoreTime = instoreTime;
+	public void setInstoreTimeStr(List<String> instoreTimeStr) {
+		this.instoreTimeStr = instoreTimeStr;
 	}
 
 	public List<String> getMemo() {

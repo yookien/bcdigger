@@ -80,7 +80,7 @@ public class GoodsOrderController {
 				// 数量列表
 				List<Integer> quantitys = orderItemModel.getQuantity();
 				// 要货时间列表
-				List<String> instoreTimes = orderItemModel.getInstoreTime();
+				List<String> instoreTimes = orderItemModel.getInstoreTimeStr();
 				// 备注列表
 				List<String> memos = orderItemModel.getMemo();
 				
