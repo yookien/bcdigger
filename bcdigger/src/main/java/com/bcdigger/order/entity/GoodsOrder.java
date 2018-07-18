@@ -1,6 +1,7 @@
 package com.bcdigger.order.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bcdigger.common.entity.BaseEntity;
 
@@ -35,7 +36,7 @@ public class GoodsOrder extends BaseEntity {
 	 */
 	private int kingdeeCustId;
 	
-	private int kingdeeCustNo;
+	private String kingdeeCustNo;
 	
 	// 非数据库字段
 	/**
@@ -43,6 +44,13 @@ public class GoodsOrder extends BaseEntity {
 	 */
 	private String storeName;
 	
+	private int storeKingdeeCustId;
+	
+	private String storeKingdeeCustNo;
+	
+	private List<GoodsOrderItem> orderItemList;
+	
+	private String orderUserName;
 
 	public String getOrderNo() {
 		return orderNo;
@@ -124,12 +132,44 @@ public class GoodsOrder extends BaseEntity {
 		this.storeName = storeName;
 	}
 
-	public int getKingdeeCustNo() {
+	public String getKingdeeCustNo() {
 		return kingdeeCustNo;
 	}
 
-	public void setKingdeeCustNo(int kingdeeCustNo) {
+	public void setKingdeeCustNo(String kingdeeCustNo) {
 		this.kingdeeCustNo = kingdeeCustNo;
+	}
+
+	public List<GoodsOrderItem> getOrderItemList() {
+		return orderItemList;
+	}
+
+	public void setOrderItemList(List<GoodsOrderItem> orderItemList) {
+		this.orderItemList = orderItemList;
+	}
+
+	public int getStoreKingdeeCustId() {
+		return storeKingdeeCustId;
+	}
+
+	public void setStoreKingdeeCustId(int storeKingdeeCustId) {
+		this.storeKingdeeCustId = storeKingdeeCustId;
+	}
+
+	public String getStoreKingdeeCustNo() {
+		return storeKingdeeCustNo;
+	}
+
+	public void setStoreKingdeeCustNo(String storeKingdeeCustNo) {
+		this.storeKingdeeCustNo = storeKingdeeCustNo;
+	}
+
+	public String getOrderUserName() {
+		return orderUserName;
+	}
+
+	public void setOrderUserName(String orderUserName) {
+		this.orderUserName = orderUserName;
 	}
 	
 }

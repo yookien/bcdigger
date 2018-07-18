@@ -34,6 +34,18 @@ public class GoodsOrderItem extends BaseEntity {
 	
 	private String memo;
 	
+	// 非数据库字段
+	/**
+	 * 商品金蝶内码
+	 */
+	private String goodsKingDeeCustId;
+	
+	private String goodsName;
+	
+	private String goodsModel;// 商品规格型号
+	
+	private String goodsUnit;// 商品单位
+	
 	public int getGoodsOrderId() {
 		return goodsOrderId;
 	}
@@ -107,10 +119,46 @@ public class GoodsOrderItem extends BaseEntity {
 	}
 
 	public String getMemo() {
+		if(memo == null || "无".equals(memo)){
+			memo = "";
+		}
 		return memo;
 	}
 
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+
+	public String getGoodsKingDeeCustId() {
+		return goodsKingDeeCustId;
+	}
+
+	public void setGoodsKingDeeCustId(String goodsKingDeeCustId) {
+		this.goodsKingDeeCustId = goodsKingDeeCustId;
+	}
+
+	public String getGoodsName() {
+		return goodsName;
+	}
+
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+
+	public String getGoodsModel() {
+		return goodsModel;
+	}
+
+	public void setGoodsModel(String goodsModel) {
+		this.goodsModel = goodsModel;
+	}
+
+	public String getGoodsUnit() {
+		return goodsUnit;
+	}
+
+	public void setGoodsUnit(String goodsUnit) {
+		this.goodsUnit = goodsUnit;
+	}
+	
 }

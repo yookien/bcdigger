@@ -54,10 +54,11 @@ public class StoreServiceImpl implements StoreService {
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("storeCode", store.getStoreCode());
 			Store storeTemp = storeDao.getBy(params);
-			if( storeTemp == null ){
+			if( storeTemp == null || storeTemp.getId() <= 0 ){
 				// 添加商品
 				storeDao.insert(store);
 			} else {
+				store.setId(storeTemp.getId());
 				// 更新商品
 				storeDao.update(store);
 			}

@@ -15,15 +15,24 @@
 		<result property="instoreTime" column="instore_time" jdbcType="TIMESTAMP" />
 		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+		<result property="memo" column="memo" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="orderItemFullResultMap" extends="BaseResultMap" type="com.bcdigger.order.entity.GoodsOrderItem">
+		<result property="goodsKingDeeCustId" column="kingdee_cust_id" jdbcType="BIGINT" />
+		<result property="goodsName" column="goods_name" jdbcType="VARCHAR" />
+		<result property="goodsModel" column="model" jdbcType="VARCHAR" />
+		<result property="goodsUnit" column="unit" jdbcType="VARCHAR" />
+		
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id,goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,add_time, update_time
+		id,goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,add_time, update_time,memo
 	</sql>
 	
 	<sql id="condition_sql">
 	
-		<if test="id != null">
+		<if test=" id != null and id > 0 ">
 			and id = #{id,jdbcType=BIGINT}
 		</if>
 		<if test="orderNo != null and orderNo !='' and like == 1 ">
@@ -32,15 +41,18 @@
 		<if test="orderNo != null and orderNo !='' and like == null">
 			and order_no = #{orderNo,jdbcType=VARCHAR}
 		</if>
+		<if test=" goodsOrderId != null and goodsOrderId > 0 ">
+			and goods_order_id = #{goodsOrderId,jdbcType=BIGINT}
+		</if>
 		
 	</sql>
 	
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsOrderItem">
 		insert into
 		<include refid="table" />
-		(goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,add_time, update_time)
+		(goods_order_id,order_no,goods_id, goods_no, order_quantity, instore_quantity, instore_time ,add_time, update_time,memo)
 		values (
-			#{goodsOrderId},#{orderNo},#{goodsId},#{goodsNo},#{orderQuantity},#{instoreQuantity},#{instoreTime},now(),now()
+			#{goodsOrderId},#{orderNo},#{goodsId},#{goodsNo},#{orderQuantity},#{instoreQuantity},#{instoreTime},now(),now(),#{memo}
 		)
 	</insert>
 	
@@ -89,5 +101,13 @@
 		</where>
 		<![CDATA[ order by id desc]]>
 	</select>
+	
+	<select id="getGoodsOrderItems" parameterType="com.bcdigger.order.entity.GoodsOrderItem" resultMap="orderItemFullResultMap">
+		select oi.id,oi.goods_order_id,oi.order_no,oi.goods_id, oi.goods_no, oi.order_quantity, oi.instore_quantity, 
+		oi.instore_time ,oi.add_time, oi.update_time,g.kingdee_cust_id,g.goods_name,g.model,g.unit
+		from bcd_goods_order_item oi , bcd_goods g
+		where oi.goods_id = g.id and oi.goods_order_id=#{goodsOrderId,jdbcType=BIGINT}
+	</select>
+	
 
 </mapper>

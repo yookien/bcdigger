@@ -64,7 +64,7 @@ public class SyncBaseDataController {
 			syncGoodsInfo();
 
 			// 同步客户信息
-			//syncCustomer();
+			syncCustomer();
 			
 			map.put("result", 1);// 同步成功
 		} catch (Exception e) {

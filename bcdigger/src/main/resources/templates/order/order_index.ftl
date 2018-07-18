@@ -198,6 +198,43 @@ function addOrder(){
     } 
 }
 
+// 打开编辑订货单页面
+function viewOrder(id){
+	// 重设form
+	$('#addOrEditOrderForm')[0].reset();
+	$('#myModalLabel').html('订货单信息');
+	if(isNaN(id) || id<=0){
+		return;
+	}
+	var pars='id='+id;
+	$.ajax({
+		url: '/order/getGoodsOrder',
+		type:'POST',
+		data: pars,
+		dataType:'json',
+		success:function (json) {
+			if(json.result==1){
+				var order = json.goodsOrder;
+				if(order == undefined){
+					return;
+				}
+				if(order.orderNo != null && order.orderNo != undefined){
+					$('#orderNo').val(order.orderNo);
+				}
+				if(order.addTime != null && order.addTime != undefined){
+					$('#addTime').val(fmtDate(order.addTime));
+				}
+				
+				
+				$("#save_btn").unbind();
+				$("#save_btn").click(function(){
+				  	updateOrder();
+				});
+			}
+		}
+	})
+}
+
 
 // 打开编辑订货单页面
 function editOrder(id){
@@ -209,131 +246,23 @@ function editOrder(id){
 	}
 	var pars='id='+id;
 	$.ajax({
-		url: '/order/getOrder',
+		url: '/order/getGoodsOrder',
 		type:'POST',
 		data: pars,
 		dataType:'json',
 		success:function (json) {
 			if(json.result==1){
-				var order = json.order;
+				var order = json.goodsOrder;
 				if(order == undefined){
 					return;
 				}
-				if(order.OrderCode != null && order.OrderCode != undefined){
-					$('#OrderCode').val(order.OrderCode);
+				if(order.orderNo != null && order.orderNo != undefined){
+					$('#orderNo').val(order.orderNo);
 				}
-				if(order.chineseName != null && order.chineseName != undefined){
-					$('#chineseName').val(order.chineseName);
-				}
-				if(order.phone != null && order.phone != undefined){
-					$('#phone').val(order.phone);
+				if(order.addTime != null && order.addTime != undefined){
+					$('#addTime').val(fmtDate(order.addTime));
 				}
 				
-				if(order.mobile != null && order.mobile != undefined){
-					$('#mobile').val(order.mobile);
-				}
-				if(order.address != null && order.address != undefined){
-					$('#address').val(order.address);
-				}
-				if(order.direction != null && order.direction != undefined){
-					$('#direction').val(order.direction);
-				}
-				
-				if(order.openHour != null && order.openHour != undefined){
-					$('#openHour').val(order.openHour);
-				}
-				if(order.closeHour != null && order.closeHour != undefined){
-					$('#closeHour').val(order.closeHour);
-				}
-				if(order.englishName != null && order.englishName != undefined){
-					$('#englishName').val(order.englishName);
-				}
-				
-				
-				
-				if(order.englishAddress != null && order.englishAddress != undefined){
-					$('#englishAddress').val(order.englishAddress);
-				}
-				if(order.locationImage != null && order.locationImage != undefined){
-					$('#locationImage').val(order.locationImage);
-				}
-				if(order.OrderImages != null && order.OrderImages != undefined){
-					$('#OrderImages').val(order.OrderImages);
-				}
-				
-				if(order.OrderProvince != null && order.OrderProvince != undefined){
-					$('#OrderProvince').val(order.OrderProvince);
-				}
-				if(order.OrderCity != null && order.OrderCity != undefined){
-					$('#OrderCity').val(order.OrderCity);
-				}
-				if(order.cityArea != null && order.cityArea != undefined){
-					$('#cityArea').val(order.cityArea);
-				}
-				
-				if(!isNaN(order.isOpen)){
-					$("[targetId='isOpen']").each(function(){
-						if($(this).find("[type='radio']").attr('value')==order.isOpen){
-							$(this).attr("class","btn btn-primary");
-						}else{
-							$(this).attr("class","btn btn-default");
-						}
-				    })
-					$("#isOpen").val(order.isOpen);
-				}
-				
-				if(order.bmapPosition != null && order.bmapPosition != undefined){
-					$('#bmapPosition').val(order.bmapPosition);
-				}
-				if(order.searchUrl != null && order.searchUrl != undefined){
-					$('#searchUrl').val(order.searchUrl);
-				}
-				if(order.bus != null && order.bus != undefined){
-					$('#bus').val(order.bus);
-				}
-				
-				if(order.subway != null && order.subway != undefined){
-					$('#subway').val(order.subway);
-				}
-				if(order.nearby != null && order.nearby != undefined){
-					$('#nearby').val(order.nearby);
-				}
-				if(order.email != null && order.email != undefined){
-					$('#email').val(order.email);
-				}
-				
-				if(order.OrderImage1 != null && order.OrderImage1 != undefined){
-					$('#OrderImage1').val(order.OrderImage1);
-				}
-				if(order.OrderImage2 != null && order.OrderImage2 != undefined){
-					$('#OrderImage2').val(order.OrderImage2);
-				}
-				if(order.OrderImage3 != null && order.OrderImage3 != undefined){
-					$('#OrderImage3').val(order.OrderImage3);
-				}
-				if(order.OrderImage4 != null && order.OrderImage4 != undefined){
-					$('#OrderImage4').val(order.OrderImage4);
-				}
-				
-				if(order.appointLimit != null && order.appointLimit != undefined){
-					$('#appointLimit').val(order.appointLimit);
-				}
-				
-				
-				if(!isNaN(order.isBooking)){
-					$("[targetId='isBooking']").each(function(){
-						if($(this).find("[type='radio']").attr('value')==order.isBooking){
-							$(this).attr("class","btn btn-primary");
-						}else{
-							$(this).attr("class","btn btn-default");
-						}
-				    })
-					$("#isBooking").val(order.isBooking);
-				}
-				
-				if(!isNaN(order.id)){
-					$('#Order_id').val(order.id);
-				}
 				
 				$("#save_btn").unbind();
 				$("#save_btn").click(function(){

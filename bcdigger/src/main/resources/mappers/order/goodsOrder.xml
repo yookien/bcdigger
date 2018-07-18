@@ -15,10 +15,15 @@
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 		<result property="memo" column="memo" jdbcType="VARCHAR" />
 		<result property="kingdeeCustId" column="kingdee_cust_id" jdbcType="BIGINT" />
+		<result property="kingdeeCustNo" column="kingdee_cust_no" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="orderResultMap" extends="BaseResultMap" type="com.bcdigger.order.entity.GoodsOrder">
+		<result property="storeName" column="chinese_name" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id
+		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id ,kingdee_cust_no
 	</sql>
 	
 	<sql id="condition_sql">
@@ -38,9 +43,9 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsOrder">
 		insert into
 		<include refid="table" />
-		(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id)
+		(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id,kingdee_cust_no)
 		values (
-			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{addTime},#{updateTime},#{memo},#{kingdeeCustId}
+			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{addTime},#{updateTime},#{memo},#{kingdeeCustId},#{kingdeeCustNo}
 		)
 	</insert>
 	
@@ -54,7 +59,6 @@
 			order_type = #{orderType},
 			state= #{state},
 			memo= #{memo},
-			kingdee_cust_id= #{kingdeeCustId},
 			update_time= now()
 		</set>
 		<where>
@@ -85,13 +89,26 @@
 		<![CDATA[ order by id desc]]>
 	</select>
 	
-	<select id="listGoodsOrderByCondation" parameterType="java.util.Map" resultMap="BaseResultMap">
-		select <include refid="base_column_list" /> from
-		<include refid="table" />
+	<select id="listGoodsOrderByCondation" parameterType="java.util.Map" resultMap="orderResultMap">
+		select go.id,go.order_no,go.order_user_id,go.store_id, go.order_type, go.state, go.add_time, 
+			go.update_time, go.memo, go.kingdee_cust_id ,go.kingdee_cust_no , s.chinese_name
+		from bcd_goods_order go , bcd_store s
 		<where>
-			<include refid="condition_sql" />
+			go.store_id = s.id
+			<if test="id != null and id > 0 ">
+				and id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test=" state != null and state > 0 ">
+				and state = #{state,jdbcType=BIGINT}
+			</if>
+			<if test="orderNo != null and orderNo !='' and like == 1 ">
+				and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="orderNo != null and orderNo !='' and like == null">
+				and order_no = #{orderNo,jdbcType=VARCHAR}
+			</if>
 		</where>
-		<![CDATA[ order by id desc]]>
+		<![CDATA[ order by go.id desc]]>
 	</select>
 	
 	<select id="countGoodsOrder" parameterType="java.util.Map" resultType="Integer">
@@ -101,5 +118,26 @@
 		where add_time >= #{addTime,jdbcType=TIMESTAMP}
 	</select>
 	
+	<update id="auditingGoodsOrder" parameterType="goodsOrder">
+		update
+		<include refid="table" />
+		<set>
+			<if test=" state != null and state > 0 ">
+				state= #{state},
+			</if>
+			<if test=" kingdeeCustId != null and kingdeeCustId > 0 ">
+				kingdee_cust_id= #{kingdeeCustId},
+			</if>
+			<if test=" kingdeeCustNo != null and kingdeeCustNo !='' ">
+				kingdee_cust_no= #{kingdeeCustNo},
+			</if>
+			<if test=" updateTime != null ">
+				update_time= #{updateTime},
+			</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
 
 </mapper>

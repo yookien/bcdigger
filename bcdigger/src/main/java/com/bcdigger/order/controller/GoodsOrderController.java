@@ -207,5 +207,62 @@ public class GoodsOrderController {
 		}
 		return "/order/order_list";
 	}
+	
+	
+	
+	@RequestMapping(value ="/goodsOrderAuditingIndex")
+	public String goodsOrderAuditingIndex() {
+		return "/order/order_auditing_index";
+	}
+
+	/**
+	 * @Description: 分页查询菜单信息
+	 * @param pageNum
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/getGoodsOrdersForAuditing",method={RequestMethod.GET,RequestMethod.POST})
+	public String getGoodsOrdersForAuditing(GoodsOrder goodsOrder, PageInfo pageInfo,ModelMap map,HttpServletRequest request) {
+		Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+		Admin admin = adminService.getAdmin(adminId);
+		if(admin!=null) {
+			goodsOrder.setOrderUserId(adminId);
+			goodsOrder.setStoreId(admin.getStoreId());
+		}
+		try{
+			if(pageInfo==null){
+				pageInfo=new PageInfo();
+			}
+			//设置每页显示个数
+			pageInfo.setPageSize(10);
+			
+			PageInfo<GoodsOrder> goodsOrderPages = goodsOrderService.getGoodsOrders(goodsOrder, pageInfo);
+			map.addAttribute("pageInfo", goodsOrderPages);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "/order/order_auditing_list";
+	}
+	
+	@RequestMapping(value ="/auditingGoodsOrder",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> auditingGoodsOrder(GoodsOrder goodsOrder){
+		Map<String, Object> map = new HashMap<>();  
+		try{
+			// 参数校验，待完善
+			if(goodsOrder == null){
+				map.put("result", -1);// 参数为空
+				return map;
+			}
+			Date now=new Date();
+			goodsOrder.setUpdateTime(now);
+			int result = goodsOrderService.auditingGoodsOrder(goodsOrder);
+			map.put("result", result);//更新成功
+		}catch(Exception e){
+			map.put("result", 0);//系统异常
+			e.printStackTrace();
+		}
+		return map;
+	}
 
 }

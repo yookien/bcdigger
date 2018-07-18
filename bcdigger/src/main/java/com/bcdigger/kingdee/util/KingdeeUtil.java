@@ -1,6 +1,7 @@
 package com.bcdigger.kingdee.util;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.http.Header;
@@ -121,5 +122,16 @@ public class KingdeeUtil {
 		jsonFN.put("FNumber",id);
 		return jsonFN;
 	}
+	
+   /**
+    * 得到年月日
+    * @param date
+    * @return
+    */
+   public static String getDateForString(Date date){
+	   SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+       String dateString=sdf.format(date);   
+       return dateString;
+   }
 	
 }
