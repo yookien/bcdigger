@@ -15,10 +15,11 @@
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 		<result property="memo" column="memo" jdbcType="VARCHAR" />
 		<result property="kingdeeCustId" column="kingdee_cust_id" jdbcType="BIGINT" />
+		<result property="kingdeeCustNo" column="kingdee_cust_no" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id
+		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id ,kingdee_cust_no
 	</sql>
 	
 	<sql id="condition_sql">
@@ -38,9 +39,9 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsOrder">
 		insert into
 		<include refid="table" />
-		(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id)
+		(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id,kingdee_cust_no)
 		values (
-			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{addTime},#{updateTime},#{memo},#{kingdeeCustId}
+			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{addTime},#{updateTime},#{memo},#{kingdeeCustId},#{kingdeeCustNo}
 		)
 	</insert>
 	
@@ -54,7 +55,6 @@
 			order_type = #{orderType},
 			state= #{state},
 			memo= #{memo},
-			kingdee_cust_id= #{kingdeeCustId},
 			update_time= now()
 		</set>
 		<where>
@@ -105,8 +105,18 @@
 		update
 		<include refid="table" />
 		<set>
-			state= #{state},
-			update_time= #{updateTime}
+			<if test=" state != null and state > 0 ">
+				state= #{state},
+			</if>
+			<if test=" kingdeeCustId != null and kingdeeCustId > 0 ">
+				kingdee_cust_id= #{kingdeeCustId},
+			</if>
+			<if test=" kingdeeCustNo != null and kingdeeCustNo !='' ">
+				kingdee_cust_no= #{kingdeeCustNo},
+			</if>
+			<if test=" updateTime != null ">
+				update_time= #{updateTime},
+			</if>
 		</set>
 		<where>
 			id = #{id}

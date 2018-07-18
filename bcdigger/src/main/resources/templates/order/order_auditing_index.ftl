@@ -97,10 +97,53 @@ function getOrder(){
 	})
 }
 
+// 查看订货单页面
+function viewOrder(id){
+	// 重设form
+	$('#auditOrderForm')[0].reset();
+	
+	// 隐藏审核按钮
+	$('.modal-footer').hide();
+	if(isNaN(id) || id<=0){
+		return;
+	}
+	$('#order_id').val(id);
+	var pars='id='+id;
+	$.ajax({
+		url: '/order/getGoodsOrder',
+		type:'POST',
+		data: pars,
+		dataType:'json',
+		success:function (json) {
+			if(json.result==1){
+				var order = json.goodsOrder;
+				if(order == undefined){
+					return;
+				}
+				if(order.orderNo != null && order.orderNo != undefined){
+					$('#updateTimeSpan').val(order.orderNo);
+				}
+				if(order.addTime != null && order.addTime != undefined){
+					$('#updateTimeSpan').val(fmtDate(order.addTime));
+				}
+				
+				
+				$("#audit_btn").unbind();
+				$("#audit_btn").click(function(){
+				  	auditingGoodsOrder(10010);
+				});
+				$("#not_audit_btn").unbind();
+				$("#not_audit_btn").click(function(){
+				  	auditingGoodsOrder(10020);
+				});
+				
+			}
+		}
+	})
+}
 
-
-// 打开编辑订货单页面
-function editOrder(id){
+// 打开审核订货单页面
+function auditingOrder(id){
 	// 重设form
 	$('#auditOrderForm')[0].reset();
 	//$('#myModalLabel').html('编辑订货单信息');

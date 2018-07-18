@@ -1,6 +1,5 @@
 package com.bcdigger.order.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -186,6 +185,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 	}
 	
 	public int auditingGoodsOrder(GoodsOrder goodsOrder){
+		int auditResult = 0;
 		try{
 			if( goodsOrder == null){
 				return 0;
@@ -210,24 +210,47 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 				}
 				// 审核通过调用方法推送到金蝶
 				String resultStr = putOrder(goodsOrderTemp);
-				
-				//	goodsOrder.setKingdeeCustId(goodsOrderTemp.getKingdeeCustId());
-				//	goodsOrder.setKingdeeCustNo(goodsOrderTemp.getKingdeeCustNo());
-				// 审核订单
-				//goodsOrderDao.auditingGoodsOrder(goodsOrder);
+				// 解析保存销售单返回信息
+				if( resultStr != null ){
+					JSONObject json = JSONObject.parseObject(resultStr).getJSONObject("Result");
+					
+					if(json.getJSONObject("ResponseStatus").getBooleanValue("IsSuccess")){
+						int kingdeeCustId = json.getIntValue("kingdeeCustId");
+						String kingdeeCustNo = json.getString("Number");
+						goodsOrderTemp.setKingdeeCustId(kingdeeCustId);
+						goodsOrderTemp.setKingdeeCustNo(kingdeeCustNo);
+						
+						goodsOrderTemp.setState(GoodsOrderStateConstant.SUCCESS_AUDIT_STATE);
+						// 保存成功就保存订单，防止重复推送
+						// 审核订单 并 保存金蝶内码、金蝶单号
+						goodsOrderDao.auditingGoodsOrder(goodsOrderTemp);
+						
+						boolean result = submitOrder(goodsOrderTemp);
+						
+						if( result ){
+							result = auditOrder(goodsOrderTemp);
+						}
+						
+						auditResult = 10000;// 成功
+					} else {
+						// 保存失败
+					}
+				} else {
+					// 保存失败
+				}
 			} else {
-				// 审核订单
+				// 拒绝订单
 				goodsOrderDao.auditingGoodsOrder(goodsOrder);
 			}
-			
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return 0;
 	}
 	
-	
+	/**
+	 * 金蝶相关接口
+	 */
 	private static String sessionValue = "";
 	private static String aspnetsessionValue = "";
 	
@@ -262,27 +285,20 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			
 			jsonModel.put("FBillTypeID", KingdeeUtil.getFNumber("XSDD01_SYS"));// 标准销售单
 			jsonModel.put("FDate", KingdeeUtil.getDateForString(goodsOrder.getAddTime()));
-			jsonModel.put("FSaleOrgId",KingdeeUtil.getFNumber("00")); //销售组织
-			jsonModel.put("FBillNo", "");//goodsOrder.getOrderNo()
+			jsonModel.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId)); //销售组织
+			//jsonModel.put("FBillNo", "goodsOrder.getOrderNo()");
 			jsonModel.put("FCustId", KingdeeUtil.getFNumber(goodsOrder.getStoreKingdeeCustNo()));// 客户
 			//jsonModel.put("FSaleDeptId", KingdeeUtil.getFNumber(tOrder.getKd_dept())); // 销售部门
 			//jsonModel.put("FSalerId", KingdeeUtil.getFNumber(tOrder.getKd_salerNo())); // 销售员
-			/**jsonModel.put("F_PAEZ_ZZYH", tOrder.getReceiver());// 收货人
-			jsonModel.put("F_PAEZ_Sheng", tOrder.getProvince());
-			jsonModel.put("F_PAEZ_Shi", tOrder.getCity());
-			jsonModel.put("F_PAEZ_Qu", tOrder.getDistrict());// 区，县
-			jsonModel.put("F_PAEZ_SHMXDZ", tOrder.getAddress());// 详细地址
-			jsonModel.put("F_PAEZ_DH", tOrder.getMobile());// 电话*/
 
 			// 支付详情
 			JSONObject jsFinance = new JSONObject();
 			jsFinance.put("FSettleCurrId", KingdeeUtil.getFNumber("PRE001"));// 结算币别
 			jsFinance.put("FExchangeTypeId", KingdeeUtil.getFNumber("HLTX01_SYS"));
 			jsFinance.put("FExchangeRate", 1.00); // 汇率
-			// jsFinance.put("FRecConditionId", value); //收款条件
-			// jsFinance.put("FSettleModeId",KingdeeUtil.getFNumber(String.valueOf(tOrder.getPayType())));//支付方式
 
 			jsonModel.put("FSaleOrderFinance", jsFinance);
+			
 			// 库存与数量
 			JSONArray jsArrEntry = new JSONArray();
 			List<GoodsOrderItem> orderItemList = goodsOrder.getOrderItemList();
@@ -299,7 +315,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 				//jsEntry.put("FAllAmount", 0);// 销售额
 
 				jsEntry.put("FDeliveryDate", KingdeeUtil.getDateForString(item.getInstoreTime()));
-				jsEntry.put("FSettleOrgIds",KingdeeUtil.getFNumber("00"));
+				jsEntry.put("FSettleOrgIds",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
 				jsArrEntry.add(jsEntry);
 			}
 			jsonModel.put("FSaleOrderEntry", jsArrEntry);
@@ -319,7 +335,6 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			if (result.getStatusLine().getStatusCode() == 200) {
 				// 读取服务器返回过来的json字符串数据
 				str = EntityUtils.toString(result.getEntity());
-				System.out.println("result:"+str);
 				return str;
 			}
 		} catch (Exception e) {
@@ -328,24 +343,18 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 		return "";
 
 	}
-
 	/**
-	 * 提交/审核
-	 * 
-	 * @param arrInStoreId
+	 * @Description:提交订单
+	 * @param goodsOrder
+	 * @return
+	 * @return boolean
+	 * @author liubei
+	 * @date 2018年7月18日
 	 */
-	public List<String> putForWardKindee(String formId, String url, List<String> arrInStoreId) {
-		JSONObject json = new JSONObject();
-		json.put("formid", formId);
-		JSONObject jsonData = new JSONObject();
-		List<String> arrRight = new ArrayList<String>();
-		// 定义这个数组
-		String[] arrNum = new String[arrInStoreId.size()];
-		// 转化数组
-		arrInStoreId.toArray(arrNum);
-		jsonData.put("Numbers", arrNum);
-		json.put("data", jsonData);
+	private boolean submitOrder(GoodsOrder goodsOrder) {
+		boolean saveResult = false;
 		try {
+			// 获取登录session
 			AccessToken accessToken = KingdeeUtil.getAccessToken();
 			if (accessToken != null) {
 				sessionValue = accessToken.getSessionValue();
@@ -353,41 +362,132 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			}
 			// 定义httpClient的实例
 			HttpClient httpclient = new DefaultHttpClient();
-			// String save_URL =
-			URI save_uri = new URI(url);
+			// 数据保存接口地址
+			String Save_URL = KingdeeStdLib.KINGDEE_SUBMIT_URL;
+			URI save_uri = new URI(Save_URL);
 			HttpPost method = new HttpPost(save_uri);
-			// 设置json格式
-			StringEntity entity = new StringEntity(json.toString(), "utf-8");
-			System.out.println(json.toString());
+
+			JSONObject json = new JSONObject();
+			json.put("FormId", "SAL_SaleOrder");// 提交
+			JSONObject objson = new JSONObject();
+			JSONArray jArray = new JSONArray();
+			jArray.add(goodsOrder.getKingdeeCustNo());
+			
+			if (jArray.size() < 1) {
+				return true;
+			}
+			objson.put("Numbers", jArray);
+			json.put("data", objson);
+
+			String jsonStr = json.toString();
+			System.out.println("请求参数：" + jsonStr);
+			StringEntity entity = new StringEntity(jsonStr, "utf-8");
 			entity.setContentEncoding("UTF-8");
 			entity.setContentType("application/json");
-			// 将登陆信息放入
-			method.setHeader(sessionkey, sessionValue);
-			method.setHeader(aspnetsessionkey, aspnetsessionValue);
+
+			// 把成功登录的Session信息传进去，获取连接信息
+			method.setHeader(KingdeeStdLib.sessionkey, sessionValue);
+			method.setHeader(KingdeeStdLib.aspnetsessionkey, aspnetsessionValue);
+			// 方法参数
 			method.setEntity(entity);
 			HttpResponse result = httpclient.execute(method);
-			String str = "";
+			// 请求发送成功，并得到响应
 			if (result.getStatusLine().getStatusCode() == 200) {
+				String str = "";
 				// 读取服务器返回过来的json字符串数据
 				str = EntityUtils.toString(result.getEntity());
-				System.out.println(str);
-				JSONObject jsonObj = JSONObject.parseObject(str);
-				JSONObject resultjson = jsonObj.getJSONObject("Result");
-				JSONObject jsResponse = resultjson.getJSONObject("ResponseStatus");
-				// 得到提交成功后的单号
-				JSONArray rightArray = jsResponse.getJSONArray("SuccessEntitys");
-				for (int s = 0; s < rightArray.size(); s++) {
-					JSONObject objError = rightArray.getJSONObject(s);
-					String name = objError.getString("Number");
-					arrRight.add(name);
+				System.out.println("接口返回数据：" + str);
+				// 把json字符串转换成json对象，方便操作
+				JSONObject jsonResult;
+				if (str != null && !"".equals(str)) {
+					try {
+						jsonResult = JSONObject.parseObject(str);
+						saveResult = jsonResult.getJSONObject("Result").getJSONObject("ResponseStatus")
+								.getBoolean("IsSuccess");
+					} catch (Exception e) {
+						saveResult = false;
+						e.printStackTrace();
+					}
 				}
-			} else {
-				// 出现异常则删除插入的订单
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		} // 返回正确执行
-		return arrRight;
+			saveResult = false;
+		}
+		return saveResult;
+	}
+
+	/**
+	 * @Description:审核订单信息
+	 * @param goodsOrder
+	 * @return
+	 * @return boolean
+	 * @author liubei
+	 * @date 2018年7月18日
+	 */
+	private boolean auditOrder(GoodsOrder goodsOrder){
+		boolean saveResult = false;
+		try {
+			// 获取登录session
+			AccessToken accessToken = KingdeeUtil.getAccessToken();
+			if (accessToken != null) {
+				sessionValue = accessToken.getSessionValue();
+				aspnetsessionValue = accessToken.getAspnetsessionValue();
+			}
+			// 定义httpClient的实例
+			HttpClient httpclient = new DefaultHttpClient();
+			// 数据保存接口地址
+			String Save_URL = KingdeeStdLib.KINGDEE_AUDIT_URL;
+			URI save_uri = new URI(Save_URL);
+			HttpPost method = new HttpPost(save_uri);
+
+			JSONObject json = new JSONObject();
+			json.put("FormId", "SAL_SaleOrder");// 销售单
+			JSONObject objson = new JSONObject();
+			JSONArray jArray = new JSONArray();
+			jArray.add(goodsOrder.getKingdeeCustNo());
+			
+			if (jArray.size() < 1) {
+				return true;
+			}
+			objson.put("Numbers", jArray);
+			json.put("data", objson);
+
+			String jsonStr = json.toString();
+			System.out.println("请求参数：" + jsonStr);
+			StringEntity entity = new StringEntity(jsonStr, "utf-8");
+			entity.setContentEncoding("UTF-8");
+			entity.setContentType("application/json");
+
+			// 把成功登录的Session信息传进去，获取连接信息
+			method.setHeader(KingdeeStdLib.sessionkey, sessionValue);
+			method.setHeader(KingdeeStdLib.aspnetsessionkey, aspnetsessionValue);
+			// 方法参数
+			method.setEntity(entity);
+			HttpResponse result = httpclient.execute(method);
+			// 请求发送成功，并得到响应
+			if (result.getStatusLine().getStatusCode() == 200) {
+				String str = "";
+				// 读取服务器返回过来的json字符串数据
+				str = EntityUtils.toString(result.getEntity());
+				System.out.println("接口返回数据：" + str);
+
+				// 把json字符串转换成json对象，方便操作
+				JSONObject jsonResult;
+				if (str != null && !"".equals(str)) {
+					try {
+						jsonResult = JSONObject.parseObject(str);
+						saveResult = jsonResult.getJSONObject("Result").getJSONObject("ResponseStatus")
+								.getBoolean("IsSuccess");
+					} catch (Exception e) {
+						saveResult = false;
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			saveResult = false;
+		}
+		return saveResult;
 	}
 
 

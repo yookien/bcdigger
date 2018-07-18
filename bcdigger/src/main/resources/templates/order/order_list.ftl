@@ -17,7 +17,7 @@
 					<td>${(order.orderNo)!1}</td>
                   	<td>${order.addTime?string("yyyy-MM-dd HH:mm:ss")}</td>
                   	<td>${(order.storeName)!}</td>
-                  	<td>${(order.storeName)!}</td>
+                  	<td>${(order.kingdeeCustNo)!}</td>
                   	<td>
                   		<#if order.state==10000>待审核
 	                  	<#elseif order.state==10010>已审核
@@ -27,7 +27,11 @@
 	                  	</#if>
                   	</td>
                   	<td>
-                  		<a href="###" onclick="editOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >编辑</a>
+                  		<#if order.state == 10000>
+                  			<a href="###" onclick="editOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >编辑</a>
+				  		<#else>
+				  			<a href="###" onclick="viewOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
+				  		</#if>
 				  	</td>
                 </tr>
 		 	</#list>
