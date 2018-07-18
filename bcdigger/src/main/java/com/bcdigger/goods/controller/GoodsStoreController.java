@@ -1,9 +1,13 @@
 package com.bcdigger.goods.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -12,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bcdigger.admin.entity.Admin;
+import com.bcdigger.admin.service.AdminService;
+import com.bcdigger.common.constant.CacheConstant;
 import com.bcdigger.common.page.PageInfo;
+import com.bcdigger.common.utils.DateUtils;
 import com.bcdigger.core.annotation.AdminAuth;
 import com.bcdigger.goods.entity.GoodsInstore;
 import com.bcdigger.goods.entity.GoodsInstoreBiz;
@@ -38,15 +46,32 @@ public class GoodsStoreController {
 	private GoodsInstoreService goodsInstoreService;
 	@Autowired
 	private GoodsOrderItemService goodsOrderItemService;
+	@Autowired
+	private AdminService adminService;
 	
 	
 	@RequestMapping(value ="/addGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public Map<String, Object> addGoodsInstore(GoodsInstore GoodsInstore){
+	public Map<String, Object> addGoodsInstore(GoodsInstoreBiz goodsInstoreBiz,HttpServletRequest request){
+		Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+adminId=1;
 		Map<String, Object> map = new HashMap<>();  
 		try{
-			int result = goodsInstoreService.addGoodsInstore(GoodsInstore);
-			map.put("result", result);//登录成功
+			GoodsOrderItem goodsOrderItem = goodsOrderItemService.getGoodsOrderItemById(goodsInstoreBiz.getGoodsOrderItemId());
+			GoodsInstore goodsInstore = new GoodsInstore();
+			goodsInstore.setBatchNo("OMSRK"+DateUtils.formatDate(new Date(), "yyyyMMdd")+String.valueOf(RandomUtils.nextInt(10000)+10000));
+			goodsInstore.setGoodsId(goodsOrderItem.getGoodsId());
+			goodsInstore.setGoodsOrderId(goodsOrderItem.getGoodsOrderId());
+			goodsInstore.setGoodsOrderItemId(goodsOrderItem.getId());
+			goodsInstore.setInQuantity(goodsInstoreBiz.getInQuantity());
+			goodsInstore.setOperator(adminId);
+			goodsInstore.setStoreId(goodsInstoreBiz.getStoreId());
+			goodsInstore.setRepositoryId(1);
+			goodsInstore.setState(0);
+			goodsInstore.setType(5000);
+			goodsInstore.setVersion(0);
+			int result = goodsInstoreService.addGoodsInstore(goodsInstore);
+			map.put("result", 1);//插入成功
 		}catch(Exception e){
 			map.put("result", 0);//系统异常
 			e.printStackTrace();
@@ -80,31 +105,6 @@ public class GoodsStoreController {
 		return map;
 	}
 	
-	/**
-	 * 
-	 * @Description: 更新门店信息
-	 * @param GoodsInstore
-	 * @return Map<String,Object>
-	 * @date 2018年3月25日
-	 */
-	@RequestMapping(value ="/updateGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
-	@ResponseBody
-	public Map<String, Object> updateGoodsInstore(GoodsInstore GoodsInstore){
-		Map<String, Object> map = new HashMap<>();  
-		try{
-			// 参数校验，待完善
-			if(GoodsInstore==null){
-				map.put("result", -1);// 参数为空
-				return map;
-			}
-			int result = goodsInstoreService.updateGoodsInstore(GoodsInstore);
-			map.put("result", result);//更新成功
-		}catch(Exception e){
-			map.put("result", 0);//系统异常
-			e.printStackTrace();
-		}
-		return map;
-	}
 	
 	/**
 	 * @Description:打开门店管理首页
@@ -113,8 +113,8 @@ public class GoodsStoreController {
 	 * @return String
 	 * @date 2018年3月26日
 	 */
-	@RequestMapping(value ="/GoodsInstoreGtoreIndex")
-	public String sysMenusIndex() {
+	@RequestMapping(value ="/goodsInstoreGtoreIndex")
+	public String goodsInstoreGtoreIndex() {
 		return "/GoodsInstore/GoodsInstore_index";
 	}
 
@@ -141,6 +141,51 @@ public class GoodsStoreController {
 		return "/GoodsInstore/GoodsInstore_list";
 	}
 	
+	@RequestMapping(value ="/goodsInstoreAddIndex")
+	public String goodsInstoreAddIndex() {
+		return "/goods/instore_add_index";
+	}
+	
+	/**
+	 * @Description: 分页查询菜单信息
+	 * @param pageNum
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/getGoodsInstoreAdds",method={RequestMethod.GET,RequestMethod.POST})
+	public String getGoodsInstoreAdds(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo,ModelMap map,HttpServletRequest request) {
+		try{
+			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+adminId=1;
+			Admin admin=adminService.getAdmin(adminId);
+			if(pageInfo==null){
+				pageInfo=new PageInfo();
+			}
+			goodsInstoreBiz.setInstoreState(-1);
+			goodsInstoreBiz.setStoreId(admin.getStoreId());
+			PageInfo<GoodsInstoreBiz> GoodsInstorePages = goodsInstoreService.getGoodsInstoreBizs(goodsInstoreBiz, pageInfo);
+			map.addAttribute("pageInfo", GoodsInstorePages);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "/goods/instore_add_list";
+	}
+	
+	/**
+	 * @Description: 根据goodsOrderId查找具体的收货信息
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/getAddGoodsInstoreInfo",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> getAddGoodsInstoreInfo(GoodsInstoreBiz goodsInstoreBiz) {
+		Map<String, Object> map = new HashMap<>();
+		List<GoodsInstoreBiz> list = goodsInstoreService.getAddGoodsInstoreInfo(goodsInstoreBiz);
+		map.put("list",list);
+		map.put("result", 1);
+		return map;
+	}
+	
 	
 	@RequestMapping(value ="/goodsInstoreAuditIndex")
 	public String goodsInstoreAuditIndex() {
@@ -159,6 +204,7 @@ public class GoodsStoreController {
 			if(pageInfo==null){
 				pageInfo=new PageInfo();
 			}
+			goodsInstoreBiz.setInstoreState(0);
 			PageInfo<GoodsInstoreBiz> GoodsInstorePages = goodsInstoreService.getGoodsInstoreBizs(goodsInstoreBiz, pageInfo);
 			map.addAttribute("pageInfo", GoodsInstorePages);
 		}catch(Exception e){
@@ -174,7 +220,7 @@ public class GoodsStoreController {
 	 */
 	@RequestMapping(value ="/getGoodsInstoreInfo",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public Map<String, Object> getGoodsInstoreAudits(GoodsInstoreBiz goodsInstoreBiz) {
+	public Map<String, Object> getGoodsInstoreInfo(GoodsInstoreBiz goodsInstoreBiz) {
 		Map<String, Object> map = new HashMap<>();
 		List<GoodsInstoreBiz> list = goodsInstoreService.getGoodsInstoreInfo(goodsInstoreBiz);
 		map.put("list",list);
@@ -191,21 +237,23 @@ public class GoodsStoreController {
 	@ResponseBody
 	public Map<String, Object> updateInstoreInfo(GoodsInstoreBiz goodsInstoreBiz) {
 		Map<String, Object> map = new HashMap<>();
-		GoodsInstore goodsInstore = goodsInstoreService.getGoodsInstore(goodsInstoreBiz.getGoodsInstoreId());
-		if(goodsInstoreBiz.getAuditType()==1) {//审核通过
-			//更新订单明细信息
-			GoodsOrderItem goodsOrderItem = goodsOrderItemService.getGoodsOrderItemById(goodsInstoreBiz.getGoodsOrderItemId());
-			goodsOrderItem.setInstoreQuantity(goodsOrderItem.getInstoreQuantity()+goodsInstoreBiz.getInQuantity());
-			goodsOrderItemService.updateGoodsOrderItem(goodsOrderItem);
-			//更新入库信息
-			goodsInstore.setState(1);
-			goodsInstoreService.updateGoodsInstore(goodsInstore);
-			//同步金蝶系统数据（待补充）
+		synchronized(goodsInstoreBiz) {
+			GoodsInstore goodsInstore = goodsInstoreService.getGoodsInstore(goodsInstoreBiz.getGoodsInstoreId());
+			if(goodsInstoreBiz.getAuditType()==1) {//审核通过
+				//更新订单明细信息
+				GoodsOrderItem goodsOrderItem = goodsOrderItemService.getGoodsOrderItemById(goodsInstoreBiz.getGoodsOrderItemId());	
+				goodsOrderItem.setInstoreQuantity(goodsOrderItem.getInstoreQuantity()+goodsInstoreBiz.getInQuantity());
+				goodsOrderItemService.updateGoodsOrderItem(goodsOrderItem);
+				//更新入库信息
+				goodsInstore.setState(1);
+				goodsInstoreService.updateGoodsInstore(goodsInstore);
+				//同步金蝶系统数据（待补充）
 			
 			
-		}else {//审核不通过
-			goodsInstore.setState(2);
-			goodsInstoreService.updateGoodsInstore(goodsInstore);
+			}else {//审核不通过
+				goodsInstore.setState(2);
+				goodsInstoreService.updateGoodsInstore(goodsInstore);
+			}
 		}
 		map.put("result", 1);
 		return map;

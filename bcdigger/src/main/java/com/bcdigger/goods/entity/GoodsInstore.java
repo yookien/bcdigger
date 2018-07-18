@@ -1,5 +1,7 @@
 package com.bcdigger.goods.entity;
 
+import java.util.Date;
+
 import com.bcdigger.common.entity.BaseEntity;
 /**
  * 商品入库表
@@ -21,12 +23,15 @@ public class GoodsInstore extends BaseEntity{
 	private int purPrice;//采购价
 	private int type    ;//入库类型 5000正常采购入库 5001盘点入库 5002退货入库 5003调仓入库
 	private int inQuantity;//入库数量
-	private int inStoreTime;//入库时间
+	private Date inStoreTime;//入库时间
+	private Date addTime;//入库时间
+	private Date updateTime;//入库时间
 	private int operator;//操作人
 	private String memo;//备注
 	private int sourceId;//入库来源 0pc端 1手机端 2paid 3其他
 	private int storeId;//店铺id
 	private int repositoryId;//仓库id
+	
 	
 	public int getStoreId() {
 		return storeId;
@@ -76,11 +81,24 @@ public class GoodsInstore extends BaseEntity{
 	public void setInQuantity(int inQuantity) {
 		this.inQuantity = inQuantity;
 	}
-	public int getInStoreTime() {
+	
+	public Date getInStoreTime() {
 		return inStoreTime;
 	}
-	public void setInStoreTime(int inStoreTime) {
+	public void setInStoreTime(Date inStoreTime) {
 		this.inStoreTime = inStoreTime;
+	}
+	public Date getAddTime() {
+		return addTime;
+	}
+	public void setAddTime(Date addTime) {
+		this.addTime = addTime;
+	}
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 	public int getOperator() {
 		return operator;

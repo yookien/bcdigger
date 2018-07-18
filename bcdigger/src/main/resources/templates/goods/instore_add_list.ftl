@@ -9,8 +9,7 @@
           	<th>收货人</th>
           	<th>订货总数量</th>
           	<th>已收货总数量</th>
-          	<th>本次收货总数量</th>
-          	<th>收货时间</th>
+          	<th>已提交收货总数量</th>
           	<th>操作</th>
         </tr>
       </thead>
@@ -25,16 +24,15 @@
                   	<td>${(goodsInstoreBiz.operatorName)!}</td>
                   	<td>${(goodsInstoreBiz.orderQuantity)!0}</td>
                   	<td>${(goodsInstoreBiz.instoreQuantity)!0}</td>
-                  	<td style="color:red">${(goodsInstoreBiz.inQuantity)!0}</td>
-                  	<td><#if (goodsInstoreBiz.updateTime)??>${goodsInstoreBiz.updateTime?string("yyyy-MM-dd")}</#if></td>
+                  	<td>${(goodsInstoreBiz.inQuantity)!0}</td>
                   	<td>
-                  		<a href="###" onclick="auditInstore(${(goodsInstoreBiz.goodsOrderId)!0})" name="auditInstore" data-toggle="modal" data-target="#myModal" goodsOrderId="${(goodsInstoreBiz.goodsOrderId)!}" >审核</a>
+                  		<a href="###" onclick="addInstore(${(goodsInstoreBiz.goodsOrderId)!0})" name="addInstore" data-toggle="modal" data-target="#myModal" goodsOrderId="${(goodsInstoreBiz.goodsOrderId)!}" >添加收货单</a>
 				  	</td>
                 </tr>
 		 	</#list>
 		<#else>
 			<tr>
-              <td colspan="10" style="text-align: center">尚未有任何需审核的收货信息</td>
+              <td colspan="10" style="text-align: center">尚未有任何需要的收货信息</td>
             </tr>
 	 	</#if>
  	</tbody>

@@ -1,11 +1,11 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>收货审核管理 </h2>
+        <h2>门店收货管理 </h2>
         <div class="clearfix"></div>
       </div>
       
-      <div class="well" style="overflow: auto">
+      <!-- <div class="well" style="overflow: auto">
       	<form class="form-horizontal form-label-left input_mask" id="searchForm">
       		<div class="col-md-10 col-sm-10 col-xs-12">
       		 
@@ -18,7 +18,7 @@
 			 	<button type="button" style="float:left;margin-left:15px" class="btn btn btn-primary" onclick="getGoodsInStoreAudits()">查询</button>
 			</div>
 		</form>
-		</div>
+		</div> -->
 
 	  <div class="x_content" id="instore_audit_datas">
 		 
@@ -42,14 +42,14 @@
             	<form class="form-horizontal form-label-left input_mask" id="auditInstoreForm">
             		<input type="hidden" id="admin_id" name="id">
             		<div class="col-md-12 col-sm-12 col-xs-12 form-group">
-            			<p class="control-label col-md-3 col-sm-3 col-xs-12" stype="text-align: left;">订货单编号：<small id="goodsOrderNoSpan">SKJD001</small></p>
+            			<p class="control-label col-md-3 col-sm-3 col-xs-12" stype="text-align: left;">订货单编号：<small id="goodsOrderNoSpan"> SKJD001</small></p>
             			<div class="control-label col-md-3 col-sm-3 col-xs-12">单据日期： <small id="updateTimeSpan">2018-07-01</small></div>
             			<div class="control-label col-md-3 col-sm-3 col-xs-12">订货单种类：<small id="orderTypeSpan">牛奶</small></div>
             			<div class="control-label col-md-3 col-sm-3 col-xs-12">订货单状态：<small id="orderStateSpan">收货中</small></div>
                      </div>
                      <div class="col-md-12 col-sm-12 col-xs-12 form-group">
                      	<div class="control-label col-md-3 col-sm-3 col-xs-12">客      户： <small id="storeChineseNameSpan">中央厨房</small></div>
-            			<div class="control-label col-md-3 col-sm-3 col-xs-12">下  单   人：<small id="operatorNameSpan"> 张三</small></div>
+            			<!-- <div class="control-label col-md-3 col-sm-3 col-xs-12">下  单   人：<small id="operatorNameSpan"> 张三</small></div> -->
             			<!-- <label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
             			<label class="control-label col-md-3 col-sm-3 col-xs-12"></label> -->
             		</div>
@@ -64,8 +64,6 @@
                           <th>订货总数量</th>
                           <th>已收货数量</th>
                           <th>本次收货数量</th>
-                          <th>要货日期</th>
-                          <th>备注</th>
                         </tr>
                       </thead>
                       <tbody id="instoreInfoTbody">
@@ -75,8 +73,8 @@
             	</form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="not_audit_btn">审核不通过</button>  
-                <button type="button" class="btn btn-primary" id="audit_btn">审核通过</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="not_save_btn">取消收货</button>  
+                <button type="button" class="btn btn-primary" id="save_btn">保存收货</button>
             </div>
         </div>  
     </div>  
@@ -90,12 +88,12 @@ var ajax_contents='instore_audit_datas';
 
 $(function(){
 	// 查询需审核的收货信息
-	getGoodsInStoreAudits();
+	getGoodsInStoreAdds();
 });
 
 // 分页查询需审核的收货信息
-function getGoodsInStoreAudits(){
-	ajax_request_url='/goods/getGoodsInstoreAudits';
+function getGoodsInStoreAdds(){
+	ajax_request_url='/goods/getGoodsInstoreAdds';
 	ajax_pars=$("#searchForm").serialize();
 //	alert(ajax_pars);
 	$.ajax({
@@ -113,16 +111,17 @@ function getGoodsInStoreAudits(){
 
 
 // 打开审核收货详细model
-function auditInstore(id){
+function addInstore(id){
 	// 重设form
 	$('#auditInstoreForm')[0].reset();
 	//$('#myModalLabel').html('编辑门店信息');
 	if(isNaN(id) || id<=0){
 		return;
 	}
-	var pars='goodsOrderId='+id+"&instoreState=0";
+	var pars='goodsOrderId='+id+"&instoreState=1";
+	
 	$.ajax({
-		url: '/goods/getGoodsInstoreInfo',
+		url: '/goods/getAddGoodsInstoreInfo',
 		type:'POST',
 		data: pars,
 		dataType:'json',
@@ -139,9 +138,9 @@ function auditInstore(id){
 						$('#goodsOrderNoSpan').text(instoreInfos[i].goodsOrderNo);
 						$('#updateTimeSpan').text(instoreInfos[i].updateTime);
 						$('#orderTypeSpan').text(instoreInfos[i].orderType);
-						$('#orderStateSpan').text("收货中");
+						$('#orderStateSpan').text("收货");
 						$('#storeChineseNameSpan').text(instoreInfos[i].storeChineseName);
-						$('#operatorNameSpan').text(instoreInfos[i].operatorName);
+						//$('#operatorNameSpan').text(instoreInfos[i].operatorName);
 					}
 					html=html +"<tr><th scope='row'>"+i+"</th><td>"+instoreInfos[i].goodsNo+"</td>"+
 					"<td>"+instoreInfos[i].goodsName+"</td>"+
@@ -149,35 +148,38 @@ function auditInstore(id){
 					"<td>"+instoreInfos[i].unit+"</td>"+
 					"<td>"+instoreInfos[i].orderQuantity+"</td>"+
 					"<td>"+instoreInfos[i].instoreQuantity+"</td>"+
-					"<td style='color:red'>"+instoreInfos[i].inQuantity+"</td>"+
-					"<td>"+instoreInfos[i].instoreTime+"</td>"+
-					"<td>"+instoreInfos[i].memo+"</td></tr>"
+					"<td><input id='inQuantity"+i+"' name='inQuantity' class='form-control' type='text' style='width:80px;'></td></tr>"
 				}
 				$('#instoreInfoTbody').html(html);
 				
-				$("#audit_btn").unbind();
-				$("#not_audit_btn").unbind();
-				$("#audit_btn").click(function(){
-				  	updateInStore(1,instoreInfos);
+				$("#save_btn").unbind();
+				$("#not_save_btn").unbind();
+				$("#save_btn").click(function(){
+				  	addInStore(instoreInfos);
 				});
-				$("#not_audit_btn").click(function(){
-				  	updateInStore(0,instoreInfos);
+				$("#not_save_btn").click(function(){
+					$("#close_btn").click();
 				});
 			}
 		}
 	})
 }
 
-// 更新入库信息
-function updateInStore(auditType,instoreInfos){
+// 添加入库信息
+function addInStore(instoreInfos){
 	
 	for (var i in instoreInfos ){
-		var pars = "auditType="+auditType+"&goodsOrderItemId="+instoreInfos[i].goodsOrderItemId+
-			"&goodsInstoreId="+instoreInfos[i].goodsInstoreId+
-			"&inQuantity="+instoreInfos[i].inQuantity;
+		var inQuantity = $("#inQuantity"+i).val()
+		alert(inQuantity)
+		if(inQuantity==""||inQuantity==0){
+			continue;
+		}
+		var pars = "goodsOrderItemId="+instoreInfos[i].goodsOrderItemId+
+			"&storeId="+instoreInfos[i].storeId+
+			"&inQuantity="+inQuantity;
 		alert(pars);
 		$.ajax({
-			url: '/goods/updateInstoreInfo',
+			url: '/goods/addGoodsInstore',
 			type:'POST',
 			data: pars,
 			dataType:'JSON',
@@ -190,7 +192,7 @@ function updateInStore(auditType,instoreInfos){
 			}
 		})
 	}
-	getGoodsInStoreAudits();
+	getGoodsInStoreAdds();
 	$("#close_btn").click();
 }
 

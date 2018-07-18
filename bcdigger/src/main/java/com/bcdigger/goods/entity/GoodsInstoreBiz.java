@@ -26,6 +26,7 @@ public class GoodsInstoreBiz extends BaseEntity{
 	private String operatorName;//入库操作人
 	private Date updateTime;//入库提交时间
 	private int orderType;//订货单类型
+	private int instoreState;//入库状态
 	
 	private int goodsInstoreId;//收货入库id
 	private String goodsNo;//商品条码
@@ -174,5 +175,13 @@ public class GoodsInstoreBiz extends BaseEntity{
 	public void setOrderType(int orderType) {
 		this.orderType = orderType;
 	}
+	public int getInstoreState() {
+		return instoreState;
+	}
+	public void setInstoreState(int instoreState) {
+		this.instoreState = instoreState;
+	}
+	
+	
 
 }
