@@ -23,6 +23,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bcdigger.admin.dao.AdminDao;
+import com.bcdigger.admin.entity.Admin;
 import com.bcdigger.common.constant.GoodsOrderStateConstant;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.common.utils.DateUtils;
@@ -60,6 +62,9 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 	@Autowired
 	private StoreDao storeDao;
 	
+	@Autowired
+	private AdminDao adminDao;
+
 	@Override
 	public JSONObject addGoodsOrder(GoodsOrder goodsOrder, GoodsOrderItemModel orderItemModel) {
 		JSONObject json = new JSONObject();
@@ -176,7 +181,35 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 
 	@Override
 	public GoodsOrder getGoodsOrderById(int id) {
-		return goodsOrderDao.getById(id);
+		GoodsOrder goodsOrder = null;
+		try{
+			// 根据id查询订货单
+			goodsOrder = goodsOrderDao.getById(id);
+			if( goodsOrder == null ){
+				return null;
+			}
+			GoodsOrderItem goodsOrderItem = new GoodsOrderItem();
+			goodsOrderItem.setGoodsOrderId(id);
+			// 根据订单id查询订单订单明细列表
+			List<GoodsOrderItem> orderItemList=this.goodsOrderItemDao.getGoodsOrderItems(goodsOrderItem);
+			goodsOrder.setOrderItemList(orderItemList);
+			
+			// 根据门店id查询门店信息
+			Store store = storeDao.getById(goodsOrder.getStoreId());
+			if( store != null){
+				goodsOrder.setStoreKingdeeCustId(store.getKingdeeCustId());
+				goodsOrder.setStoreKingdeeCustNo(store.getStoreCode());
+				goodsOrder.setStoreName(store.getChineseName());
+			}
+			// 查询下单人信息
+			Admin admin = adminDao.getById(goodsOrder.getOrderUserId());
+			if( admin != null){
+				goodsOrder.setOrderUserName(admin.getNickname());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return goodsOrder;
 	}
 
 	@Override
@@ -192,8 +225,15 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			}
 			if(goodsOrder.getState() == GoodsOrderStateConstant.SUCCESS_AUDIT_STATE){
 				GoodsOrder goodsOrderTemp = this.goodsOrderDao.getById(goodsOrder.getId());
-				if( goodsOrderTemp == null || goodsOrderTemp.getId() <= 0){
+				if( goodsOrderTemp == null || goodsOrderTemp.getId() <= 0 
+						|| goodsOrderTemp.getState() != GoodsOrderStateConstant.INIT_STATE){// 初始状态才允许审核
 					return 0;
+				}
+				if( goodsOrderTemp.getKingdeeCustId() > 0 
+						|| (goodsOrderTemp.getKingdeeCustNo() != null 
+							&& "".equals(goodsOrderTemp.getKingdeeCustNo())) ){
+					goodsOrderDao.auditingGoodsOrder(goodsOrder);
+					return 10000;
 				}
 				GoodsOrderItem goodsOrderItem = new GoodsOrderItem();
 				goodsOrderItem.setGoodsOrderId(goodsOrderTemp.getId());
@@ -215,7 +255,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 					JSONObject json = JSONObject.parseObject(resultStr).getJSONObject("Result");
 					
 					if(json.getJSONObject("ResponseStatus").getBooleanValue("IsSuccess")){
-						int kingdeeCustId = json.getIntValue("kingdeeCustId");
+						int kingdeeCustId = json.getIntValue("Id");
 						String kingdeeCustNo = json.getString("Number");
 						goodsOrderTemp.setKingdeeCustId(kingdeeCustId);
 						goodsOrderTemp.setKingdeeCustNo(kingdeeCustNo);
@@ -241,11 +281,12 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			} else {
 				// 拒绝订单
 				goodsOrderDao.auditingGoodsOrder(goodsOrder);
+				auditResult = 10000;// 成功
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return 0;
+		return auditResult;
 	}
 	
 	/**

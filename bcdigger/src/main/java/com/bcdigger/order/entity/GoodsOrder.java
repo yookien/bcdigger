@@ -50,6 +50,7 @@ public class GoodsOrder extends BaseEntity {
 	
 	private List<GoodsOrderItem> orderItemList;
 	
+	private String orderUserName;
 
 	public String getOrderNo() {
 		return orderNo;
@@ -161,6 +162,14 @@ public class GoodsOrder extends BaseEntity {
 
 	public void setStoreKingdeeCustNo(String storeKingdeeCustNo) {
 		this.storeKingdeeCustNo = storeKingdeeCustNo;
+	}
+
+	public String getOrderUserName() {
+		return orderUserName;
+	}
+
+	public void setOrderUserName(String orderUserName) {
+		this.orderUserName = orderUserName;
 	}
 	
 }

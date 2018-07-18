@@ -16,6 +16,11 @@ public class GoodsOrderStateConstant {
 	 * 审核通过
 	 */
 	public static int SUCCESS_AUDIT_STATE = 10010;
+	
+	/**
+	 * 审核拒绝
+	 */
+	public static int REFUSE_AUDIT_STATE = 10050;
 
 	/**
 	 * 收货中
@@ -31,5 +36,6 @@ public class GoodsOrderStateConstant {
 	 * 失效
 	 */
 	public static int INVALID_STATE = 10040;
+	
 
 }

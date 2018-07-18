@@ -18,7 +18,7 @@
 <div class="modal-dialog" role="document" style="width:800px">  
         <div class="modal-content">  
             <div class="modal-header">  
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">  
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close_btn">  
                     <span aria-hidden="true"><i class="fa fa-times"></i></span>  
                 </button>
                 <h1 class="modal-title" id="myModalLabel" style="text-align:center;">弈杰订货单</h1>
@@ -28,14 +28,15 @@
             		<input type="hidden" id="order_id" name="id">
             		<input type="hidden" id="order_state" name="state">
             		<div class="col-md-12 col-sm-12 col-xs-12 form-group">
-            			<p class="control-label col-md-3 col-sm-3 col-xs-12" stype="text-align: left;">订货单编号：<small id="goodsOrderNoSpan"> </small></p>
-            			<div class="control-label col-md-3 col-sm-3 col-xs-12">单据日期： <small id="updateTimeSpan"> </small></div>
-            			<div class="control-label col-md-3 col-sm-3 col-xs-12">订货单种类：<small id="orderTypeSpan"> </small></div>
-            			<div class="control-label col-md-3 col-sm-3 col-xs-12">订货单状态：<small id="orderStateSpan"> </small></div>
+            			<div class="col-md-4 col-xs-12">单据编号：<small id="goodsOrderNoSpan"> </small></div>
+            			<div class="col-md-4 col-xs-12">客户： <small id="storeChineseNameSpan"></small></div>
+            			<div class="col-md-4 col-xs-12">金蝶K3单号：<small id="kingdeeCustNoSpan"> </small></div>
                      </div>
                      <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                     	<div class="control-label col-md-3 col-sm-3 col-xs-12">客      户： <small id="storeChineseNameSpan">中央厨房</small></div>
-            			<div class="control-label col-md-3 col-sm-3 col-xs-12">下  单   人：<small id="operatorNameSpan"> 张三</small></div>
+                     	<div class="col-md-3 col-xs-12">单据类型：<small id="orderTypeSpan"> </small></div>
+            			<div class="col-md-3 col-xs-12">单据状态：<small id="orderStateSpan"> </small></div>
+            			<div class="col-md-3 col-xs-12">下  单  人：<small id="operatorNameSpan">  </small></div>
+            			<div class="col-md-3 col-xs-12">单据日期：<small id="updateTimeSpan"> </small></div>
             		</div>
             		<table class="table table-bordered">
                       <thead>
@@ -98,12 +99,17 @@ function getOrder(){
 }
 
 // 查看订货单页面
-function viewOrder(id){
+function openOrder(id,type){
 	// 重设form
 	$('#auditOrderForm')[0].reset();
 	
-	// 隐藏审核按钮
-	$('.modal-footer').hide();
+	if( type == 'view' ){
+		// 隐藏审核按钮
+		$('.modal-footer').hide();
+	} else {
+		// 展示审核按钮
+		$('.modal-footer').show();
+	}
 	if(isNaN(id) || id<=0){
 		return;
 	}
@@ -121,94 +127,97 @@ function viewOrder(id){
 					return;
 				}
 				if(order.orderNo != null && order.orderNo != undefined){
-					$('#updateTimeSpan').val(order.orderNo);
+					$('#goodsOrderNoSpan').html(order.orderNo);
 				}
 				if(order.addTime != null && order.addTime != undefined){
-					$('#updateTimeSpan').val(fmtDate(order.addTime));
+					$('#updateTimeSpan').html(fmtDate(order.addTime));
+				}
+				if(order.storeName != null && order.storeName != undefined){
+					$('#storeChineseNameSpan').html(order.storeName);
+				}
+				if(order.kingdeeCustNo != null && order.kingdeeCustNo != undefined){
+					$('#kingdeeCustNoSpan').html(order.kingdeeCustNo);
+				}
+				if(order.orderUserName != null && order.orderUserName != undefined){
+					$('#operatorNameSpan').html(order.orderUserName);
 				}
 				
+				if ( order.state==10000 ) 
+					$('#orderStateSpan').html('待审核');  
+              	else if ( order.state==10010 )
+              		$('#orderStateSpan').html('已审核'); 
+              	else if ( order.state==10020 )
+              		$('#orderStateSpan').html('收货中'); 
+              	else if ( order.state==10030 )
+              		$('#orderStateSpan').html('已完成'); 
+              	else if ( order.state==10040 )
+              		$('#orderStateSpan').html('已失效'); 
+              	else if ( order.state==10050 )
+              		$('#orderStateSpan').html('已拒绝'); 
 				
-				$("#audit_btn").unbind();
-				$("#audit_btn").click(function(){
-				  	auditingGoodsOrder(10010);
-				});
-				$("#not_audit_btn").unbind();
-				$("#not_audit_btn").click(function(){
-				  	auditingGoodsOrder(10020);
-				});
-				
+				var orderItemList = order.orderItemList;
+				var orderItemInfos = eval(orderItemList);
+				if( orderItemInfos != undefined && orderItemInfos.length>0 ){
+					var htmlStr = ""
+					var orderItem;
+					for(var i=0;i<orderItemInfos.length;i++){
+						orderItem = orderItemInfos[i];
+						if(orderItem == undefined ){
+							continue;
+						}
+						htmlStr = htmlStr +"<tr><th scope='row'>"+(i+1)+"</th><td>"+orderItem.goodsNo+"</td>"+
+						"<td>"+orderItem.goodsName+"</td>"+
+						"<td>"+orderItem.goodsModel+"</td>"+
+						"<td>"+orderItem.goodsUnit+"</td>"+
+						"<td>"+orderItem.orderQuantity+"</td>"+
+						"<td>"+fmtDate(orderItem.instoreTime)+"</td>"+
+						"<td>"+orderItem.memo+"</td></tr>"
+					}
+					$('#orderItemTbody').html(htmlStr);
+				}
+				if( type == 'auditing' ){
+					$("#audit_btn").attr("disabled",false);
+					$("#audit_btn").click(function(){
+					  	auditingGoodsOrder(10010);// 审核通过
+					});
+					
+					$("#not_audit_btn").attr("disabled",false);
+					$("#not_audit_btn").click(function(){
+					  	auditingGoodsOrder(10050);// 拒绝
+					});
+				}
 			}
 		}
 	})
 }
 
-// 打开审核订货单页面
-function auditingOrder(id){
-	// 重设form
-	$('#auditOrderForm')[0].reset();
-	//$('#myModalLabel').html('编辑订货单信息');
-	if(isNaN(id) || id<=0){
-		return;
-	}
-	$('#order_id').val(id);
-	var pars='id='+id;
-	$.ajax({
-		url: '/order/getGoodsOrder',
-		type:'POST',
-		data: pars,
-		dataType:'json',
-		success:function (json) {
-			if(json.result==1){
-				var order = json.goodsOrder;
-				if(order == undefined){
-					return;
-				}
-				if(order.orderNo != null && order.orderNo != undefined){
-					$('#updateTimeSpan').val(order.orderNo);
-				}
-				if(order.addTime != null && order.addTime != undefined){
-					$('#updateTimeSpan').val(fmtDate(order.addTime));
-				}
-				
-				
-				$("#audit_btn").unbind();
-				$("#audit_btn").click(function(){
-				  	auditingGoodsOrder(10010);
-				});
-				$("#not_audit_btn").unbind();
-				$("#not_audit_btn").click(function(){
-				  	auditingGoodsOrder(10020);
-				});
-				
-			}
-		}
-	})
-}
-
-// 添加用户订货单
+// 审核用户订货单
 function auditingGoodsOrder(state){
 	if(isNaN(state)){
 		return;
 	}
 	$('#order_state').val(state);
-	$("#auditOrderForm").bootstrapValidator('validate');//提交验证  
-    if ($("#auditOrderForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-        var pars=$("#auditOrderForm").serialize();
-		$.ajax({
-			url: '/order/auditingGoodsOrder',
-			type:'POST',
-			data: pars,
-			dataType:'JSON',
-			success:function (json) {
-				if(json.result==10000){
-					getOrder();
-					$("#close_btn").click();
-				}else{
-					alert(json.result);
-				}
+	
+	$("#audit_btn").unbind();
+	$("#audit_btn").attr("disabled",true);
+	$("#not_audit_btn").unbind();
+	$("#not_audit_btn").attr("disabled",true);
+
+    var pars=$("#auditOrderForm").serialize();
+	$.ajax({
+		url: '/order/auditingGoodsOrder',
+		type:'POST',
+		data: pars,
+		dataType:'JSON',
+		success:function (json) {
+			if(json.result == 10000){
+				getOrder();
+				$("#close_btn").click();
+			}else{
+				alert(json.result);
 			}
-		})
-    } 
+		}
+	})
 }
 
 

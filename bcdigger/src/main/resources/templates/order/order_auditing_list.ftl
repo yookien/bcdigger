@@ -24,13 +24,14 @@
 	                  	<#elseif order.state==10020>收货中
 	                  	<#elseif order.state==10030>已完成
 	                  	<#elseif order.state==10040>已失效
+	                  	<#elseif order.state==10050>已拒绝
 	                  	</#if>
                   	</td>
                   	<td>
 	                  	<#if order.state == 10000>
-	                  		<a href="###" onclick="auditingOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >审核</a>
+	                  		<a onclick="openOrder(${(order.id)!0},'auditing')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >审核</a>
 					  	<#else>
-					  		<a href="###" onclick="viewOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
+					  		<a onclick="openOrder(${(order.id)!0},'view')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
 					  	</#if>
 				  	</td>
                 </tr>

@@ -18,6 +18,10 @@
 		<result property="kingdeeCustNo" column="kingdee_cust_no" jdbcType="VARCHAR" />
 	</resultMap>
 	
+	<resultMap id="orderResultMap" extends="BaseResultMap" type="com.bcdigger.order.entity.GoodsOrder">
+		<result property="storeName" column="chinese_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
 	<sql id="base_column_list">
 		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id ,kingdee_cust_no
 	</sql>
@@ -86,12 +90,25 @@
 	</select>
 	
 	<select id="listGoodsOrderByCondation" parameterType="java.util.Map" resultMap="BaseResultMap">
-		select <include refid="base_column_list" /> from
-		<include refid="table" />
+		select go.id,go.order_no,go.order_user_id,go.store_id, go.order_type, go.state, go.add_time, 
+			go.update_time, go.memo, go.kingdee_cust_id ,go.kingdee_cust_no , s.chinese_name
+		from bcd_goods_order go , bcd_store s
 		<where>
-			<include refid="condition_sql" />
+			go.store_id = s.id
+			<if test="id != null and id > 0 ">
+				and id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test=" state != null and state > 0 ">
+				and state = #{state,jdbcType=BIGINT}
+			</if>
+			<if test="orderNo != null and orderNo !='' and like == 1 ">
+				and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="orderNo != null and orderNo !='' and like == null">
+				and order_no = #{orderNo,jdbcType=VARCHAR}
+			</if>
 		</where>
-		<![CDATA[ order by id desc]]>
+		<![CDATA[ order by go.id desc]]>
 	</select>
 	
 	<select id="countGoodsOrder" parameterType="java.util.Map" resultType="Integer">
