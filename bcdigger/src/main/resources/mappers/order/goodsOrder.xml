@@ -89,7 +89,7 @@
 		<![CDATA[ order by id desc]]>
 	</select>
 	
-	<select id="listGoodsOrderByCondation" parameterType="java.util.Map" resultMap="BaseResultMap">
+	<select id="listGoodsOrderByCondation" parameterType="java.util.Map" resultMap="orderResultMap">
 		select go.id,go.order_no,go.order_user_id,go.store_id, go.order_type, go.state, go.add_time, 
 			go.update_time, go.memo, go.kingdee_cust_id ,go.kingdee_cust_no , s.chinese_name
 		from bcd_goods_order go , bcd_store s
