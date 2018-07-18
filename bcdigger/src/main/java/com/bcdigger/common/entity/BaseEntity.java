@@ -15,6 +15,7 @@ public class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private Integer version = 0;
+	private int like = 0;
 	/**
 	 * 创建时间
 	 */
@@ -42,6 +43,14 @@ public class BaseEntity implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public int getLike() {
+		return like;
+	}
+
+	public void setLike(int like) {
+		this.like = like;
 	}
 
 }

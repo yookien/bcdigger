@@ -41,7 +41,9 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public PageInfo<Goods> getGoods(Goods goods, PageInfo pageInfo) {
 		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("goodsName", goods.getGoodsName());
 		params.put("goodsNo", goods.getGoodsNo());
+		params.put("like", goods.getLike());
 		return goodsDao.listPage(pageInfo, params);
 	}
 	/**

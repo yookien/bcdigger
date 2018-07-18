@@ -30,19 +30,16 @@
             <div class="modal-body">  
                    <form class="form-horizontal form-label-left input_mask" id="addOrEditOrderForm">
 						<div class="form-group">
-	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货单编号</label>
-	                      <div class="col-md-2 col-sm-2 col-xs-3 ">
-	                        <input type="text" class="form-control" id="orderNo">
+	                      <div class="col-md-3 col-sm-3 col-xs-4 ">
+	                     	 单据编号:<middle id="goodsOrderNoSpan"> </middle>
 	                      </div>
 	                      
-	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货单日期</label>
 	                      <div class="col-md-2 col-sm-2 col-xs-3">
-	                        <input type="text" class="form-control" id="addTime">
+	                     	 单据日期:<middle id="updateTimeSpan"> </middle>
 	                      </div>
 	                      
-	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">门店</label>
-	                      <div class="col-md-2 col-sm-2 col-xs-3">
-	                        <input type="text" class="form-control" id="storeName" >
+	                      <div class="col-md-3 col-sm-3 col-xs-4">
+	                      	门店:<middle id="storeChineseNameSpan"></middle>
 	                      </div>
 	                      
 	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货种类</label>
@@ -50,41 +47,41 @@
 	                        <input type="text" class="form-control" id="orderType">
 	                      </div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" id="choose_goods_bt">
 							<label class="control-label col-md-1 col-sm-1 col-xs-3 " onclick="addGoodsInfoEvent()">选择商品</label>
 						</div>
 					
 						<table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
 	                      <thead>
 	                        <tr>
-	                          <th width="15%">物料编码</th>
+	                          <th width="18%">物料编码</th>
 	                          <th width="25%">物料名称</th>
 	                          <th width="12%">规格型号</th>
 	                          <th width="10%">销售单位</th>
 	                          <th width="10%">销售数量</th>
-	                          <th width="10%">要货日期</th>
-	                          <th width="18%">备注</th>
+	                          <th width="15%">要货日期</th>
+	                          <th width="15%">备注</th>
 	                        </tr>
 	                      </thead>
 	                      <tbody id="choose_goods_tbody">
 		                      	
 	                      </tbody>
-	                      		<tr>
-		                          <td>
-		                          	<input type="text" class="form-control" onclick="addGoodsInfoEvent()">
-		                          </td>
-		                          <td><input type="text" class="form-control"></td>
-		                          <td><input type="text" class="form-control"></td>
-		                          <td><input type="text" class="form-control"></td>
-		                          <td><input type="text" class="form-control"></td>
-		                          <td>
-		                          	<input class="form-control has-feedback-left" type="text">
-		                          </td>
-		                          <td><input type="text" class="form-control"value=""></td>
-		                        </tr>
+                      		<tr id="choose_goods_tr">
+	                          <td>
+	                          	<input type="text" class="form-control" onclick="addGoodsInfoEvent()">
+	                          </td>
+	                          <td><input type="text" class="form-control"></td>
+	                          <td><input type="text" class="form-control"></td>
+	                          <td><input type="text" class="form-control"></td>
+	                          <td><input type="text" class="form-control"></td>
+	                          <td>
+	                          	<input class="form-control" type="text">
+	                          </td>
+	                          <td><input type="text" class="form-control"value=""></td>
+	                        </tr>
 					    </table>
 						
-					   <input type="hidden" name="id" id="Order_id" value="0"> 
+					   <input type="hidden" name="id" id="order_id" value="0"> 
                  </form>
             </div>
             <div class="modal-footer">
@@ -105,6 +102,24 @@
                 </button>  
                 <h4 class="modal-title" id="myModalLabel">选择商品</h4>
             </div>
+            
+			<div class="form-group">
+				<form id="searchGoodsInfoForm">
+					<input type="hidden" name="like" value="1"> 
+	                <label class="control-label col-md-2 col-sm-2 col-xs-4 ">商品名称（包含）</label>
+	                <div class="col-md-2 col-sm-2 col-xs-3 ">
+	                    <input type="text" class="form-control" name="goodsName" value="">
+	                </div>
+	                  
+	                <label class="control-label col-md-2 col-sm-2 col-xs-3 ">商品编号（包含）</label>
+	                <div class="col-md-2 col-sm-2 col-xs-3">
+	                    <input type="text" class="form-control" name="goodsNo" value="" >
+	                </div>
+	                  
+	                <button type="button" class="btn btn-default" onclick="getGoodsInfo()">检索</button> 
+                </form>	
+			</div>
+			
             <form id="chooseGoodsInfoForm">
 	            <div class="modal-body" id="goodsInfoDatas">
 	            </div>
@@ -132,19 +147,47 @@ $(function(){
 	initValidator();
 	
 	// 初始化日历
-	initDaterangepicker('single_cal4');
+	initDaterangepicker('instoreTime');
 	
 
 });
 
 
 // 初始化日历
-function initDaterangepicker(id){
-	$('#'+id).daterangepicker({
-	  singleDatePicker: true,
-	  singleClasses: "picker_4"
+function initDaterangepicker(className){
+	$('.'+className).daterangepicker({
+		 startDate: moment().startOf('day'),
+         dateLimit : {  
+             days : 90
+         }, //起止时间的最大间隔  
+         showDropdowns : true,  
+         showWeekNumbers : false, //是否显示第几周  
+         timePicker : false, //是否显示小时和分钟  
+         timePickerIncrement : 60, //时间的增量，单位为分钟  
+         timePicker12Hour : false, //是否使用12小时制来显示时间  
+         opens : 'right', //日期选择框的弹出位置  
+         buttonClasses : [ 'btn btn-default' ],  
+         //applyClass : 'btn-small btn-primary blue',  
+         //cancelClass : 'btn-small',  
+         //format : 'YYYY-MM-DD HH:mm:ss', //控件中from和to 显示的日期格式  
+         format : 'YYYY-MM-DD', //控件中from和to 显示的日期格式  
+         separator : ' to ',  
+         locale : {  
+             applyLabel : '确定',  
+             cancelLabel : '取消',  
+             fromLabel : '起始时间',  
+             toLabel : '结束时间',  
+             customRangeLabel : '自定义',  
+             daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],  
+             monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',  
+                     '七月', '八月', '九月', '十月', '十一月', '十二月' ],  
+             firstDay : 1  
+         },
+	  	 singleDatePicker: true,
+	  	 singleClasses: "picker_4"
 	}, function(start, end, label) {
-	  console.log(start.toISOString(), end.toISOString(), label);
+	  	//console.log(start.toISOString(), end.toISOString(), label);
+	  	$('#id').html(start.format('YYYY-MM-DD')); 
 	});
 }
 
@@ -152,6 +195,7 @@ function initDaterangepicker(id){
 function getOrder(){
 	ajax_request_url='/order/getGoodsOrders';
 	ajax_contents='order_datas';
+	ajax_pars='';
 	$.ajax({
 		url: ajax_request_url,
 		type:'POST',
@@ -168,6 +212,8 @@ function getOrder(){
 // 打开商品选择页面
 function addGoodsInfoEvent(){
 	$('#myGoodsModal').modal('show');
+	$('#searchGoodsInfoForm')[0].reset();
+	
 	getGoodsInfo();
 	
 	$("#choose_goods_btn").unbind();
@@ -180,10 +226,12 @@ function addGoodsInfoEvent(){
 function getGoodsInfo(){
 	ajax_request_url='/goods/getGoodsInfo';
 	ajax_contents='goodsInfoDatas';
+	var pars=$("#searchGoodsInfoForm").serialize();
+	ajax_pars=pars;
 	$.ajax({
 		url: ajax_request_url,
 		type:'POST',
-		data:ajax_pars,
+		data: ajax_pars,
 		dataType:'html',
 		success:function (data) {
 			if (data != "") {
@@ -232,11 +280,13 @@ function chooseGoods(){
 					"<td><input type='text' class='form-control' readonly='readonly' value='"+goodsAttr[2]+"'></td>"+
 					"<td><input type='text' class='form-control' readonly='readonly' value='"+goodsAttr[3]+"'></td>"+
 					"<td><input type='text' class='form-control' name='quantity' value='0'></td>"+
-					"<td><input id='single_cal4' name='instoreTimeStr'/></td>"+
+					"<td><input name='instoreTimeStr' class='instoreTime'/></td>"+
 					"<td><input type='text' class='form-control' id='memo1' name='memo' value='无'></td></tr>"
 		}
 		
 		$("#choose_goods_tbody").append(htmlStr);
+		// 初始化时间插件
+		initDaterangepicker('instoreTime');
 	} else {
 		alert('请至少选择一个商品');
 	}
@@ -248,6 +298,11 @@ function addOrderEvent(){
 	// 重设form
 	$('#addOrEditOrderForm')[0].reset();
 	$('#myModalLabel').html('添加订货单信息');
+	$('#choose_goods_tbody').html('');
+	
+	$('#choose_goods_bt').show();
+	$('#choose_goods_tr').show();
+		
 	$("#save_btn").unbind();
 	$("#save_btn").click(function(){
 	  	addOrder();
@@ -255,17 +310,18 @@ function addOrderEvent(){
 }
 
 // 添加订货单信息
-function addOrder(){alert(1);
+function addOrder(){
+	$("#save_btn").attr("disabled",true);
 	$("#addOrEditOrderForm").bootstrapValidator('validate');//提交验证  
     if ($("#addOrEditOrderForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
-        var pars=$("#addOrEditOrderForm").serialize();alert(pars);
+        var pars=$("#addOrEditOrderForm").serialize();
 		$.ajax({
 			url: '/order/addGoodsOrder',
 			type:'POST',
 			data: pars,
 			dataType:'JSON',
 			success:function (json) {
-				if(json.result==1){
+				if(json.result==10000){
 					getOrder();
 					$("#close_btn").click();
 				}else{
@@ -273,14 +329,30 @@ function addOrder(){alert(1);
 				}
 			}
 		})
-    } 
+    } else {
+    	$("#save_btn").attr("disabled",false);
+    }
 }
 
+
 // 打开编辑订货单页面
-function viewOrder(id){
+function openOrder(id,type){
 	// 重设form
 	$('#addOrEditOrderForm')[0].reset();
 	$('#myModalLabel').html('订货单信息');
+	
+	if( type == 'view' ){
+		// 隐藏审核按钮
+		$('.modal-footer').hide();
+		$('#choose_goods_bt').hide();
+		$('#choose_goods_tr').hide();
+	} else {
+		// 展示审核按钮
+		$('.modal-footer').show();
+		$('#choose_goods_bt').show();
+		$('#choose_goods_tr').show();
+	}
+	
 	if(isNaN(id) || id<=0){
 		return;
 	}
@@ -297,55 +369,46 @@ function viewOrder(id){
 					return;
 				}
 				if(order.orderNo != null && order.orderNo != undefined){
-					$('#orderNo').val(order.orderNo);
+					$('#goodsOrderNoSpan').html(order.orderNo);
 				}
 				if(order.addTime != null && order.addTime != undefined){
-					$('#addTime').val(fmtDate(order.addTime));
+					$('#updateTimeSpan').html(fmtDate(order.addTime));
+				}
+				if(order.storeName != null && order.storeName != undefined){
+					$('#storeChineseNameSpan').html(order.storeName);
 				}
 				
-				
-				$("#save_btn").unbind();
-				$("#save_btn").click(function(){
-				  	updateOrder();
-				});
-			}
-		}
-	})
-}
-
-
-// 打开编辑订货单页面
-function editOrder(id){
-	// 重设form
-	$('#addOrEditOrderForm')[0].reset();
-	$('#myModalLabel').html('编辑订货单信息');
-	if(isNaN(id) || id<=0){
-		return;
-	}
-	var pars='id='+id;
-	$.ajax({
-		url: '/order/getGoodsOrder',
-		type:'POST',
-		data: pars,
-		dataType:'json',
-		success:function (json) {
-			if(json.result==1){
-				var order = json.goodsOrder;
-				if(order == undefined){
-					return;
+				var orderItemList = order.orderItemList;
+				var orderItemInfos = eval(orderItemList);
+				if( orderItemInfos != undefined && orderItemInfos.length>0 ){
+					var htmlStr = ""
+					var orderItem;
+					for(var i=0;i<orderItemInfos.length;i++){
+						orderItem = orderItemInfos[i];
+						if(orderItem == undefined ){
+							continue;
+						}
+						htmlStr=htmlStr + 
+							"<tr><td><input type='text' class='form-control' readonly='readonly' name='goodsNo' value='"+orderItem.goodsNo+"'></td>"+
+							"<td><input type='text' class='form-control' readonly='readonly' value='"+orderItem.goodsName+"'></td>"+
+							"<td><input type='text' class='form-control' readonly='readonly' value='"+orderItem.goodsModel+"'></td>"+
+							"<td><input type='text' class='form-control' readonly='readonly' value='"+orderItem.goodsUnit+"'></td>"+
+							"<td><input type='text' class='form-control' name='quantity' value='"+orderItem.orderQuantity+"'></td>"+
+							"<td><input class='instoreTime' name='instoreTimeStr' value='"+fmtDate(orderItem.instoreTime)+"'/></td>"+
+							"<td><input type='text' class='form-control' id='memo1' name='memo' value='"+orderItem.memo+"'></td></tr>"
+					}
+					$("#choose_goods_tbody").append(htmlStr);
+					// 初始化时间插件
+					initDaterangepicker('instoreTime');
 				}
-				if(order.orderNo != null && order.orderNo != undefined){
-					$('#orderNo').val(order.orderNo);
+				if( type == 'edit' ){
+					$('#order_id').val(order.id);
+					$("#save_btn").unbind();
+					$("#save_btn").click(function(){
+					  	updateOrder();
+					  	$("#save_btn").attr("disabled",false);
+					});
 				}
-				if(order.addTime != null && order.addTime != undefined){
-					$('#addTime').val(fmtDate(order.addTime));
-				}
-				
-				
-				$("#save_btn").unbind();
-				$("#save_btn").click(function(){
-				  	updateOrder();
-				});
 			}
 		}
 	})
@@ -353,6 +416,7 @@ function editOrder(id){
 
 // 添加用户订货单
 function updateOrder(){
+	$("#save_btn").attr("disabled",true);
 	$("#addOrEditOrderForm").bootstrapValidator('validate');//提交验证  
     if ($("#addOrEditOrderForm").data('bootstrapValidator').isValid()) {//获取验证结果，如果成功，执行下面代码  
         var pars=$("#addOrEditOrderForm").serialize();
@@ -370,7 +434,9 @@ function updateOrder(){
 				}
 			}
 		})
-    } 
+    } else {
+    	$("#save_btn").attr("disabled",false);
+    }
 }
 
 

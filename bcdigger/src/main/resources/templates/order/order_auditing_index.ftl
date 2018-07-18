@@ -28,15 +28,15 @@
             		<input type="hidden" id="order_id" name="id">
             		<input type="hidden" id="order_state" name="state">
             		<div class="col-md-12 col-sm-12 col-xs-12 form-group">
-            			<div class="col-md-4 col-xs-12">单据编号：<small id="goodsOrderNoSpan"> </small></div>
-            			<div class="col-md-4 col-xs-12">客户： <small id="storeChineseNameSpan"></small></div>
-            			<div class="col-md-4 col-xs-12">金蝶K3单号：<small id="kingdeeCustNoSpan"> </small></div>
+            			<div class="col-md-4 col-xs-12">单据编号：<middle id="goodsOrderNoSpan"> </middle></div>
+            			<div class="col-md-4 col-xs-12">客户： <middle id="storeChineseNameSpan"></middle></div>
+            			<div class="col-md-4 col-xs-12">金蝶K3单号：<middle id="kingdeeCustNoSpan"> </middle></div>
                      </div>
                      <div class="col-md-12 col-sm-12 col-xs-12 form-group">
-                     	<div class="col-md-3 col-xs-12">单据类型：<small id="orderTypeSpan"> </small></div>
-            			<div class="col-md-3 col-xs-12">单据状态：<small id="orderStateSpan"> </small></div>
-            			<div class="col-md-3 col-xs-12">下  单  人：<small id="operatorNameSpan">  </small></div>
-            			<div class="col-md-3 col-xs-12">单据日期：<small id="updateTimeSpan"> </small></div>
+                     	<div class="col-md-3 col-xs-12">单据类型：<middle id="orderTypeSpan"> </middle></div>
+            			<div class="col-md-3 col-xs-12">单据状态：<middle id="orderStateSpan"> </middle></div>
+            			<div class="col-md-3 col-xs-12">下  单  人：<middle id="operatorNameSpan">  </middle></div>
+            			<div class="col-md-3 col-xs-12">单据日期：<middle id="updateTimeSpan"> </middle></div>
             		</div>
             		<table class="table table-bordered">
                       <thead>

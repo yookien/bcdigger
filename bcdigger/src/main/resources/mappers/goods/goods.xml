@@ -41,13 +41,17 @@
 		<if test="goodsName != null and goodsName !='' and like == 1 ">
 			and goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%')
 		</if>
-		<if test="goodsName != null and goodsName !='' and like == null">
+		<if test="goodsName != null and goodsName !='' and (like == 0 or like == null) ">
 			and goods_name = #{goodsName,jdbcType=VARCHAR}
 		</if>
 		
-		<if test="goodsNo != null and goodsNo !='' ">
+		<if test="goodsNo != null and goodsNo !='' and like == 1 ">
+			and goods_no like concat('%',#{goodsNo,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="goodsNo != null and goodsNo !='' and (like == 0 or like == null) ">
 			and goods_no = #{goodsNo,jdbcType=VARCHAR}
 		</if>
+		
 	</sql>
 	
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goods">
@@ -111,6 +115,17 @@
 			<include refid="condition_sql" />
 		</where>
 		<![CDATA[ order by id desc]]>
+	</select>
+	
+	<select id="getGoodsInfoByCondation" parameterType="goods" resultMap="BaseResultMap">
+		select <include refid="base_column_list" /> from
+		<include refid="table" />
+		<where>
+			<if test="goodsNo != null and goodsNo !='' ">
+				and goods_no = #{goodsNo,jdbcType=VARCHAR}
+			</if>
+		</where>
+		limit 1
 	</select>
 
 

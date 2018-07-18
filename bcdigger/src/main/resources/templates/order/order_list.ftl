@@ -27,10 +27,10 @@
 	                  	</#if>
                   	</td>
                   	<td>
-                  		<#if order.state == 10000>
-                  			<a href="###" onclick="editOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >编辑</a>
+                  		<#if order.state == 10000 || order.state == 10050>
+                  			<a href="###" onclick="openOrder(${(order.id)!0},'edit')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >编辑</a>
 				  		<#else>
-				  			<a href="###" onclick="viewOrder(${(order.id)!0})" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
+				  			<a href="###" onclick="openOrder(${(order.id)!0},'view')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
 				  		</#if>
 				  	</td>
                 </tr>
