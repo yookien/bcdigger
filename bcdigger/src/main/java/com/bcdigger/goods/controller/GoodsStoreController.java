@@ -54,7 +54,7 @@ public class GoodsStoreController {
 	@ResponseBody
 	public Map<String, Object> addGoodsInstore(GoodsInstoreBiz goodsInstoreBiz,HttpServletRequest request){
 		Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
-adminId=1;
+//adminId=1;
 		Map<String, Object> map = new HashMap<>();  
 		try{
 			GoodsOrderItem goodsOrderItem = goodsOrderItemService.getGoodsOrderItemById(goodsInstoreBiz.getGoodsOrderItemId());
@@ -156,7 +156,7 @@ adminId=1;
 	public String getGoodsInstoreAdds(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo,ModelMap map,HttpServletRequest request) {
 		try{
 			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
-adminId=1;
+//adminId=1;
 			Admin admin=adminService.getAdmin(adminId);
 			if(pageInfo==null){
 				pageInfo=new PageInfo();

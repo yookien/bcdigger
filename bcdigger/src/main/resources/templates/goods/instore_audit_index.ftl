@@ -175,7 +175,6 @@ function updateInStore(auditType,instoreInfos){
 		var pars = "auditType="+auditType+"&goodsOrderItemId="+instoreInfos[i].goodsOrderItemId+
 			"&goodsInstoreId="+instoreInfos[i].goodsInstoreId+
 			"&inQuantity="+instoreInfos[i].inQuantity;
-		alert(pars);
 		$.ajax({
 			url: '/goods/updateInstoreInfo',
 			type:'POST',
@@ -183,15 +182,16 @@ function updateInStore(auditType,instoreInfos){
 			dataType:'JSON',
 			success:function (json) {
 				if(json.result==1){
-					continue;
+					if((instoreInfos.length-1) == i){
+						getGoodsInStoreAudits();
+						$("#close_btn").click();
+					}
 				}else{
 					alert(json.result);
 				}
 			}
 		})
 	}
-	getGoodsInStoreAudits();
-	$("#close_btn").click();
 }
 
 </script>

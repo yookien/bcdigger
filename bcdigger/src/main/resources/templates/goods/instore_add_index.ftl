@@ -170,14 +170,16 @@ function addInStore(instoreInfos){
 	
 	for (var i in instoreInfos ){
 		var inQuantity = $("#inQuantity"+i).val()
-		alert(inQuantity)
-		if(inQuantity==""||inQuantity==0){
+		if(isNaN(inQuantity) || inQuantity=="" || inQuantity==0){
+			if((instoreInfos.length-1) == i){
+				getGoodsInStoreAdds();
+				$("#close_btn").click();
+			}
 			continue;
 		}
 		var pars = "goodsOrderItemId="+instoreInfos[i].goodsOrderItemId+
 			"&storeId="+instoreInfos[i].storeId+
 			"&inQuantity="+inQuantity;
-		alert(pars);
 		$.ajax({
 			url: '/goods/addGoodsInstore',
 			type:'POST',
@@ -185,15 +187,17 @@ function addInStore(instoreInfos){
 			dataType:'JSON',
 			success:function (json) {
 				if(json.result==1){
-					continue;
+					if((instoreInfos.length-1) == i){
+						getGoodsInStoreAdds();
+						$("#close_btn").click();
+					}
 				}else{
 					alert(json.result);
 				}
 			}
 		})
 	}
-	getGoodsInStoreAdds();
-	$("#close_btn").click();
+	
 }
 
 </script>
