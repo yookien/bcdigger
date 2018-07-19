@@ -491,7 +491,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			JSONObject jsonModel = new JSONObject();
 			
 			jsonModel.put("FBillTypeID", KingdeeUtil.getFNumber("XSDD01_SYS"));// 标准销售单
-			jsonModel.put("FDate", KingdeeUtil.getDateForString(goodsOrder.getAddTime()));
+			jsonModel.put("FDate", KingdeeUtil.getDateForString(DateTime.getDateBeforeDay(goodsOrder.getAddTime(),1)));
 			jsonModel.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId)); //销售组织
 			//jsonModel.put("FBillNo", "goodsOrder.getOrderNo()");
 			jsonModel.put("FCustId", KingdeeUtil.getFNumber(goodsOrder.getStoreKingdeeCustNo()));// 客户
@@ -520,12 +520,18 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 				//jsEntry.put("FTaxAmount", 16.00);// 税额
 				//jsEntry.put("FDiscount", 0);// 折扣额
 				//jsEntry.put("FAllAmount", 0);// 销售额
-
 				jsEntry.put("FDeliveryDate", KingdeeUtil.getDateForString(item.getInstoreTime()));
 				jsEntry.put("FSettleOrgIds",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
 				jsArrEntry.add(jsEntry);
 			}
 			jsonModel.put("FSaleOrderEntry", jsArrEntry);
+			
+			/**JSONArray saleOrderPlanEntry = new JSONArray();
+			JSONObject jsEntry = new JSONObject();
+			jsEntry.put("FPlanDeliveryDate", KingdeeUtil.getDateForString(DateTime.getDateBeforeDay(goodsOrder.getAddTime(),-1)));
+			saleOrderPlanEntry.add(jsEntry);
+			jsonModel.put("FSaleOrderPlan", saleOrderPlanEntry);*/
+			
 			jsonData.put("Model", jsonModel);
 			json.put("data", jsonData);
 			// 设置json格式
@@ -542,6 +548,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			if (result.getStatusLine().getStatusCode() == 200) {
 				// 读取服务器返回过来的json字符串数据
 				str = EntityUtils.toString(result.getEntity());
+				System.out.println("result:"+str);
 				return str;
 			}
 		} catch (Exception e) {
