@@ -520,7 +520,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 				//jsEntry.put("FTaxAmount", 16.00);// 税额
 				//jsEntry.put("FDiscount", 0);// 折扣额
 				//jsEntry.put("FAllAmount", 0);// 销售额
-				jsEntry.put("FDeliveryDate", KingdeeUtil.getDateForString(item.getInstoreTime()));
+				jsEntry.put("FDeliveryDate", KingdeeUtil.dateToString(item.getInstoreTime()));
 				jsEntry.put("FSettleOrgIds",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
 				jsArrEntry.add(jsEntry);
 			}

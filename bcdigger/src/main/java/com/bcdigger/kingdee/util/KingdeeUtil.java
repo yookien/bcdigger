@@ -124,12 +124,26 @@ public class KingdeeUtil {
 	}
 	
    /**
-    * 得到年月日
+    * 得到年月日 小时 分秒
     * @param date
     * @return
     */
    public static String getDateForString(Date date){
 	   SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+       String dateString=sdf.format(date);   
+       return dateString;
+   }
+   /**
+    * 得到年月日
+    * @Description:
+    * @param date
+    * @return
+    * @return String
+    * @author liubei
+    * @date 2018年7月19日
+    */
+   public static String dateToString(Date date){
+	   SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
        String dateString=sdf.format(date);   
        return dateString;
    }
