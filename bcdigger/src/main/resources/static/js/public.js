@@ -59,3 +59,49 @@ Date.prototype.Format = function(fmt) {
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
   return fmt;   
 }
+
+//全选
+function checkedAllBox(name) {
+	var el = document.getElementsByTagName("input");
+	var len = el.length;
+	for (var i = 0; i < len; i++) {
+		if ((el[i].type == "checkbox") && (el[i].name == name)) {
+			el[i].checked = true;
+		}
+	}
+}
+
+//至少选择一个
+function checkedLestOne(name) {
+	var el = document.getElementsByTagName("input");
+	var len = el.length;
+	for (var i = 0; i < len; i++) {
+		if ((el[i].type == "checkbox") && (el[i].name == name)) {
+			if(el[i].checked == true)
+				return true;
+		}
+	}
+	return false;
+}
+
+//全不选
+function unCheckedAllBox(name) {
+	var el = document.getElementsByTagName("input");
+	var len = el.length;
+	for (var i = 0; i < len; i++) {
+		if ((el[i].type == "checkbox") && (el[i].name == name)) {
+			el[i].checked = false;
+		}
+	}
+}
+
+//反选
+function switchCheckedBox(name) {
+	var el = document.getElementsByTagName("input");
+	var len = el.length;
+	for (var i = 0; i < len; i++) {
+		if ((el[i].type == "checkbox") && (el[i].name == name)) {
+			el[i].checked = !el[i].checked;
+		}
+	}
+}

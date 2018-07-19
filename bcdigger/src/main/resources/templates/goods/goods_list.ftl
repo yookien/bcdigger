@@ -2,7 +2,7 @@
   <table id="datatable" class="table table-striped table-bordered">
       <thead>
         <tr>
-        	<th>选择</th>
+        	<th><a href="javascript:switchCheckedBox('goodsInfos')">选择</a></th>
           	<th>物料编码</th>
           	<th>物料名称</th>
           	<th>规格型号</th>

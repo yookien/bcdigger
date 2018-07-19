@@ -56,6 +56,12 @@
 		)
 	</insert>
 	
+	<delete id="deleteById" parameterType="Integer" >
+		delete from
+		<include refid="table" />
+		where id = #{id}
+	</delete>
+	
 	<update id="update" parameterType="goodsOrderItem">
 		update
 		<include refid="table" />

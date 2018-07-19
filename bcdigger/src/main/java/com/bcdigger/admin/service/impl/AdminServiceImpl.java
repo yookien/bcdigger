@@ -41,6 +41,19 @@ public class AdminServiceImpl implements AdminService {
 		return admin;
 	}
 	
+	public Admin getAdminInfoById(Admin admin){
+		try{
+			if(admin==null || admin.getId() <= 0 ){
+				return null;
+			}
+			admin = adminDao.getAdminInfoById(admin);
+		}catch(Exception e){
+			e.printStackTrace();
+			admin = null;
+		}
+		return admin;
+	}
+	
 	@Override
 	public PageInfo<Admin> getAdmins(String name, PageInfo pageInfo) {
 		

@@ -41,6 +41,32 @@ public class GoodsOrderController {
 	@Autowired
 	private AdminService adminService;
 	
+	@RequestMapping(value ="/getUserInfo",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> getUserInfo(HttpServletRequest request){
+		Map<String, Object> map = new HashMap<>();  
+		try{
+			// 获取用户登录信息
+			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+			if(adminId == null || adminId < 1){
+				map.put("result", 10001);// 用户未登录
+				return map;
+			}
+			Admin admin = new Admin();
+			admin.setId(adminId);
+			admin = adminService.getAdminInfoById(admin);
+			if( admin != null){
+				map.put("storeName", admin.getStoreName());
+			}
+			map.put("now", new Date());// 传递当前时间
+			map.put("result", 10000);
+		}catch(Exception e){
+			e.printStackTrace();
+			map.put("result", 0);
+		}
+		return map;
+	}
+	
 	@RequestMapping(value ="/addGoodsOrder",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public Map<String, Object> addGoodsOrder(HttpServletRequest request, GoodsOrder goodsOrder,
@@ -148,18 +174,67 @@ public class GoodsOrderController {
 	 */
 	@RequestMapping(value ="/updateGoodsOrder",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> updateGoodsOrder(GoodsOrder goodsOrder){
+	public Map<String, Object> updateGoodsOrder(HttpServletRequest request, GoodsOrder goodsOrder,
+			GoodsOrderItemModel orderItemModel,GoodsOrderItem goodsOrderItem){
 		Map<String, Object> map = new HashMap<>();  
 		try{
-			// 参数校验，待完善
-			if(goodsOrder == null){
-				map.put("result", -1);// 参数为空
+			// 获取用户登录信息
+			Integer adminId=(Integer)request.getSession().getAttribute(CacheConstant.ADMIN_SESSION_ID);
+			if(adminId == null || adminId < 1){
+				map.put("result", 10001);// 用户未登录
 				return map;
 			}
+			Admin admin=adminService.getAdmin(adminId);
+			if( admin == null || admin.getId() < 1){
+				map.put("result", 10001);// 用户未登录
+				return map;
+			}
+			if( admin.getStoreId() < 1){
+				map.put("result", 10002);// 用户未绑定订货单
+				return map;
+			}
+			// 参数校验
+			if(goodsOrder == null || goodsOrder.getId() <= 0 ){
+				map.put("result", 10003);// 参数为空
+				return map;
+			}
+			goodsOrder.setOrderUserId(admin.getId());
+			
+			if( orderItemModel != null ){
+				// 货号列表
+				List<String> goodsNos = orderItemModel.getGoodsNo();
+				// 数量列表
+				List<Integer> quantitys = orderItemModel.getQuantity();
+				// 要货时间列表
+				List<String> instoreTimes = orderItemModel.getInstoreTimeStr();
+				// 备注列表
+				List<String> memos = orderItemModel.getMemo();
+				// 订单明细id列表
+				List<Integer> orderItemId = orderItemModel.getOrderItemId();
+				// 参数不合法
+				if(goodsNos==null || goodsNos.size()<1 || quantitys == null 
+					|| instoreTimes == null || memos == null || orderItemId == null
+					|| goodsNos.size() != quantitys.size()
+					|| goodsNos.size() != instoreTimes.size() 
+					|| goodsNos.size() != memos.size() 
+					|| goodsNos.size() != orderItemId.size() ){
+					map.put("result", 10004);// 参数校验失败
+					return map;
+				}
+				
+			} else {
+				map.put("result", 10005);// 订单明细数据为空
+				return map;
+			}
+			
 			Date now=new Date();
 			goodsOrder.setUpdateTime(now);
-			int result = goodsOrderService.updateGoodsOrder(goodsOrder);
-			map.put("result", result);//更新成功
+			JSONObject json = goodsOrderService.updateGoodsOrder(goodsOrder,orderItemModel);
+			if(json == null ){
+				map.put("result", 0);
+			} else {
+				map.put("result", json.get("result"));
+			}
 		}catch(Exception e){
 			map.put("result", 0);//系统异常
 			e.printStackTrace();

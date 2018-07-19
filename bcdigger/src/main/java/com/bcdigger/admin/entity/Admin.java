@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.bcdigger.common.entity.BaseEntity;
 
-public class Admin extends BaseEntity{
-	
+public class Admin extends BaseEntity {
+
 	private String nickname;
 	private int storeId;
 	private String name;
@@ -27,11 +27,12 @@ public class Admin extends BaseEntity{
 	private int userLevel;
 	private int pwdErrorCount;
 	private Date pwdErrorTime;
-	
+
 	private String userPermissionStr;
-	//查询的开始时间和结束时间
+	// 查询的开始时间和结束时间
 	private String startTime;
 	private String endTime;
+	private String storeName;
 
 	public String getStartTime() {
 		return startTime;
@@ -224,7 +225,12 @@ public class Admin extends BaseEntity{
 	public void setStoreId(int storeId) {
 		this.storeId = storeId;
 	}
-	
-	
 
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
 }

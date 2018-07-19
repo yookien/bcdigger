@@ -120,7 +120,7 @@ public class GoodsOrderItem extends BaseEntity {
 
 	public String getMemo() {
 		if(memo == null || "无".equals(memo)){
-			memo = "";
+			memo = " ";
 		}
 		return memo;
 	}

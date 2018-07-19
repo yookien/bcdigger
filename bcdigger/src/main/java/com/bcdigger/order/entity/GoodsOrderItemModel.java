@@ -31,6 +31,10 @@ public class GoodsOrderItemModel {
 	 * 备注列表
 	 */
 	private List<String> memo;
+	/**
+	 * 订单明细id列表
+	 */
+	private List<Integer> orderItemId;
 
 	public List<String> getGoodsNo() {
 		return goodsNo;
@@ -62,6 +66,14 @@ public class GoodsOrderItemModel {
 
 	public void setMemo(List<String> memo) {
 		this.memo = memo;
+	}
+
+	public List<Integer> getOrderItemId() {
+		return orderItemId;
+	}
+
+	public void setOrderItemId(List<Integer> orderItemId) {
+		this.orderItemId = orderItemId;
 	}
 
 }

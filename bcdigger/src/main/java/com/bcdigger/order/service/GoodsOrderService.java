@@ -24,7 +24,7 @@ public interface GoodsOrderService {
 	 * @param GoodsOrder
 	 * @return
 	 */
-	public int updateGoodsOrder(GoodsOrder goodsOrder);
+	public JSONObject updateGoodsOrder(GoodsOrder goodsOrder,GoodsOrderItemModel orderItemModel);
 	
 	/**
 	 * @Description: 审核订单

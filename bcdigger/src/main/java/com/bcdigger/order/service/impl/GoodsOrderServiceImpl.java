@@ -2,6 +2,7 @@ package com.bcdigger.order.service.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.net.URI;
@@ -175,8 +176,173 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 	}
 
 	@Override
-	public int updateGoodsOrder(GoodsOrder goodsOrder) {
-		return goodsOrderDao.update(goodsOrder);
+	public JSONObject updateGoodsOrder(GoodsOrder goodsOrder, GoodsOrderItemModel orderItemModel) {
+		JSONObject json = new JSONObject();
+		// 货号列表
+		List<String> goodsNos = null;
+		// 数量列表
+		List<Integer> quantitys = null;
+		// 要货时间列表
+		List<String> instoreTimes = null;
+		// 备注列表
+		List<String> memos = null;
+		// 订单明细id列表
+		List<Integer> orderItemId = null;
+		// 订单号
+		String orderNo = null;
+		
+		// 订单明细map，用于处理删减的订单明细
+		Map<Integer,GoodsOrderItem> orderItemMap = new HashMap<Integer,GoodsOrderItem>();
+		try{
+			// 参数校验
+			if( goodsOrder == null || goodsOrder.getId() <= 0){
+				json.put("result", 10003);
+				return json;
+			}
+			// 校验订单明细参数
+			if(orderItemModel != null){
+				goodsNos = orderItemModel.getGoodsNo();
+				quantitys = orderItemModel.getQuantity();
+				instoreTimes = orderItemModel.getInstoreTimeStr();
+				memos = orderItemModel.getMemo();
+				orderItemId = orderItemModel.getOrderItemId();
+				// 参数不合法
+				if(goodsNos==null || goodsNos.size()<1 || quantitys == null 
+					|| instoreTimes == null || memos == null || orderItemId == null
+					|| goodsNos.size() != quantitys.size()
+					|| goodsNos.size() != instoreTimes.size() 
+					|| goodsNos.size() != memos.size()
+					|| goodsNos.size() != orderItemId.size()){
+					json.put("result", 10004);// 参数校验失败
+					return json;
+				}
+			} else {
+				json.put("result", 10005);// 订单明细数据为空
+				return json;
+			}
+			// 校验并设置更新参数
+			GoodsOrder goodsOrderTemp = goodsOrderDao.getById(goodsOrder.getId());
+			if( goodsOrderTemp != null && goodsOrderTemp.getId() > 0){
+				if( goodsOrderTemp.getState() == GoodsOrderStateConstant.INIT_STATE
+						|| goodsOrderTemp.getState() == GoodsOrderStateConstant.REFUSE_AUDIT_STATE ){
+					// 设置需要更新的参数
+					Date now = new Date();
+					goodsOrderTemp.setUpdateTime(now);
+					//goodsOrderTemp.setOrderType(goodsOrder.getOrderType());
+					goodsOrder = goodsOrderTemp;
+				} else {
+					json.put("result", 10007);// 只能编辑 初始及审核拒绝
+					return json;
+				}
+			} else {
+				json.put("result", 10008);// 未查到指定订单
+				return json;
+			}
+			GoodsOrderItem goodsOrderItem = new GoodsOrderItem();
+			goodsOrderItem.setGoodsOrderId(goodsOrder.getId());
+			// 订单明细列表
+			List<GoodsOrderItem> orderItemlist = goodsOrderItemDao.getGoodsOrderItems(goodsOrderItem);
+			if( orderItemlist != null && orderItemlist.size() > 0 ){
+				for(int i=0,j=orderItemlist.size(); i<j; i++){
+					goodsOrderItem = orderItemlist.get(i);
+					if( goodsOrderItem == null ){
+						continue;
+					}
+					orderItemMap.put(goodsOrderItem.getId(), goodsOrderItem);
+				}
+			}
+		}catch(Exception e){
+			json.put("result", 0);// 系统异常
+			e.printStackTrace();
+			return json;
+		}
+		
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		TransactionStatus status = transactionManager.getTransaction(def);
+		try{
+			// 更新订货单信息
+			int result = goodsOrderDao.update(goodsOrder);
+			if( result != 1){
+				json.put("result", 10009);// 更新订单信息失败
+				// 事务回滚
+				transactionManager.rollback(status);
+				return json;
+			}
+			// 添加订单明细
+			GoodsOrderItem goodsOrderItem = null;
+			String goodsNo;
+			String instoreTimeStr;
+			Date instoreTime;
+			for( int i=0,j=goodsNos.size(); i<j; i++){
+				// 需要新增
+				if(orderItemId.get(i) == null || orderItemId.get(i) == 0 
+						|| orderItemMap.get(orderItemId.get(i)) == null ){
+					goodsOrderItem = new GoodsOrderItem();
+					
+					goodsNo = goodsNos.get(i);
+					Map<String,Object> paramMap = new HashMap<String,Object>();
+					paramMap.put("goodsNo", goodsNo);
+					Goods goods = goodsDao.getBy(paramMap);
+					if(goods == null || goods.getId() < 0 || goods.getState() != 1){
+						json.put("result", 10006);// 商品不存在 或者 已下架
+						// 事务回滚
+						transactionManager.rollback(status);
+						return json;
+					}
+					goodsOrderItem.setGoodsNo(goodsNo);
+					goodsOrderItem.setGoodsId(goods.getId());
+					goodsOrderItem.setGoodsOrderId(goodsOrder.getId());
+					goodsOrderItem.setOrderNo(orderNo);
+					goodsOrderItem.setOrderQuantity(quantitys.get(i));
+					goodsOrderItem.setMemo(memos.get(i));
+					
+					instoreTimeStr = instoreTimes.get(i);
+					instoreTime=DateTime.parseDate(instoreTimeStr);
+					goodsOrderItem.setInstoreTime(instoreTime);
+					// 添加订货单明细
+					goodsOrderItemDao.insert(goodsOrderItem);
+				} else {// 需要更新信息
+					goodsOrderItem = orderItemMap.get(orderItemId.get(i));
+					
+					// 设置可以修改的参数
+					goodsOrderItem.setOrderQuantity(quantitys.get(i));
+					goodsOrderItem.setMemo(memos.get(i));
+					
+					instoreTimeStr = instoreTimes.get(i);
+					instoreTime=DateTime.parseDate(instoreTimeStr);
+					
+					goodsOrderItem.setInstoreTime(instoreTime);
+					goodsOrderItemDao.update(goodsOrderItem);
+					// 移除已经更新过的订单明细
+					orderItemMap.remove(orderItemId.get(i));
+				}
+			}
+			
+			// 删除订单明细列表里面剩余的 订单明细
+			if (!orderItemMap.isEmpty()) {
+				Iterator<Map.Entry<Integer,GoodsOrderItem>> iterator = orderItemMap.entrySet().iterator();
+				while (iterator.hasNext()) {
+					Map.Entry<Integer,GoodsOrderItem> entry = iterator.next();
+					Integer itemId = entry.getKey();
+					if(itemId != null && itemId > 0){
+						this.goodsOrderItemDao.deleteById(itemId);
+					}
+					//entry.getValue();
+				}
+			}
+			
+			// 更新订单成功
+			json.put("result", 10000);
+			
+			// 事务提交
+			transactionManager.commit(status);
+		}catch(Exception e){
+			// 事务回滚
+			transactionManager.rollback(status);
+			json.put("result", 0);// 系统异常
+			e.printStackTrace();
+		}
+		return json;
 	}
 
 	@Override

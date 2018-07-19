@@ -34,9 +34,9 @@
                      </div>
                      <div class="col-md-12 col-sm-12 col-xs-12 form-group">
                      	<div class="col-md-4 col-xs-12">客户： <middle id="storeChineseNameSpan"></middle></div>
-            			<div class="col-md-2 col-xs-12">下单人：<middle id="operatorNameSpan">  </middle></div>
-            			<div class="col-md-2 col-xs-12">单据状态：<middle id="orderStateSpan"> </middle></div>
-            			<div class="col-md-4 col-xs-12">单据类型：<middle id="orderTypeSpan"> </middle></div>
+            			<div class="col-md-4 col-xs-12">下单人：<middle id="operatorNameSpan">  </middle></div>
+            			<div class="col-md-4 col-xs-12">单据状态：<middle id="orderStateSpan"> </middle></div>
+            			<!--<div class="col-md-4 col-xs-12">单据类型：<middle id="orderTypeSpan"> </middle></div>-->
             			
             		</div>
             		<table class="table table-bordered">

@@ -1,5 +1,7 @@
 package com.bcdigger.admin.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.bcdigger.admin.entity.Admin;
 import com.bcdigger.common.exceptions.BizException;
 import com.bcdigger.core.dao.BaseDaoImpl;
+import com.bcdigger.order.entity.GoodsOrderItem;
 
 @Repository("adminDao")
 public class AdminDao extends BaseDaoImpl<Admin>{
@@ -28,6 +31,16 @@ public class AdminDao extends BaseDaoImpl<Admin>{
 			throw BizException.DB_UPDATE_RESULT_0;
 
 		return result;
+	}
+	
+	public Admin getAdminInfoById(Admin admin) {
+		try{
+			admin= sqlSession.selectOne("getAdminInfoById", admin);
+		}catch(Exception e){
+			e.printStackTrace();
+			admin = null;
+		}
+		return admin;
 	}
 	
 }

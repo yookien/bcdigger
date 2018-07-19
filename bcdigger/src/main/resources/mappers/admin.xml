@@ -11,8 +11,7 @@
 		<result property="name" column="name" jdbcType="VARCHAR" />
 		<result property="password" column="password" jdbcType="VARCHAR" />
 		<result property="sex" column="sex" jdbcType="BIGINT"/>  <!-- 1男  2 女 -->
- 		<result property="age" column="age" jdbcType="BIGINT"/>  
-		<result property="department" column="department" jdbcType="VARCHAR"/>
+ 		<result property="age" column="age" jdbcType="BIGINT"/>
 		<result property="duty" column="duty" jdbcType="VARCHAR"/>
 		<result property="telephone" column="telephone" jdbcType="VARCHAR"/>
 		<result property="mobile" column="mobile" jdbcType="VARCHAR"/>
@@ -27,6 +26,9 @@
 		<result property="userLevel" column="user_level" jdbcType="BIGINT"></result>
 		<result property="pwdErrorCount" column="pwd_error_count" jdbcType="BIGINT"></result>
 		<result property="pwdErrorTime" column="pwd_error_time" jdbcType="TIMESTAMP"></result>
+	</resultMap>
+	<resultMap id="adminResult" extends="BaseResultMap" type="com.bcdigger.admin.entity.Admin">
+		<result property="storeName" column="chinese_name" jdbcType="VARCHAR"></result>
 	</resultMap>
 
 	<sql id="condition_sql">
@@ -152,6 +154,12 @@
 		<![CDATA[ order by id desc]]>
 	</select>
 
-
+	<select id="getAdminInfoById" parameterType="com.bcdigger.admin.entity.Admin" resultMap="adminResult">
+		select a.id,a.store_id,a.nickname,a.name,a.password,a.sex,a.age,a.duty,a.telephone,
+			a.mobile,a.email,a.address,a.add_time,a.update_time,a.state,a.department_id,a.open_id,a.entry_date,
+			a.user_level,a.pwd_error_count,a.pwd_error_time,s.chinese_name
+		from bcd_admin a left join bcd_store s on a.store_id = s.id
+		where a.id = #{id}
+	</select>
 
 </mapper>

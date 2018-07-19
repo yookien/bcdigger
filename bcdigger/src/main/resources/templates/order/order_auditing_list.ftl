@@ -29,9 +29,9 @@
                   	</td>
                   	<td>
 	                  	<#if order.state == 10000>
-	                  		<a onclick="openOrder(${(order.id)!0},'auditing')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >审核</a>
+	                  		<a href="###" onclick="openOrder(${(order.id)!0},'auditing')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >审核</a>
 					  	<#else>
-					  		<a onclick="openOrder(${(order.id)!0},'view')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
+					  		<a href="###" onclick="openOrder(${(order.id)!0},'view')" name="editOrderBt" data-toggle="modal" data-target="#myModal" orderId="${(order.id)!}" >查看</a>
 					  	</#if>
 				  	</td>
                 </tr>
