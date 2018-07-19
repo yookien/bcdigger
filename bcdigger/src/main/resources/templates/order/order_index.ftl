@@ -59,7 +59,9 @@
 	                          <th width="12%">规格型号</th>
 	                          <th width="10%">销售单位</th>
 	                          <th width="10%">销售数量</th>
-	                          <th width="15%">要货日期</th>
+	                          <th width="15%">要货日期
+	                          	<a onclick="copyFirstTime('instoreTime')">填充</a>
+	                          </th>
 	                          <th width="15%">备注</th>
 	                        </tr>
 	                      </thead>
@@ -102,28 +104,30 @@
                 </button>  
                 <h4 class="modal-title" id="myModalLabel">选择商品</h4>
             </div>
-            
-			<div class="form-group">
-				<form id="searchGoodsInfoForm">
-					<input type="hidden" name="like" value="1"> 
-	                <label class="control-label col-md-2 col-sm-2 col-xs-4 ">商品名称（包含）</label>
-	                <div class="col-md-2 col-sm-2 col-xs-3 ">
-	                    <input type="text" class="form-control" name="goodsName" value="">
-	                </div>
-	                  
-	                <label class="control-label col-md-2 col-sm-2 col-xs-3 ">商品编号（包含）</label>
-	                <div class="col-md-2 col-sm-2 col-xs-3">
-	                    <input type="text" class="form-control" name="goodsNo" value="" >
-	                </div>
-	                  
-	                <button type="button" class="btn btn-default" onclick="getGoodsInfo()">检索</button> 
-                </form>	
-			</div>
-			
-            <form id="chooseGoodsInfoForm">
-	            <div class="modal-body" id="goodsInfoDatas">
-	            </div>
-            </form>
+            <div class="modal-body"> 
+				<div class="form-group">
+					<form id="searchGoodsInfoForm">
+						<input type="hidden" name="like" value="1">
+						
+		                <label class="control-label col-md-1 col-sm-1 col-xs-3 ">商品名称（包含）</label>
+		                <div class="col-md-2 col-sm-2 col-xs-3 ">
+		                    <input type="text" class="form-control" name="goodsName" value="">
+		                </div>
+		                  
+		                <label class="control-label col-md-1 col-sm-1 col-xs-3 ">商品编号（包含）</label>
+		                <div class="col-md-2 col-sm-2 col-xs-3">
+		                    <input type="text" class="form-control" name="goodsNo" value="" >
+		                </div>
+		                  
+		                <button type="button" class="btn btn-default" onclick="getGoodsInfo()">检索</button> 
+	                </form>	
+				</div>
+				
+	            <form id="chooseGoodsInfoForm">
+		            <div class="modal-body" id="goodsInfoDatas">
+		            </div>
+	            </form>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="goods_close_btn">关闭</button>  
                 <button type="button" class="btn btn-primary" id="choose_goods_btn">返回数据</button>
@@ -147,16 +151,34 @@ $(function(){
 	initValidator();
 	
 	// 初始化日历
-	initDaterangepicker('instoreTime');
+	//initDaterangepicker('instoreTime');
 	
 
 });
 
+// 向下填充时间
+function copyFirstTime(className){
+	var instoreTimeStr='';
+	$('.'+className).each(function(index){
+		if( index == 0 ){
+			instoreTimeStr = $(this).val();
+			if( instoreTimeStr == undefined || instoreTimeStr == '' ){
+				// alert('第一行时间为空，无法自动填充');
+				// return;
+				instoreTimeStr = dateFormatStr(new Date(new Date() - 3));
+				$(this).val(instoreTimeStr)
+			}
+		} else if( $(this).val() == undefined || $(this).val() == '' ){
+			$(this).val(instoreTimeStr);
+		}
+	});
+}
 
 // 初始化日历
 function initDaterangepicker(className){
 	$('.'+className).daterangepicker({
 		 startDate: moment().startOf('day'),
+		 minDate: moment().startOf('day'),
          dateLimit : {  
              days : 90
          }, //起止时间的最大间隔  
@@ -167,11 +189,10 @@ function initDaterangepicker(className){
          timePicker12Hour : false, //是否使用12小时制来显示时间  
          opens : 'right', //日期选择框的弹出位置  
          buttonClasses : [ 'btn btn-default' ],  
-         //applyClass : 'btn-small btn-primary blue',  
-         //cancelClass : 'btn-small',  
-         //format : 'YYYY-MM-DD HH:mm:ss', //控件中from和to 显示的日期格式  
-         format : 'YYYY-MM-DD', //控件中from和to 显示的日期格式  
-         separator : ' to ',  
+         applyClass : 'btn-small btn-primary blue',  
+         cancelClass : 'btn-small',  
+         separator : ' to ', 
+         autoUpdateInput:false,
          locale : {  
              applyLabel : '确定',  
              cancelLabel : '取消',  
@@ -181,13 +202,18 @@ function initDaterangepicker(className){
              daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],  
              monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',  
                      '七月', '八月', '九月', '十月', '十一月', '十二月' ],  
-             firstDay : 1  
+             firstDay : 1  ,
+             format : 'YYYY-MM-DD', //控件中from和to 显示的日期格式  
+             //format : 'YYYY-MM-DD HH:mm:ss', //控件中from和to 显示的日期格式  
          },
-	  	 singleDatePicker: true,
-	  	 singleClasses: "picker_4"
+	  	 singleDatePicker: true
 	}, function(start, end, label) {
-	  	//console.log(start.toISOString(), end.toISOString(), label);
-	  	$('#id').html(start.format('YYYY-MM-DD')); 
+	  	// console.log(start.toISOString(), end.toISOString(), label);
+	  	//$('#className').val(start.format('YYYY-MM-DD')); 
+	});
+	
+	$('.'+className).each(function(index){
+		$(this).data('daterangepicker').autoUpdateInput=true;
 	});
 }
 
@@ -340,7 +366,8 @@ function openOrder(id,type){
 	// 重设form
 	$('#addOrEditOrderForm')[0].reset();
 	$('#myModalLabel').html('订货单信息');
-	
+	// 清空缓存数据
+	$('#choose_goods_tbody').html('');
 	if( type == 'view' ){
 		// 隐藏审核按钮
 		$('.modal-footer').hide();
@@ -372,7 +399,7 @@ function openOrder(id,type){
 					$('#goodsOrderNoSpan').html(order.orderNo);
 				}
 				if(order.addTime != null && order.addTime != undefined){
-					$('#updateTimeSpan').html(fmtDate(order.addTime));
+					$('#updateTimeSpan').html(unixFormatFullStr(order.addTime));
 				}
 				if(order.storeName != null && order.storeName != undefined){
 					$('#storeChineseNameSpan').html(order.storeName);
@@ -394,7 +421,7 @@ function openOrder(id,type){
 							"<td><input type='text' class='form-control' readonly='readonly' value='"+orderItem.goodsModel+"'></td>"+
 							"<td><input type='text' class='form-control' readonly='readonly' value='"+orderItem.goodsUnit+"'></td>"+
 							"<td><input type='text' class='form-control' name='quantity' value='"+orderItem.orderQuantity+"'></td>"+
-							"<td><input class='instoreTime' name='instoreTimeStr' value='"+fmtDate(orderItem.instoreTime)+"'/></td>"+
+							"<td><input class='instoreTime' name='instoreTimeStr' value='"+unixFormatStr(orderItem.instoreTime)+"'/></td>"+
 							"<td><input type='text' class='form-control' id='memo1' name='memo' value='"+orderItem.memo+"'></td></tr>"
 					}
 					$("#choose_goods_tbody").append(htmlStr);
