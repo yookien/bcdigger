@@ -491,7 +491,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			JSONObject jsonModel = new JSONObject();
 			
 			jsonModel.put("FBillTypeID", KingdeeUtil.getFNumber("XSDD01_SYS"));// 标准销售单
-			jsonModel.put("FDate", KingdeeUtil.getDateForString(DateTime.getDateBeforeDay(goodsOrder.getAddTime(),1)));
+			jsonModel.put("FDate", KingdeeUtil.getDateForString(goodsOrder.getAddTime()));
 			jsonModel.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId)); //销售组织
 			//jsonModel.put("FBillNo", "goodsOrder.getOrderNo()");
 			jsonModel.put("FCustId", KingdeeUtil.getFNumber(goodsOrder.getStoreKingdeeCustNo()));// 客户
@@ -511,8 +511,9 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			List<GoodsOrderItem> orderItemList = goodsOrder.getOrderItemList();
 			for (GoodsOrderItem item : orderItemList) {
 				JSONObject jsEntry = new JSONObject();
+				Goods goods = this.goodsDao.getById(item.getGoodsId());
 				jsEntry.put("FMaterialId", KingdeeUtil.getFNumber(item.getGoodsNo())); // 物料单号
-				jsEntry.put("FUnitID", KingdeeUtil.getFNumber("Pcs"));// 单位
+				jsEntry.put("FUnitID", KingdeeUtil.getFNumber(goods.getUnit()));// 单位
 				// 数量
 				jsEntry.put("FQty", item.getOrderQuantity());
 				jsEntry.put("FTaxPrice", 0.0); // 支付单价
@@ -520,17 +521,20 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 				//jsEntry.put("FTaxAmount", 16.00);// 税额
 				//jsEntry.put("FDiscount", 0);// 折扣额
 				//jsEntry.put("FAllAmount", 0);// 销售额
-				jsEntry.put("FDeliveryDate", KingdeeUtil.dateToString(item.getInstoreTime()));
+				jsEntry.put("FDeliveryDate", KingdeeUtil.getDateForString(item.getInstoreTime()));
 				jsEntry.put("FSettleOrgIds",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
+				
+				JSONArray saleOrderPlanEntry = new JSONArray();
+				JSONObject ntryPlan = new JSONObject();
+				ntryPlan.put("FPlanDate", KingdeeUtil.getDateForString(item.getInstoreTime()));
+				saleOrderPlanEntry.add(ntryPlan);
+				jsEntry.put("FOrderEntryPlan", saleOrderPlanEntry);
+				
 				jsArrEntry.add(jsEntry);
 			}
 			jsonModel.put("FSaleOrderEntry", jsArrEntry);
 			
-			/**JSONArray saleOrderPlanEntry = new JSONArray();
-			JSONObject jsEntry = new JSONObject();
-			jsEntry.put("FPlanDeliveryDate", KingdeeUtil.getDateForString(DateTime.getDateBeforeDay(goodsOrder.getAddTime(),-1)));
-			saleOrderPlanEntry.add(jsEntry);
-			jsonModel.put("FSaleOrderPlan", saleOrderPlanEntry);*/
+			
 			
 			jsonData.put("Model", jsonModel);
 			json.put("data", jsonData);

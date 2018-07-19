@@ -64,7 +64,7 @@ public class SyncBaseDataController {
 			syncGoodsInfo();
 
 			// 同步客户信息
-			syncCustomer();
+			// syncCustomer();
 			
 			map.put("result", 1);// 同步成功
 		} catch (Exception e) {
@@ -110,7 +110,8 @@ public class SyncBaseDataController {
 				objjson.put("FilterString", " FModifyDate >= '" + modifyDate +"' and FUSEORGID.FNUMBER='" + KingdeeStdLib.saleOrgId + "' ");// 标准的SQL语句
 				objjson.put("OrderString", "FMaterialID ASC");
 				objjson.put("FieldKeys",
-						"FMaterialID,FNumber,FName,FForbidStatus,FModifyDate,FSpecification,FBaseUnitId,FWEIGHTUNITID,FVOLUMEUNITID,FExpUnit,FGROSSWEIGHT,FVOLUME,FExpPeriod,FCreateDate,FDefaultVendor");
+						"FMaterialID,FNumber,FName,FForbidStatus,FModifyDate,FSpecification,FBaseUnitId,FWEIGHTUNITID,FVOLUMEUNITID"
+						+ ",FExpUnit,FGROSSWEIGHT,FVOLUME,FExpPeriod,FCreateDate,FDefaultVendor,FSaleUnitId");
 				json.put("data", objjson);
 
 				StringEntity entity = new StringEntity(json.toString(), "utf-8");
@@ -151,6 +152,7 @@ public class SyncBaseDataController {
 						
 						// 0FMaterialID,1FNumber,2FName,3FForbidStatus,4FModifyDate,5FSpecification,6FBaseUnitId,
 						// 7FWEIGHTUNITID,8FVOLUMEUNITID,9FExpUnit,10FGROSSWEIGHT,11FVOLUME,12FExpPeriod,13FCreateDate,14FDefaultVendor
+						// 15FSaleUnitId
 						// 解析参数
 						String goodsNo = info.getString(1);// 商品货号
 						String goodsName = info.getString(2);// 商品名称
@@ -176,7 +178,10 @@ public class SyncBaseDataController {
 						int grossweight = info.getInteger(10);// 重量
 						int volume = info.getInteger(11);// 体积
 						int expPeriod = info.getInteger(12);// 保质期
-
+						
+						String saleUnitId=info.getString(15);// 销售单位
+						String model=info.getString(5); // 规格
+						
 						goods.setGoodsNo(goodsNo);
 						goods.setGoodsName(goodsName);
 						goods.setKingdeeCustId(kingdeeCustId);
@@ -184,7 +189,8 @@ public class SyncBaseDataController {
 						goods.setUpdateTime(updateTime);
 						goods.setAddTime(addTime);
 						goods.setState(1);
-						goods.setUnit("PCS");
+						goods.setUnit(saleUnitId);
+						goods.setModel(model);
 						
 						// 调用接口保存
 						goodsService.addOrUpdateGoods(goods);

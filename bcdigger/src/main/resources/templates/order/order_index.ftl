@@ -30,22 +30,13 @@
             <div class="modal-body">  
                    <form class="form-horizontal form-label-left input_mask" id="addOrEditOrderForm">
 						<div class="form-group">
-	                      <div class="col-md-3 col-sm-3 col-xs-4 ">
-	                     	 单据编号：<middle id="goodsOrderNoSpan"> </middle>
-	                      </div>
+	                      <div class="col-md-3">单据编号：<middle id="goodsOrderNoSpan"></middle></div>
 	                      
-	                      <div class="col-md-3 col-sm-3 col-xs-4">
-	                     	 单据日期：<middle id="updateTimeSpan"> </middle>
-	                      </div>
+	                      <div class="col-md-3">金蝶单号：<middle id="kingdeeCustNoSpan"> </middle></div>
 	                      
-	                      <div class="col-md-3 col-sm-3 col-xs-4">
-	                      	门店：<middle id="storeChineseNameSpan"></middle>
-	                      </div>
-	                      <!-- 暂时隐藏 
-	                      <label class="control-label col-md-1 col-sm-1 col-xs-3 ">订货种类</label>
-	                      <div class="col-md-2 col-sm-2 col-xs-3">
-	                        <input type="text" class="form-control">
-	                      </div>-->
+	                      <div class="col-md-3">单据日期：<middle id="updateTimeSpan"> </middle></div>
+	                      
+	                      <div class="col-md-3">门店：<middle id="storeChineseNameSpan"></middle></div>
 	                      
 						</div>
 						
@@ -281,6 +272,8 @@ function addOrderEvent(){
 	$('#goodsOrderNoSpan').html('');
 	$('#updateTimeSpan').html('');
 	$('#storeChineseNameSpan').html('');
+	
+	$('.modal-footer').show();
 	// 加载系统时间及用户所属门店信息
 	$.ajax({
 		url: '/order/getUserInfo',
@@ -373,6 +366,10 @@ function openOrder(id,type){
 				}
 				if(order.storeName != null && order.storeName != undefined){
 					$('#storeChineseNameSpan').html(order.storeName);
+				}
+				
+				if(order.kingdeeCustNo != null && order.kingdeeCustNo != undefined){
+					$('#kingdeeCustNoSpan').html(order.kingdeeCustNo);
 				}
 				
 				var orderItemList = order.orderItemList;
