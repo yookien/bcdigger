@@ -82,4 +82,49 @@ public class GoodsInstoreDao extends BaseDaoImpl<GoodsInstore> {
 		}
 		return list;
 	}
+	
+	/**
+	 * 获取待关闭收货单列表
+	 * @Title: getGoodsInstoreBizs   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: PageInfo<GoodsInstoreBiz>      
+	 * @throws
+	 */
+	public PageInfo<GoodsInstoreBiz> findCloseOrders(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo) {
+		
+		try{
+			Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+			List<GoodsInstoreBiz> list= sqlSession.selectList("listCloseOrders", goodsInstoreBiz);
+			pageInfo.setTotal(page.getTotal());
+			pageInfo.setPages(page.getPages());
+			pageInfo.setIsFirstPage(page.getPageNum()==1?true:false);
+			pageInfo.setIsLastPage(page.getPageNum()==page.getPages()?true:false);
+			pageInfo.setList(list);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return pageInfo;
+	}
+	
+	/**
+	 * 根据订货单id查找需关闭的收货单详细信息
+	 * @Title: getGoodsInstoreBizs   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: List<GoodsInstoreBiz>      
+	 * @throws
+	 */
+	public List<GoodsInstoreBiz> findCloseOrderById(GoodsInstoreBiz goodsInstoreBiz){
+		
+		List<GoodsInstoreBiz> list = null;
+		try{
+			list= sqlSession.selectList("listCloseOrderById", goodsInstoreBiz);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

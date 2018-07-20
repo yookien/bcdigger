@@ -36,7 +36,7 @@ public class AdminLoginInterceptor extends  HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		/**
+		
 		if (!handler.getClass().isAssignableFrom(HandlerMethod.class)) { 
 			return true; 
 		}
@@ -56,7 +56,7 @@ public class AdminLoginInterceptor extends  HandlerInterceptorAdapter {
 			}else{ 
 				return true; 
 			} 
-		} */
+		}
 		return true; 
 	}
 	

@@ -135,7 +135,7 @@ function addInstore(id){
 				var html = ""
 				for (var i in instoreInfos ){
 					if(i==0){
-						$('#goodsOrderNoSpan').text(instoreInfos[i].goodsOrderNo);
+						$('#goodsOrderNoSpan').text(instoreInfos[i].orderNo);
 						$('#updateTimeSpan').text(instoreInfos[i].updateTime);
 						$('#orderTypeSpan').text(instoreInfos[i].orderType);
 						$('#orderStateSpan').text("收货");

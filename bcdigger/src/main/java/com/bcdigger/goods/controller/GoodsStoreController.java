@@ -25,8 +25,10 @@ import com.bcdigger.core.annotation.AdminAuth;
 import com.bcdigger.goods.entity.GoodsInstore;
 import com.bcdigger.goods.entity.GoodsInstoreBiz;
 import com.bcdigger.goods.service.GoodsInstoreService;
+import com.bcdigger.order.entity.GoodsOrder;
 import com.bcdigger.order.entity.GoodsOrderItem;
 import com.bcdigger.order.service.GoodsOrderItemService;
+import com.bcdigger.order.service.GoodsOrderService;
 
 /**
  * 
@@ -44,6 +46,8 @@ public class GoodsStoreController {
 	
 	@Autowired
 	private GoodsInstoreService goodsInstoreService;
+	@Autowired
+	private GoodsOrderService goodsOrderService;
 	@Autowired
 	private GoodsOrderItemService goodsOrderItemService;
 	@Autowired
@@ -254,6 +258,79 @@ public class GoodsStoreController {
 				goodsInstore.setState(2);
 				goodsInstoreService.updateGoodsInstore(goodsInstore);
 			}
+		}
+		map.put("result", 1);
+		return map;
+	}
+	
+	/**
+	 * 关闭订货单首页
+	 * @Title: goodsInstoreAuditIndex   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @return      
+	 * @return: String      
+	 * @throws
+	 */
+	@RequestMapping(value ="/closeOrderIndex")
+	public String closeOrderIndex() {
+		return "/goods/close_order_index";
+	}
+	
+	/**
+	 * @Description: 分页查找订货单列表（待关闭）
+	 * @param pageNum
+	 * @return Map<String,Object>  
+	 * @date 2018年3月25日
+	 */
+	@RequestMapping(value ="/getCloseOrders",method={RequestMethod.GET,RequestMethod.POST})
+	public String getCloseOrders(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo,ModelMap map) {
+		try{
+			if(pageInfo==null){
+				pageInfo=new PageInfo();
+			}
+			PageInfo<GoodsInstoreBiz> GoodsInstorePages = goodsInstoreService.getCloseOrders(goodsInstoreBiz, pageInfo);
+			map.addAttribute("pageInfo", GoodsInstorePages);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "/goods/close_order_list";
+	}
+	
+	/**
+	 * 获取待关闭订货单的详细信息（根据订货单id）
+	 * @Title: getCloseOrderInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: Map<String,Object>      
+	 * @throws
+	 */
+	@RequestMapping(value ="/getCloseOrderInfo",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> getCloseOrderInfo(GoodsInstoreBiz goodsInstoreBiz) {
+		Map<String, Object> map = new HashMap<>();
+		List<GoodsInstoreBiz> list = goodsInstoreService.getCloseOrderInfo(goodsInstoreBiz);
+		map.put("list",list);
+		map.put("result", 1);
+		return map;
+	}
+	/**
+	 * 关闭订货单
+	 * @Title: updateCloseOrderInfo   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: Map<String,Object>      
+	 * @throws
+	 */
+	@RequestMapping(value ="/updateCloseOrderInfo",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> updateCloseOrderInfo(GoodsInstoreBiz goodsInstoreBiz) {
+		Map<String, Object> map = new HashMap<>();
+		if(goodsInstoreBiz!=null && goodsInstoreBiz.getGoodsOrderId()!=0) {
+			GoodsOrder goodsOrder = goodsOrderService.getGoodsOrderById(goodsInstoreBiz.getGoodsOrderId());
+			goodsOrder.setState(10040);
+			goodsOrderService.updateGoodsOrder(goodsOrder);
 		}
 		map.put("result", 1);
 		return map;

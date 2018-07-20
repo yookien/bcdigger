@@ -102,4 +102,32 @@ public class GoodsInstoreServiceImpl implements GoodsInstoreService {
 	public List<GoodsInstoreBiz> getAddGoodsInstoreInfo(GoodsInstoreBiz goodsInstoreBiz) {
 		return goodsInstoreDao.getAddGoodsInstoreInfo(goodsInstoreBiz);
 	}
+	
+	
+	/**
+	 * 获取待关闭收货单列表
+	 * @Title: getGoodsInstoreBizs   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: PageInfo<GoodsInstoreBiz>      
+	 * @throws
+	 */
+	public PageInfo<GoodsInstoreBiz> getCloseOrders(GoodsInstoreBiz goodsInstoreBiz, PageInfo pageInfo){
+		
+		return goodsInstoreDao.findCloseOrders(goodsInstoreBiz, pageInfo);
+	}
+	
+	/**
+	 * 根据订货单id查找需关闭的收货单详细信息
+	 * @Title: getGoodsInstoreBizs   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param goodsInstoreBiz
+	 * @param: @return      
+	 * @return: List<GoodsInstoreBiz>      
+	 * @throws
+	 */
+	public List<GoodsInstoreBiz> getCloseOrderInfo(GoodsInstoreBiz goodsInstoreBiz){
+		return goodsInstoreDao.findCloseOrderById(goodsInstoreBiz);
+	}
 }
