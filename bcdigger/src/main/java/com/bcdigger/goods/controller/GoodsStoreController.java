@@ -1,5 +1,6 @@
 package com.bcdigger.goods.controller;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -16,15 +23,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bcdigger.admin.entity.Admin;
 import com.bcdigger.admin.service.AdminService;
 import com.bcdigger.common.constant.CacheConstant;
 import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.common.utils.DateUtils;
 import com.bcdigger.core.annotation.AdminAuth;
+import com.bcdigger.goods.entity.Goods;
 import com.bcdigger.goods.entity.GoodsInstore;
 import com.bcdigger.goods.entity.GoodsInstoreBiz;
 import com.bcdigger.goods.service.GoodsInstoreService;
+import com.bcdigger.kingdee.util.AccessToken;
+import com.bcdigger.kingdee.util.KingdeeStdLib;
+import com.bcdigger.kingdee.util.KingdeeUtil;
 import com.bcdigger.order.entity.GoodsOrder;
 import com.bcdigger.order.entity.GoodsOrderItem;
 import com.bcdigger.order.service.GoodsOrderItemService;
@@ -252,7 +265,7 @@ public class GoodsStoreController {
 				goodsInstore.setState(1);
 				goodsInstoreService.updateGoodsInstore(goodsInstore);
 				//同步金蝶系统数据（待补充）
-			
+				pushGoodsInstore(goodsInstore);
 			
 			}else {//审核不通过
 				goodsInstore.setState(2);
@@ -334,5 +347,72 @@ public class GoodsStoreController {
 		}
 		map.put("result", 1);
 		return map;
+	}
+	
+	
+	/**
+	 * 金蝶相关接口
+	 */
+	private static String sessionValue = "";
+	private static String aspnetsessionValue = "";
+	
+	private static String sessionkey = "kdservice-sessionid";
+	private static String aspnetsessionkey = "ASP.NET_SessionId";
+	
+	/**
+	 * 采购订单下推生成采购入库单
+	 * 
+	 * @param tOrder
+	 */
+	public String pushGoodsInstore(GoodsInstore goodsInstore) {
+		try {
+			// 得到登录接口
+			AccessToken accessToken = KingdeeUtil.getAccessToken();
+			if (accessToken != null) {
+				sessionValue = accessToken.getSessionValue();
+				aspnetsessionValue = accessToken.getAspnetsessionValue();
+			}
+			// 定义httpClient的实例
+			HttpClient httpclient = new DefaultHttpClient();
+			// 订单保存接口
+			String save_URL = KingdeeStdLib.KINGDEE_PUSH_URL;
+			URI save_uri = new URI(save_URL);
+			HttpPost method = new HttpPost(save_uri);
+
+			JSONObject json = new JSONObject();
+			json.put("formid", "BD_MATERIAL");
+
+			JSONObject jsonData = new JSONObject();
+			JSONObject jsonModel = new JSONObject();
+			// 需替换成采购单金蝶内码id、采购单号
+			jsonModel.put("Ids", goodsInstore.getGoodsOrderId());
+			JSONArray jsArrEntry = new JSONArray();
+			jsArrEntry.add("");
+			jsonModel.put("Numbers", jsArrEntry);
+			
+			jsonData.put("Model", jsonModel);
+			json.put("data", jsonData);
+			// 设置json格式
+			StringEntity entity = new StringEntity(json.toString(), "utf-8");
+			System.out.println(json.toString());
+			entity.setContentEncoding("UTF-8");
+			entity.setContentType("application/json");
+			// 将登陆信息放入
+			method.setHeader(sessionkey, sessionValue);
+			method.setHeader(aspnetsessionkey, aspnetsessionValue);
+			method.setEntity(entity);
+			HttpResponse result = httpclient.execute(method);
+			String str = "";
+			if (result.getStatusLine().getStatusCode() == 200) {
+				// 读取服务器返回过来的json字符串数据
+				str = EntityUtils.toString(result.getEntity());
+				System.out.println("result:"+str);
+				return str;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+
 	}
 }

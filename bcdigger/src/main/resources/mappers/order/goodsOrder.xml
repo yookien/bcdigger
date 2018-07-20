@@ -16,6 +16,8 @@
 		<result property="memo" column="memo" jdbcType="VARCHAR" />
 		<result property="kingdeeCustId" column="kingdee_cust_id" jdbcType="BIGINT" />
 		<result property="kingdeeCustNo" column="kingdee_cust_no" jdbcType="VARCHAR" />
+		<result property="kingdeePurchaseCustId" column="kingdee_purchase_cust_id" jdbcType="BIGINT" />
+		<result property="kingdeePurchaseCustNo" column="kingdee_purchase_cust_no" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<resultMap id="orderResultMap" extends="BaseResultMap" type="com.bcdigger.order.entity.GoodsOrder">
@@ -23,7 +25,8 @@
 	</resultMap>
 	
 	<sql id="base_column_list">
-		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id ,kingdee_cust_no
+		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo
+		, kingdee_cust_id , kingdee_cust_no, kingdee_purchase_cust_id, kingdeePurchaseCustNo
 	</sql>
 	
 	<sql id="condition_sql">
@@ -43,10 +46,8 @@
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="goodsOrder">
 		insert into
 		<include refid="table" />
-		(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo, kingdee_cust_id,kingdee_cust_no)
-		values (
-			#{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{addTime},#{updateTime},#{memo},#{kingdeeCustId},#{kingdeeCustNo}
-		)
+			(order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo)
+		values ( #{orderNo},#{orderUserId},#{storeId},#{orderType},#{state},#{addTime},#{updateTime},#{memo} )
 	</insert>
 	
 	<update id="update" parameterType="goodsOrder">
@@ -133,6 +134,12 @@
 			</if>
 			<if test=" updateTime != null ">
 				update_time= #{updateTime},
+			</if>
+			<if test=" kingdeePurchaseCustId != null and kingdeePurchaseCustId > 0 ">
+				kingdee_purchase_cust_id= #{kingdeePurchaseCustId},
+			</if>
+			<if test=" kingdeePurchaseCustNo != null and kingdeePurchaseCustNo !='' ">
+				kingdee_purchase_cust_no= #{kingdeePurchaseCustNo},
 			</if>
 		</set>
 		<where>
