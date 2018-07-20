@@ -364,6 +364,7 @@ CREATE TABLE `bcd_goods` (
   `add_time` datetime DEFAULT NULL COMMENT '添加时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `kingdee_cust_id` int(11) DEFAULT '0',
+  `unit_cust_id`  int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
 
@@ -567,8 +568,8 @@ create table bcd_goods_order_item
 alter table bcd_goods_order_item comment '订货明细表';
 
 create table `bcd_meta_content` (
-  `content_id` int(11) NOT NULL auto_increment,
-  `define_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `define_id` int(11) DEFAULT 0,
   `content_desc` varchar(255) DEFAULT NULL,
   `name` varchar(32) DEFAULT NULL,
   `value` varchar(64) DEFAULT NULL,
@@ -577,20 +578,20 @@ create table `bcd_meta_content` (
   `Value3` varchar(64) DEFAULT NULL,
   `Value4` varchar(64) DEFAULT NULL,
   `Value5` varchar(64) DEFAULT NULL,
-  `kingdee_cust_id` varchar(64) DEFAULT NULL,
-  `state` tinyint(4) DEFAULT NULL COMMENT '0:无效,1:有效',
+  `kingdee_cust_id` int(11) DEFAULT 0,
+  `state` tinyint(4) DEFAULT 1 COMMENT '0:无效,1:有效',
   `add_Time` datetime DEFAULT NULL,
-  `upate_Time` datetime DEFAULT NULL,
-  primary KEY (`CONTENT_ID`)
+  `update_time` datetime DEFAULT NULL,
+  primary KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='元数据内容表';
 
 
 create table `bcd_meta_define` (
-  `define_id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL auto_increment,
   `define_name` varchar(32) DEFAULT NULL,
   `define_desc` varchar(255) DEFAULT NULL,
-  `state` tinyint(4) DEFAULT NULL COMMENT '0:无效,1:有效',
+  `state` tinyint(4) DEFAULT 1 COMMENT '0:无效,1:有效',
   `add_time` datetime DEFAULT NULL,
-  `upate_Time` datetime DEFAULT NULL,
-  primary KEY (`DEFINE_ID`)
+  `update_time` datetime DEFAULT NULL,
+  primary KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='元数据类型表';
