@@ -139,5 +139,20 @@
 			id = #{id}
 		</where>
 	</update>
+	<update id="updateGoodsOrderState" parameterType="goodsOrder">
+		update
+		<include refid="table" />
+		<set>
+			<if test=" state != null and state > 0 ">
+				state= #{state},
+			</if>
+			<if test=" updateTime != null ">
+				update_time= #{now},
+			</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
 
 </mapper>

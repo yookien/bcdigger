@@ -179,7 +179,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			if(goodsOrder == null || goodsOrder.getId()<=0){
 				return 0;
 			}
-			return goodsOrderDao.update(goodsOrder);
+			return goodsOrderDao.updateGoodsOrderState(goodsOrder);
 		}catch(Exception e){
 			e.printStackTrace();
 			return 0;
