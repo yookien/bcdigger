@@ -540,6 +540,8 @@ create table bcd_goods_order
    state                int,
    kingdee_cust_id      int,
    kingdee_cust_no    	varchar(64),
+   `kingdee_purchase_cust_id`  int(11) NULL DEFAULT 0,
+   `kingdee_purchase_cust_no`  varchar(64) NULL,
    primary key (id)
 );
 
