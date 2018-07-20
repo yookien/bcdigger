@@ -174,6 +174,17 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 		}
 		return json;
 	}
+	public int updateGoodsOrder(GoodsOrder goodsOrder) {
+		try{
+			if(goodsOrder == null || goodsOrder.getId()<=0){
+				return 0;
+			}
+			return goodsOrderDao.update(goodsOrder);
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
 
 	@Override
 	public JSONObject updateGoodsOrder(GoodsOrder goodsOrder, GoodsOrderItemModel orderItemModel) {

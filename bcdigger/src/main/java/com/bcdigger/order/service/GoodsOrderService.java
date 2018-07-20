@@ -16,7 +16,15 @@ public interface GoodsOrderService {
 	 * @return
 	 */
 	public JSONObject addGoodsOrder(GoodsOrder goodsOrder,GoodsOrderItemModel orderItemModel);
-	
+	/**
+	 * @Description:更新订单信息
+	 * @param goodsOrder
+	 * @return
+	 * @return int
+	 * @author liubei
+	 * @date 2018年7月20日
+	 */
+	public int updateGoodsOrder(GoodsOrder goodsOrder);
 	/**
 	 * 更新订单信息
 	 * <p>Title: updateGoodsOrder</p>  
