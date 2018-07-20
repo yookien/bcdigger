@@ -42,6 +42,8 @@
         <typeAlias alias="roleMenuRef" type="com.bcdigger.admin.entity.RoleMenuRef" />
         <typeAlias alias="adminRoleRef" type="com.bcdigger.admin.entity.AdminRoleRef" />
         <typeAlias alias="department" type="com.bcdigger.admin.entity.Department" />
+        <typeAlias alias="metaContent" type="com.bcdigger.admin.entity.MetaContent" />
+        <typeAlias alias="metaDefine" type="com.bcdigger.admin.entity.MetaDefine" />
         
         <typeAlias alias="store" type="com.bcdigger.store.entity.Store" />
         

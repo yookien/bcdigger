@@ -2,6 +2,8 @@ package com.bcdigger.goods.entity;
 
 import java.util.Date;
 
+import com.bcdigger.admin.entity.MetaContent;
+import com.bcdigger.common.constant.DataInit;
 import com.bcdigger.common.entity.BaseEntity;
 
 /**
@@ -43,6 +45,7 @@ public class Goods extends BaseEntity {
 
 	// 金蝶内码id
 	private int kingdeeCustId;
+	private int unitCustId;// 销售单位 金蝶内码
 
 	public int getCatId() {
 		return catId;
@@ -117,6 +120,10 @@ public class Goods extends BaseEntity {
 	}
 
 	public String getUnit() {
+		MetaContent unitMeta = DataInit.unitMetaSource.get(unitCustId);
+		if( unitMeta != null ){
+			unit = unitMeta.getName();
+		}
 		return unit;
 	}
 
@@ -206,6 +213,14 @@ public class Goods extends BaseEntity {
 
 	public void setKingdeeCustId(int kingdeeCustId) {
 		this.kingdeeCustId = kingdeeCustId;
+	}
+
+	public int getUnitCustId() {
+		return unitCustId;
+	}
+
+	public void setUnitCustId(int unitCustId) {
+		this.unitCustId = unitCustId;
 	}
 
 }

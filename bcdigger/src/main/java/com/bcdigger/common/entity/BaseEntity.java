@@ -20,6 +20,10 @@ public class BaseEntity implements Serializable {
 	 * 创建时间
 	 */
 	protected Date createTime = new Date();
+	/**
+	 * 当前时间（传递参数使用）
+	 */
+	private Date now = new Date();
 
 	public Integer getId() {
 		return id;
@@ -51,6 +55,14 @@ public class BaseEntity implements Serializable {
 
 	public void setLike(int like) {
 		this.like = like;
+	}
+
+	public Date getNow() {
+		return now;
+	}
+
+	public void setNow(Date now) {
+		this.now = now;
 	}
 
 }

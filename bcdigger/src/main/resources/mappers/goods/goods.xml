@@ -26,11 +26,12 @@
 		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 		<result property="kingdeeCustId" column="kingdee_cust_id" jdbcType="BIGINT"/>
+		<result property="unitCustId" column="unit_cust_id" jdbcType="BIGINT"/>
 	</resultMap>
 	
 	<sql id="base_column_list">
 		id, cat_id,goods_no,goods_name,state,small_image,middle_image,goods_image,weight,unit,model,inner_name,
-		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time,kingdee_cust_id
+		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time,kingdee_cust_id,unit_cust_id
 	</sql>
 	
 	<sql id="condition_sql">
@@ -58,9 +59,9 @@
 		insert into
 		<include refid="table" />
 		(cat_id,goods_no,goods_name,state,small_image,middle_image,goods_image,weight,unit,model,inner_name,
-		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time,kingdee_cust_id)
+		type,price,market_price,pur_price,goods_desc,display_order,add_time,update_time,kingdee_cust_id,unit_cust_id)
 		values (#{catId},#{goodsNo},#{goodsName},#{state},#{smallImage},#{middleImage},#{goodsImage},#{weight},#{unit},#{model},#{innerName},
-			#{type},#{price},#{marketPrice},#{purPrice},#{goodsDesc},#{displayOrder},now(),now(),#{kingdeeCustId}
+			#{type},#{price},#{marketPrice},#{purPrice},#{goodsDesc},#{displayOrder},now(),now(),#{kingdeeCustId},#{unitCustId}
 		)
 	</insert>
 	
@@ -87,7 +88,8 @@
 			display_order = #{displayOrder} , 
 			add_time = #{addTime} , 
 			update_time = now(),
-			kingdee_cust_id= #{kingdeeCustId}
+			kingdee_cust_id= #{kingdeeCustId},
+			unit_cust_id= #{unitCustId}
 		</set>
 		<where>
 			id = #{id}

@@ -513,7 +513,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 				JSONObject jsEntry = new JSONObject();
 				Goods goods = this.goodsDao.getById(item.getGoodsId());
 				jsEntry.put("FMaterialId", KingdeeUtil.getFNumber(item.getGoodsNo())); // 物料单号
-				jsEntry.put("FUnitID", KingdeeUtil.getFNumber(goods.getUnit()));// 单位
+				jsEntry.put("FUnitID", KingdeeUtil.getFNumber(String.valueOf(goods.getUnitCustId())));// 销售单位
 				// 数量
 				jsEntry.put("FQty", item.getOrderQuantity());
 				jsEntry.put("FTaxPrice", 0.0); // 支付单价

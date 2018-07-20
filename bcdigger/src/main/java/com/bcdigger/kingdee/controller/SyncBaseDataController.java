@@ -3,6 +3,7 @@ package com.bcdigger.kingdee.controller;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bcdigger.admin.entity.MetaContent;
+import com.bcdigger.admin.service.MetaContentService;
+import com.bcdigger.common.constant.DataInit;
 import com.bcdigger.goods.entity.Goods;
 import com.bcdigger.goods.service.GoodsService;
 import com.bcdigger.kingdee.util.AccessToken;
@@ -52,6 +56,9 @@ public class SyncBaseDataController {
 	@Autowired
 	private StoreService storeService;
 	
+	@Autowired
+	private MetaContentService metaContentService;
+	
 	@RequestMapping(value ="/autoSyncBaseData",method={RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public Map<String, Object> autoSyncBaseData() throws Exception {
@@ -60,11 +67,15 @@ public class SyncBaseDataController {
 			// 同步36小时内更新的资料
 			Date now = new Date();
 			modifyDate = DateTime.formatDateTime(DateTime.subtractMinute(now, 60 * 24 * 365));
+			
+			// 同步计量单位信息
+			syncUnits();
+			
 			// 同步物料
 			syncGoodsInfo();
 
 			// 同步客户信息
-			// syncCustomer();
+			//syncCustomer();
 			
 			map.put("result", 1);// 同步成功
 		} catch (Exception e) {
@@ -142,7 +153,6 @@ public class SyncBaseDataController {
 					}else{
 						haveNext=false;
 					}
-					
 					for (int i = 0; i < infos.size(); i++) {
 						info = infos.getJSONArray(i);
 						if (info == null || info.size() < 15) {
@@ -158,7 +168,6 @@ public class SyncBaseDataController {
 						String goodsName = info.getString(2);// 商品名称
 						int kingdeeCustId = info.getInteger(0);// 物料金蝶系统内码
 						String createDate = info.getString(13);// 创建时间
-						
 						Date addTime = new Date();
 						if( createDate != null && createDate.length() >= 8 ){
 							addTime = DateTime.parseDate(createDate);
@@ -179,7 +188,8 @@ public class SyncBaseDataController {
 						int volume = info.getInteger(11);// 体积
 						int expPeriod = info.getInteger(12);// 保质期
 						
-						String saleUnitId=info.getString(15);// 销售单位
+						int unitCustId = info.getInteger(15);// 销售单位内码
+						
 						String model=info.getString(5); // 规格
 						
 						goods.setGoodsNo(goodsNo);
@@ -189,8 +199,8 @@ public class SyncBaseDataController {
 						goods.setUpdateTime(updateTime);
 						goods.setAddTime(addTime);
 						goods.setState(1);
-						goods.setUnit(saleUnitId);
 						goods.setModel(model);
+						goods.setUnitCustId(unitCustId);
 						
 						// 调用接口保存
 						goodsService.addOrUpdateGoods(goods);
@@ -289,6 +299,96 @@ public class SyncBaseDataController {
 					storeService.addOrUpdateStore(store);
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("post请求提交失败:" + e);
+		}
+	}
+	
+	public void syncUnits() throws Exception {
+		// 获取登录session
+		AccessToken accessToken = KingdeeUtil.getAccessToken();
+		if (accessToken != null) {
+			sessionValue = accessToken.getSessionValue();
+			aspnetsessionValue = accessToken.getAspnetsessionValue();
+		}
+		// 定义httpClient的实例
+		HttpClient httpclient = new DefaultHttpClient();
+		/********** 查询物料Beigin ************************/
+		try {
+			
+			if(modifyDate == null || modifyDate.equals("")){
+				modifyDate = DateTime.formatDateTime(DateTime.subtractMinute(new Date(), 60 * 36));// 同步36小时内更新的资料
+			}else{
+				modifyDate=DateTime.formatDateTime(DateTime.parseDate(modifyDate));
+			}
+			
+			// 数据保存接口地址
+			String Save_URL = KingdeeStdLib.KINGDEE_EXCCUTE_BILL_QUERY_URL;
+			URI save_uri = new URI(Save_URL);
+			HttpPost method = new HttpPost(save_uri);
+
+			JSONObject json = new JSONObject();
+			JSONObject objjson = new JSONObject();
+			objjson.put("FSaleOrgId",KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
+			objjson.put("FormId", "BD_UNIT");// 计量单位
+			objjson.put("TopRowCount", 0);
+			// objjson.put("Limit", 200);
+			objjson.put("StartRow", 0);
+			objjson.put("FilterString", " FModifyDate>= '" + modifyDate+"'");// 标准的SQL语句
+			objjson.put("OrderString", "FUnitID ASC");
+			objjson.put("FieldKeys", "FUnitID,FNumber,FName,FForbidStatus,FModifyDate,FCreateDate");
+			json.put("data", objjson);
+
+			StringEntity entity = new StringEntity(json.toString(), "utf-8");
+			entity.setContentEncoding("UTF-8");
+			entity.setContentType("application/json");
+
+			// 把成功登录的Session信息传进去，获取连接信息
+			method.setHeader(KingdeeStdLib.sessionkey, sessionValue);
+			method.setHeader(KingdeeStdLib.aspnetsessionkey, aspnetsessionValue);
+			// 方法参数
+			method.setEntity(entity);
+			HttpResponse result = httpclient.execute(method);
+			// 请求发送成功，并得到响应
+			if (result.getStatusLine().getStatusCode() == 200) {
+				System.out.println("请求成功");
+				String str = "";
+				// 读取服务器返回过来的json字符串数据
+				str = EntityUtils.toString(result.getEntity());
+				// 把json字符串转换成json数组
+				JSONArray infos = JSONArray.parseArray(str);
+				JSONArray info = null;
+				MetaContent metaContent = null;
+				for (int i = 0; i < infos.size(); i++) {
+					info = infos.getJSONArray(i);
+					System.out.println(
+							"FID:" + info.getIntValue(0) + " FNumber:" + info.getString(1) + " FName:" + info.getString(2));
+					metaContent = new MetaContent();
+					metaContent.setKingdeeCustId(info.getInteger(0));// 金蝶内码id
+					metaContent.setContentDesc(info.getString(1));
+					metaContent.setName(info.getString(2));
+					metaContent.setValue(info.getString(2));
+					metaContent.setState(1);
+					metaContent.setNow(DateTime.parseDate(info.getString(5)));
+					metaContent.setDefineId(1);// 类型为1 计量单位
+					metaContentService.addOrUpdateMetaContent(metaContent);
+				}
+			}
+			MetaContent metaContent = new MetaContent();
+			metaContent.setDefineId(1);// 查询所有计量单位信息
+			List<MetaContent> metaContentList = metaContentService.listMetaContentByCondation(metaContent);
+			if( metaContentList != null && metaContentList.size() > 0 ){
+				// 清理原有数据
+				DataInit.unitMetaSource.clear();
+				for (MetaContent meta : metaContentList) {
+					if( meta == null ){
+						continue;
+					}
+					DataInit.unitMetaSource.put(meta.getKingdeeCustId(), meta);
+				}
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("post请求提交失败:" + e);
