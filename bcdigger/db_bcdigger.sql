@@ -566,4 +566,31 @@ create table bcd_goods_order_item
 
 alter table bcd_goods_order_item comment '订货明细表';
 
+create table `bcd_meta_content` (
+  `content_id` int(11) NOT NULL auto_increment,
+  `define_id` int(11) DEFAULT NULL,
+  `content_desc` varchar(255) DEFAULT NULL,
+  `name` varchar(32) DEFAULT NULL,
+  `value` varchar(64) DEFAULT NULL,
+  `Value1` varchar(64) DEFAULT NULL,
+  `Value2` varchar(64) DEFAULT NULL,
+  `Value3` varchar(64) DEFAULT NULL,
+  `Value4` varchar(64) DEFAULT NULL,
+  `Value5` varchar(64) DEFAULT NULL,
+  `kingdee_cust_id` varchar(64) DEFAULT NULL,
+  `state` tinyint(4) DEFAULT NULL COMMENT '0:无效,1:有效',
+  `add_Time` datetime DEFAULT NULL,
+  `upate_Time` datetime DEFAULT NULL,
+  primary KEY (`CONTENT_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='元数据内容表';
 
+
+create table `bcd_meta_define` (
+  `define_id` int(11) NOT NULL auto_increment,
+  `define_name` varchar(32) DEFAULT NULL,
+  `define_desc` varchar(255) DEFAULT NULL,
+  `state` tinyint(4) DEFAULT NULL COMMENT '0:无效,1:有效',
+  `add_time` datetime DEFAULT NULL,
+  `upate_Time` datetime DEFAULT NULL,
+  primary KEY (`DEFINE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='元数据类型表';
