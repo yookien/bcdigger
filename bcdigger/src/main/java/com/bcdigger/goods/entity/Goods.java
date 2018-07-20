@@ -121,7 +121,7 @@ public class Goods extends BaseEntity {
 
 	public String getUnit() {
 		MetaContent unitMeta = DataInit.unitMetaSource.get(unitCustId);
-		if( unitMeta != null ){
+		if( unitMeta != null && unitMeta.getName() != null){
 			unit = unitMeta.getName();
 		}
 		return unit;
