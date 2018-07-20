@@ -31,24 +31,12 @@ public class KingdeeStdLib {
 	 * 暂存
 	 */
 	public static final String KINGDEE_DRAFT_URL=KINGDEE_BASE_PATH+"/K3Cloud/Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Draft.common.kdsvc";
+	
 	/**
-	 * 委外临时接口
+	 * 推送
 	 */
-	public static final String KINGDEE_OUTSOURCE=KINGDEE_BASE_PATH+"/K3Cloud/Services/FoxconnService.asmx/Iupdate";
-	//临时接口  String SERVICE_URL_DB = "http://svn-server/K3Cloud/tcwy.asmx/UpdateDiaochu";
-	public static final String  KINDEE_SERVICE_URL_DB=KINGDEE_BASE_PATH+"/K3Cloud/tcwy.asmx/UpdateDiaochu";
-	/**
-	 * 临时接口2
-	 */
-	public static final String  KINDEE_OUTSOURCE_UP=KINGDEE_BASE_PATH+"/K3Cloud/tcwy.asmx/UpdateWeiWai";
-	/**
-	 * 登录验证
-	 */
-	public static final String KINDEE_VALIDATE=KINGDEE_BASE_PATH+"/K3Cloud/tcwy.asmx/ValidateSystem";
-	/**
-	 * 令牌时间验证
-	 */
-	public static final String KINGDEE_VALIDATE_TIME=KINGDEE_BASE_PATH+"/K3Cloud/tcwy.asmx/ValidateToken";
+	public static final String KINGDEE_PUSH_URL=KINGDEE_BASE_PATH+"/K3Cloud/Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Push.common.kdsvc";
+	
 	/**
 	 * 审核
 	 */

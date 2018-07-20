@@ -31,6 +31,7 @@ import com.bcdigger.common.page.PageInfo;
 import com.bcdigger.common.utils.DateUtils;
 import com.bcdigger.goods.dao.GoodsDao;
 import com.bcdigger.goods.entity.Goods;
+import com.bcdigger.goods.entity.GoodsInstore;
 import com.bcdigger.kingdee.util.AccessToken;
 import com.bcdigger.kingdee.util.DateTime;
 import com.bcdigger.kingdee.util.KingdeeStdLib;
@@ -395,6 +396,7 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 	}
 	
 	public int auditingGoodsOrder(GoodsOrder goodsOrder){
+		
 		int auditResult = 0;
 		try{
 			if( goodsOrder == null){
@@ -440,12 +442,32 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 						goodsOrderTemp.setState(GoodsOrderStateConstant.SUCCESS_AUDIT_STATE);
 						// 保存成功就保存订单，防止重复推送
 						// 审核订单 并 保存金蝶内码、金蝶单号
-						goodsOrderDao.auditingGoodsOrder(goodsOrderTemp);
-						
+						int auditInfo = goodsOrderDao.auditingGoodsOrder(goodsOrderTemp);
+						if( auditInfo == 0){
+							return 0;
+						}
+						// 保存销售订单
 						boolean result = submitOrder(goodsOrderTemp);
 						
+						// 审核销售订单
 						if( result ){
 							result = auditOrder(goodsOrderTemp);
+						}
+						
+						// 下推采购单
+						if( result ){
+							resultStr = pushPurchaseOrder(goodsOrderTemp);
+							if( resultStr != null ){
+								json = JSONObject.parseObject(resultStr).getJSONObject("Result");
+								if(json.getJSONObject("ResponseStatus").getBooleanValue("IsSuccess")){
+									// 下推采购单成功，保存采购单金蝶内码、采购单号
+									int kingdeePurchaseCustId = json.getIntValue("Id");
+									String kingdeePurchaseCustNo = json.getString("Number");
+									goodsOrderTemp.setKingdeePurchaseCustId(kingdeePurchaseCustId);
+									goodsOrderTemp.setKingdeePurchaseCustNo(kingdeePurchaseCustNo);
+									goodsOrderDao.auditingGoodsOrder(goodsOrderTemp);
+								}
+							}
 						}
 						
 						auditResult = 10000;// 成功
@@ -717,6 +739,65 @@ public class GoodsOrderServiceImpl implements GoodsOrderService {
 			saveResult = false;
 		}
 		return saveResult;
+	}
+	
+	/**
+	 * @Description:下推采购订单
+	 * @param goodsInstore
+	 * @return
+	 * @return String
+	 * @author liubei
+	 * @date 2018年7月20日
+	 */
+	public String pushPurchaseOrder(GoodsOrder goodsOrder) {
+		try {
+			// 得到登录接口
+			AccessToken accessToken = KingdeeUtil.getAccessToken();
+			if (accessToken != null) {
+				sessionValue = accessToken.getSessionValue();
+				aspnetsessionValue = accessToken.getAspnetsessionValue();
+			}
+			// 定义httpClient的实例
+			HttpClient httpclient = new DefaultHttpClient();
+			// 订单保存接口
+			String save_URL = KingdeeStdLib.KINGDEE_PUSH_URL;
+			URI save_uri = new URI(save_URL);
+			HttpPost method = new HttpPost(save_uri);
+
+			JSONObject json = new JSONObject();
+			json.put("formid", "SCP_PurchaseOrder");// 采购订单formid
+			//采购入库单：SCP_InStock 采购订单： SCP_PurchaseOrder
+			JSONObject jsonData = new JSONObject();
+			JSONObject jsonModel = new JSONObject();
+			jsonModel.put("Ids", goodsOrder.getKingdeeCustId());
+			JSONArray jsArrEntry = new JSONArray();
+			jsArrEntry.add(goodsOrder.getKingdeeCustNo());
+			jsonModel.put("Numbers", jsArrEntry);
+			
+			jsonData.put("Model", jsonModel);
+			json.put("data", jsonData);
+			// 设置json格式
+			StringEntity entity = new StringEntity(json.toString(), "utf-8");
+			System.out.println(json.toString());
+			entity.setContentEncoding("UTF-8");
+			entity.setContentType("application/json");
+			// 将登陆信息放入
+			method.setHeader(sessionkey, sessionValue);
+			method.setHeader(aspnetsessionkey, aspnetsessionValue);
+			method.setEntity(entity);
+			HttpResponse result = httpclient.execute(method);
+			String str = "";
+			if (result.getStatusLine().getStatusCode() == 200) {
+				// 读取服务器返回过来的json字符串数据
+				str = EntityUtils.toString(result.getEntity());
+				System.out.println("result:"+str);
+				return str;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+
 	}
 
 
