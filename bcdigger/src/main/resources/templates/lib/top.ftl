@@ -11,7 +11,7 @@
                 </li>
               	<li class="">
                   <a href="javascript:;" class="user-profile " aria-expanded="false">
-                   <strong>${(admin.name)!}</strong>
+                   <strong>${(admin.nickname)!}</strong>
                   </a>
                 </li>
     
