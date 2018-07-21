@@ -517,6 +517,7 @@ CREATE TABLE `bcd_goods` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `kingdee_cust_id` int(11) DEFAULT '0',
   `unit_cust_id`  int(11) DEFAULT '0',
+  `default_vendor`  int(11) NULL DEFAULT 0 COMMENT '供应商',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
 
