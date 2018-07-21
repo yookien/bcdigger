@@ -2166,6 +2166,8 @@ span.section {
     border-radius: 0;
     width: 100%
 }
+
+
 .form-horizontal .control-label {
     padding-top: 8px
 }
@@ -3391,22 +3393,50 @@ ul.project_files li a i {
 .product_social ul li a i {
     font-size: 35px
 }
+
 .login {
-    background: #F7F7F7
+    background: #2a3f54;
 }
+
 .login .fa-paw {
     font-size: 26px
 }
 a.hiddenanchor {
     display: none
 }
-.login_wrapper {
-    right: 0px;
-    margin: 0px auto;
-    margin-top: 5%;
-    max-width: 350px;
-    position: relative
+.login_container {
+	margin: 10% auto 0 auto;
 }
+
+.login_panel {
+    margin: 0 auto;
+    width: 540px;
+    min-height: 280px;
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0px 0px 30px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 30px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 30px rgba(0,0,0,0.75);
+}
+
+.login_head {
+    min-height: 0px;
+    background-color: #edf3fe;
+    border-bottom: 1px solid #dfdfdf;
+    position: relative;
+}
+
+.login_head_h4 {
+    font-family: "Helvetica Neue",Helvetica,Tahoma,Arial,sans-serif;
+    font-size: 20px;
+    color: inherit;
+    padding: 20px;
+    margin: auto
+}
+
 .registration_form,
 .login_form {
     position: absolute;
@@ -3472,13 +3502,10 @@ form:after {
     visibility: hidden
 }
 .login_content {
-    margin: 0 auto;
-    padding: 25px 0 0;
-    position: relative;
-    text-align: center;
-    text-shadow: 0 1px 0 #fff;
-    min-width: 280px
+    padding: 10px 50px;
+    min-height: 10px;
 }
+
 .login_content a,
 .login_content .btn-default:hover {
     text-decoration: none
@@ -3544,6 +3571,9 @@ form:after {
     margin: 0 0 20px;
     width: 100%
 }
+
+
+
 .login_content form input[type="text"]:focus,
 .login_content form input[type="email"]:focus,
 .login_content form input[type="password"]:focus {

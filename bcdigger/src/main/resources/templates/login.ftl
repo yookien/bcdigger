@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>欢迎使用bcdigger系统</title>
+    <title>欢迎使用弈杰云系统</title>
 
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -18,22 +18,22 @@
     <!-- Animate.css -->
     <link href="/css/animate.min.css" rel="stylesheet">
     <!-- Custom Theme Style -->
-    <link href="/build/css/custom.min.css" rel="stylesheet">
+    <link href="/build/css/custom.css" rel="stylesheet">
     
     <script src="/js/jquery-3.3.1.min.js" type="text/javascript" ></script>
     
   </head>
 
   <body class="login">
-    <div>
+    <div class="login_container">
       <a class="hiddenanchor" id="signup"></a>
       <a class="hiddenanchor" id="signin"></a>
 
-      <div class="login_wrapper">
-        <div class="animate form login_form">
+      <div class="login_panel">
+      	<div class="login_head"><div class="login_head_h4">弈杰云管理系统</div></div>
+        <div class="animate form">
           <section class="login_content">
             <form>
-              <h1>欢迎使用bcdigger系统 </h1>
               <div>
                 <input type="text" id="login_name" class="form-control" placeholder="请输入用户名称" required="" />
               </div>
@@ -41,39 +41,25 @@
                 <input type="password" id="login_password" class="form-control" placeholder="请输入密码" required="" />
               </div>
               
-              <div id="login_vrifycode_div" style="diaplay:none;">
-                <input type="text" id="login_vrifycode" class="form-control" placeholder="请输入验证码" required="" />
-                 &nbsp&nbsp&nbsp&nbsp
-                <img src="" id="login_vrifycode_img"/> <a href="javascript:getVrifycode();">刷  新</a>
+              <div id="login_vrifycode_div">
+                <input type="text" id="login_vrifycode" class="form-control" placeholder="请输入验证码" required="">
+                <img src="" id="login_vrifycode_img"/><a href="javascript:getVrifycode();">刷  新</a>
               </div>
               
-              <div>
-                <a class="btn btn-default submit" href="javascript:doLogin()">登  录</a>
+              <div style="margin:20px 150px">
+              	<button type="button" class="btn btn-primary btn-lg" onclick="doLogin()">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+                <!-- <a class="btn btn-default submit" href="javascript:doLogin()" style="align:center">登  录</a> -->
                <!--  <a class="reset_pass" href="#">忘记密码?</a> -->
               </div>
 
               <div class="clearfix" id="login_info" style="display:none"><i class="fa fa-exclamation-triangle" style="color:red"></i>
               	 &nbsp&nbsp&nbsp&nbsp<span id="login_info_span">用户名或者密码输入错误，请重试...</span>
               </div>
-
-              <div class="separator">
-               <!--  <p class="change_link">注册新用户?
-                  <a href="#signup" class="to_register"> 注册 </a>
-                </p> -->
-
-                <div class="clearfix"></div>
-                <br />
-
-                <div>
-                  <h1><i class="fa fa-paw"></i> www.bcdigger.com</h1>
-                  <p>©2018 All Rights Reserved. www.bcdigger.com</p>
-                </div>
-              </div>
             </form>
           </section>
         </div>
 
-        <div id="register" class="animate form registration_form">
+        <!-- <div id="register" class="animate form registration_form">
           <section class="login_content">
             <form>
               <h1>注册</h1>
@@ -107,7 +93,7 @@
               </div>
             </form>
           </section>
-        </div>
+        </div> -->
       </div>
     </div>
   </body>
