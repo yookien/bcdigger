@@ -42,6 +42,10 @@ public class GoodsOrder extends BaseEntity {
 	
 	private String kingdeePurchaseCustNo;// 采购单号
 	
+	private int kingdeePurchaseInstoreCustId;// 采购入库单id
+	
+	private String kingdeePurchaseInstoreCustNo;// 采购入库单号
+	
 	// 非数据库字段
 	/**
 	 * 门店名称
@@ -190,6 +194,22 @@ public class GoodsOrder extends BaseEntity {
 
 	public void setKingdeePurchaseCustNo(String kingdeePurchaseCustNo) {
 		this.kingdeePurchaseCustNo = kingdeePurchaseCustNo;
+	}
+
+	public int getKingdeePurchaseInstoreCustId() {
+		return kingdeePurchaseInstoreCustId;
+	}
+
+	public void setKingdeePurchaseInstoreCustId(int kingdeePurchaseInstoreCustId) {
+		this.kingdeePurchaseInstoreCustId = kingdeePurchaseInstoreCustId;
+	}
+
+	public String getKingdeePurchaseInstoreCustNo() {
+		return kingdeePurchaseInstoreCustNo;
+	}
+
+	public void setKingdeePurchaseInstoreCustNo(String kingdeePurchaseInstoreCustNo) {
+		this.kingdeePurchaseInstoreCustNo = kingdeePurchaseInstoreCustNo;
 	}
 	
 }

@@ -94,7 +94,7 @@ public class GoodsOrderController {
 			goodsOrder.setOrderUserId(admin.getId());
 			goodsOrder.setStoreId(admin.getStoreId());
 			/**if(StringUtils.isBlank(goodsOrder.getOrderNo())){
-				map.put("result", -2);// 菜单名称不能为空
+				map.put("result", -2);// 订单名称不能为空
 				return map;
 			}*/
 			
@@ -253,7 +253,7 @@ public class GoodsOrderController {
 	}
 
 	/**
-	 * @Description: 分页查询菜单信息
+	 * @Description: 分页查询订单信息
 	 * @param pageNum
 	 * @return Map<String,Object>  
 	 * @date 2018年3月25日
@@ -289,7 +289,7 @@ public class GoodsOrderController {
 	}
 
 	/**
-	 * @Description: 分页查询菜单信息
+	 * @Description: 分页查询订单信息
 	 * @param pageNum
 	 * @return Map<String,Object>  
 	 * @date 2018年3月25日

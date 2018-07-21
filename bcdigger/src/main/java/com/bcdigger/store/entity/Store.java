@@ -81,6 +81,9 @@ public class Store extends BaseEntity {
 	// 金蝶内码id
 	private int kingdeeCustId;
 	
+	// 收货仓库
+	private int receiveStockId;
+	
 	public String getStoreCode() {
 		return storeCode;
 	}
@@ -290,6 +293,12 @@ public class Store extends BaseEntity {
 	}
 	public void setKingdeeCustId(int kingdeeCustId) {
 		this.kingdeeCustId = kingdeeCustId;
+	}
+	public int getReceiveStockId() {
+		return receiveStockId;
+	}
+	public void setReceiveStockID(int receiveStockId) {
+		this.receiveStockId = receiveStockId;
 	}
 	
 }

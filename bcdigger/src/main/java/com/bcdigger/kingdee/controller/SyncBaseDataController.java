@@ -75,7 +75,7 @@ public class SyncBaseDataController {
 			syncGoodsInfo();
 
 			// 同步客户信息
-			//syncCustomer();
+			syncCustomer();
 			
 			map.put("result", 1);// 同步成功
 		} catch (Exception e) {
@@ -187,6 +187,7 @@ public class SyncBaseDataController {
 						int grossweight = info.getInteger(10);// 重量
 						int volume = info.getInteger(11);// 体积
 						int expPeriod = info.getInteger(12);// 保质期
+						int defaultVendor= info.getInteger(14);// 默认供应商
 						
 						int unitCustId = info.getInteger(15);// 销售单位内码
 						
@@ -200,6 +201,7 @@ public class SyncBaseDataController {
 						goods.setAddTime(addTime);
 						goods.setState(1);
 						goods.setModel(model);
+						goods.setDefaultVendor(defaultVendor);
 						goods.setUnitCustId(unitCustId);
 						
 						// 调用接口保存
@@ -254,7 +256,7 @@ public class SyncBaseDataController {
 			objjson.put("FilterString", " FModifyDate >= '" + modifyDate +"'");// 标准的SQL语句
 			objjson.put("OrderString", "FCustId ASC");
 			objjson.put("FieldKeys",
-					"FCustId,FNumber,FName,FCustTypeId,FSALDEPTID,FShortName,FTContact,FTEL,FMOBILE,FFAX,FADDRESS,FModifyDate,FCreateDate,FForbidStatus");
+					"FCustId,FNumber,FName,FCustTypeId,FSALDEPTID,FShortName,FTContact,FTEL,FMOBILE,FFAX,FADDRESS,FModifyDate,FCreateDate,F_BHR_XNRKD");
 			json.put("data", objjson);
 
 			StringEntity entity = new StringEntity(json.toString(), "utf-8");
@@ -273,6 +275,7 @@ public class SyncBaseDataController {
 				String str = "";
 				// 读取服务器返回过来的json字符串数据
 				str = EntityUtils.toString(result.getEntity());
+				System.out.println(str);
 				// 把json字符串转换成json数组
 				JSONArray infos = JSONArray.parseArray(str);
 				JSONArray info = null;
@@ -280,22 +283,22 @@ public class SyncBaseDataController {
 				for (int i = 0; i < infos.size(); i++) {
 					info = infos.getJSONArray(i);
 					//System.out.println("FCustId:" + info.getInteger(0) + " FNumber:" + info.getString(1) + " FName:"
-					//		+ info.getString(2));
+					//		+ info.getString(2)+ " F_BHR_XNRKD:" + info.getString(13));
 
-					// "0FCustId,1FNumber,2FName,3FCustTypeId,4FSALDEPTID,5FShortName,6FTContact,7FTEL,8FMOBILE,9FFAX,10FADDRESS,11FModifyDate,12FCreateDate");
+					// "0FCustId,1FNumber,2FName,3FCustTypeId,4FSALDEPTID,5FShortName,6FTContact,7FTEL,8FMOBILE,9FFAX,10FADDRESS,11FModifyDate,12FCreateDate,13F_BHR_XNRKD");
 					// 解析参数，保存客户信息
 					store = new Store();
 					store.setKingdeeCustId(info.getInteger(0));
 					store.setStoreCode(info.getString(1));
 					store.setChineseName(info.getString(2));
-	
+					store.setPhone(info.getString(7));
 					store.setMobile(info.getString(8));
 
 					store.setAddress(info.getString(10));
 					store.setUpdateTime(DateTime.parseDate(info.getString(11)));
 					store.setAddTime(DateTime.parseDate(info.getString(12)));
-					System.out.println("FCustId:" + store.getKingdeeCustId() + " FNumber:" + store.getStoreCode() + " FName:"
-							+ store.getChineseName() );
+					store.setReceiveStockID(info.getInteger(13));
+					//System.out.println("FCustId:" + store.getKingdeeCustId() + " FNumber:" + store.getStoreCode() + " FName:"+ store.getChineseName() );
 					storeService.addOrUpdateStore(store);
 				}
 			}

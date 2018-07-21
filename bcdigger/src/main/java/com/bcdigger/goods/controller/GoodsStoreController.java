@@ -35,6 +35,7 @@ import com.bcdigger.goods.entity.Goods;
 import com.bcdigger.goods.entity.GoodsInstore;
 import com.bcdigger.goods.entity.GoodsInstoreBiz;
 import com.bcdigger.goods.service.GoodsInstoreService;
+import com.bcdigger.goods.service.GoodsService;
 import com.bcdigger.kingdee.util.AccessToken;
 import com.bcdigger.kingdee.util.KingdeeStdLib;
 import com.bcdigger.kingdee.util.KingdeeUtil;
@@ -65,6 +66,9 @@ public class GoodsStoreController {
 	private GoodsOrderItemService goodsOrderItemService;
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private GoodsService goodsService;
 	
 	
 	@RequestMapping(value ="/addGoodsInstore",method={RequestMethod.GET,RequestMethod.POST})
@@ -265,7 +269,7 @@ public class GoodsStoreController {
 				goodsInstore.setState(1);
 				goodsInstoreService.updateGoodsInstore(goodsInstore);
 				//同步金蝶系统数据（待补充）
-				pushGoodsInstore(goodsInstore);
+				updateInstoreInfo(goodsInstore);
 			
 			}else {//审核不通过
 				goodsInstore.setState(2);
@@ -360,41 +364,139 @@ public class GoodsStoreController {
 	private static String aspnetsessionkey = "ASP.NET_SessionId";
 	
 	/**
-	 * 采购订单下推生成采购入库单
-	 * 
-	 * @param tOrder
-	 */
-	public String pushGoodsInstore(GoodsInstore goodsInstore) {
+     * 保存采购入库单
+     */
+	@RequestMapping(value ="/t_updateInstoreInfo",method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> updateInstoreInfo(
+			GoodsInstore goodsInstore){
+		Map<String, Object> map = new HashMap<>(); 
 		try {
+			// ***********参数处理 开始*********
 			// 得到登录接口
 			AccessToken accessToken = KingdeeUtil.getAccessToken();
 			if (accessToken != null) {
 				sessionValue = accessToken.getSessionValue();
 				aspnetsessionValue = accessToken.getAspnetsessionValue();
 			}
-			// 定义httpClient的实例
+			// 定义httpClient
 			HttpClient httpclient = new DefaultHttpClient();
-			// 订单保存接口
-			String save_URL = KingdeeStdLib.KINGDEE_PUSH_URL;
+			// 入库单保存接口地址
+			String save_URL = KingdeeStdLib.KINGDEE_BATCH_SAVE_URL;// KINGDEE_SAVE_URL
 			URI save_uri = new URI(save_URL);
 			HttpPost method = new HttpPost(save_uri);
-
+			// 拼接json字符串
 			JSONObject json = new JSONObject();
-			json.put("formid", "BD_MATERIAL");
-
+			json.put("formid", "STK_InStock");
+			json.put("ValidateFlag", false);
+			json.put("NeedUpDateFields", "['FRealQty','FStockID']");
+			
 			JSONObject jsonData = new JSONObject();
 			JSONObject jsonModel = new JSONObject();
-			// 需替换成采购单金蝶内码id、采购单号
-			jsonModel.put("Ids", goodsInstore.getGoodsOrderId());
-			JSONArray jsArrEntry = new JSONArray();
-			jsArrEntry.add("");
-			jsonModel.put("Numbers", jsArrEntry);
+			jsonModel.put("FID", 100470);
+			// 直配采购：RKD01_CUST  标准采购：RKD01_SYS 
+			jsonModel.put("FBillTypeID", KingdeeUtil.getFNumber("RKD01_CUST")); // 入库单据类型 
+			jsonModel.put("FDate", KingdeeUtil.getDateForString(new Date())); // 日期
+			jsonModel.put("FBillNo", "CGRK1807210001"); 
+			//jsonModel.put("FSRCBillNo", "CGDD1807140172");
 			
-			jsonData.put("Model", jsonModel);
+			// 收料组织、需求组织和采购组织
+			jsonModel.put("FStockOrgId", KingdeeUtil
+					.getFNumber(KingdeeStdLib.saleOrgId));
+			jsonModel.put("FDemandOrgId", KingdeeUtil
+					.getFNumber(KingdeeStdLib.saleOrgId));
+			jsonModel.put("FPurchaseOrgId", KingdeeUtil
+					.getFNumber(KingdeeStdLib.saleOrgId));
+			// 得到供应商编码(从货号关联种获取)
+			String purchaseKindeeNo = "YLBC0044";
+			jsonModel.put("FSupplierId", KingdeeUtil
+					.getFNumber(purchaseKindeeNo));
+			// 货主类型和货主
+			jsonModel.put("FOwnerTypeIdHead", "BD_OwnerOrg");
+			jsonModel.put("FOwnerIdHead", KingdeeUtil
+					.getFNumber(KingdeeStdLib.saleOrgId));
+
+			jsonModel.put("FOwnerIdHead", KingdeeUtil.getFNumber(KingdeeStdLib.saleOrgId));
+			
+			// 支付详情
+			JSONObject jsFinance = new JSONObject();
+			jsFinance.put("FSettleOrgId", KingdeeUtil
+					.getFNumber(KingdeeStdLib.saleOrgId));
+			jsFinance.put("FSettleCurrId", KingdeeUtil.getFNumber("PRE001"));// 结算币别
+			jsFinance.put("FExchangeTypeId", KingdeeUtil
+					.getFNumber("HLTX01_SYS"));
+			jsFinance.put("FExchangeRate", 1); // 汇率
+			jsFinance.put("FPriceTimePoint", 2); // 单据日期
+			jsonModel.put("FInStockFin", jsFinance);
+			// 入库详情 库存入库表集合
+			JSONArray jsArrEntry = new JSONArray();
+			// 循环封装明细
+			Goods goods;
+			for (int i = 0; i < 1; i++) {
+				JSONArray jsArrEntry1 = new JSONArray();
+				int inQuantity = 20;
+				// 测试商品 对应物料4030300801
+				goods = this.goodsService.getGoods(545);//goodsInstore.getGoodsId()
+				if(goods == null){
+					continue;
+				}
+				String unitID=String.valueOf(goods.getUnitCustId());
+				// 入库详情 库存入库表集合
+				JSONObject jsEntry = new JSONObject();
+				// 关联实体
+				JSONObject jsEntry1 = new JSONObject();
+				jsEntry.put("FUnitID", KingdeeUtil.getFNumber(unitID));
+				jsEntry
+						.put("FMaterialId", KingdeeUtil
+								.getFNumber("4030300801")); // 物料
+				// jsEntry.put("FUnitID",KingdeeUtil.getFNumber("Pcs"));//单位
+				jsEntry.put("FRealQty", inQuantity);// 实收数量
+				jsEntry.put("FTaxPrice", 0);// 含税单价
+				jsEntry.put("FPrice", 0);// 未税单价
+				
+				jsEntry.put("FID", 101428);// 分录id
+				 
+				// 税额
+				// jsEntry.put("FEntryTaxAmount",inQuantity*Integer.parseInt(taxPrices[i])/100);
+				// 税率
+				jsEntry.put("FEntryTaxRate",16);// 税率
+				// 仓库id
+				jsEntry.put("FStockID", KingdeeUtil
+						.getFNumber("HNSZ91"));// 仓库id 先写死
+				// 计价单位  从商品中获取
+				jsEntry.put("FPriceUnitID", KingdeeUtil.getFNumber(unitID));
+
+				jsEntry.put("FRemainInStockUnitId", KingdeeUtil
+						.getFNumber(unitID));
+				// 原单号 采购单单号？
+				/**jsEntry.put("FSRCBillNo", "CGDD1807140172");
+				// 原单类型
+				jsEntry.put("FSRCBILLTYPEID", "SCP_PurchaseOrder");
+				jsEntry.put("FPOORDERENTRYID", "");
+				jsEntry.put("FPOOrderNo", "");
+				// 关联表关系
+				jsEntry1.put("FInStockEntry_Link_FRuleId",
+						"PUR_ReceiveBill-STK_InStock");
+				jsEntry1.put("FInStockEntry_Link_FSTableName",
+						"T_PUR_ReceiveEntry");
+				jsEntry1.put("FInStockEntry_Link_FSBillId", Integer
+						.parseInt("1"));// 待修改
+				jsEntry1.put("FInStockEntry_Link_FSId", Integer
+						.parseInt("1"));// 待修改
+				jsEntry1.put("FInStockEntry_Link_FBaseUnitQtyOld", inQuantity);
+				jsEntry1.put("FInStockEntry_Link_FBaseUnitQty", inQuantity);
+				jsArrEntry1.add(jsEntry1);
+				jsEntry.put("FInStockEntry_Link", jsArrEntry1);*/
+				jsArrEntry.add(jsEntry);
+			}
+			jsonModel.put("FInStockEntry", jsArrEntry);
+			
+			JSONArray modelArray = new JSONArray();
+			modelArray.add(jsonModel);
+			jsonData.put("Model", modelArray);
 			json.put("data", jsonData);
-			// 设置json格式
-			StringEntity entity = new StringEntity(json.toString(), "utf-8");
 			System.out.println(json.toString());
+			StringEntity entity = new StringEntity(json.toString(), "utf-8");
 			entity.setContentEncoding("UTF-8");
 			entity.setContentType("application/json");
 			// 将登陆信息放入
@@ -402,17 +504,101 @@ public class GoodsStoreController {
 			method.setHeader(aspnetsessionkey, aspnetsessionValue);
 			method.setEntity(entity);
 			HttpResponse result = httpclient.execute(method);
-			String str = "";
 			if (result.getStatusLine().getStatusCode() == 200) {
+				System.out.println("请求成功");
+				String str = "";
 				// 读取服务器返回过来的json字符串数据
 				str = EntityUtils.toString(result.getEntity());
-				System.out.println("result:"+str);
-				return str;
+				System.out.println(str);
+				// 根据返回结果成功与否决定入库
+				JSONObject jsonObject1 = JSONObject.parseObject(str);
+				JSONObject resultjson = jsonObject1.getJSONObject("Result");
+
+				JSONObject jsResponse = resultjson
+						.getJSONObject("ResponseStatus");
+				boolean jsError = jsResponse.getBoolean("IsSuccess");
+				if (jsError != true) {
+					//金蝶保存失败
+				} else {
+					String successNumber = resultjson.getString("Number");
+					String formId = "STK_InStock";
+					String url = KingdeeStdLib.KINGDEE_SUBMIT_URL;
+					String checkUrl = KingdeeStdLib.KINGDEE_AUDIT_URL;
+					// String FBillNo = "CGRK00066";
+					Boolean f = SingleKingSubmitAndCheck(formId,
+							url, successNumber);
+					System.out.println("状态：" + f);
+					if (f == true) { // 提交成功
+						System.out.println("提交成功");
+						Boolean e = SingleKingSubmitAndCheck(
+								formId, checkUrl, successNumber);
+						if (e == true) { // 审核成功
+							System.out.println("审核成功！！");
+						} else {
+							// 金蝶审核失败
+						}
+					} else {
+						// 金蝶提交失败
+					}
+				}
+			} else {
+				//金蝶接口返回失败
 			}
+			map.put("result", 1);// 同步成功
 		} catch (Exception e) {
 			e.printStackTrace();
+			map.put("result", 0);// 系统异常
 		}
-		return "";
-
+		return map;
 	}
+	
+	
+   //单个提交
+   public  static Boolean SingleKingSubmitAndCheck(String formId,String url,String FBillNo){
+	   	boolean jsError =false;
+	   	JSONObject json=new JSONObject();
+		JSONObject jsonData=new JSONObject();
+	   try {
+			AccessToken accessToken=KingdeeUtil.getAccessToken();
+			if(accessToken!=null){
+				sessionValue =accessToken.getSessionValue();
+				aspnetsessionValue=accessToken.getAspnetsessionValue();
+			}
+			// 定义httpClient的实例
+			HttpClient httpclient = new DefaultHttpClient();
+			//String save_URL = 
+			URI save_uri = new URI(url);
+			HttpPost method = new HttpPost(save_uri);
+			//设置参数
+			json.put("formid",formId);
+			jsonData.put("Numbers",FBillNo);
+			json.put("data",jsonData);
+			
+			//设置json格式
+			StringEntity entity = new StringEntity(json.toString(), "utf-8");
+			System.out.println(json.toString());
+			entity.setContentEncoding("UTF-8");
+			entity.setContentType("application/json");
+			//将登陆信息放入
+			method.setHeader(sessionkey, sessionValue);
+			method.setHeader(aspnetsessionkey, aspnetsessionValue);
+			method.setEntity(entity);
+			HttpResponse result =httpclient.execute(method);
+			
+			if(result.getStatusLine().getStatusCode()==200){
+				String str ="";
+				str = EntityUtils.toString(result.getEntity());
+				JSONObject jsonObject1=JSONObject.parseObject(str);
+				JSONObject resultjson=jsonObject1.getJSONObject("Result");
+				JSONObject jsResponse=resultjson.getJSONObject("ResponseStatus");
+				jsError=jsResponse.getBoolean("IsSuccess");
+				System.out.println("提交或审核结果:"+jsonObject1.toString());
+			}
+	   }catch (Exception e) {
+			e.printStackTrace();
+		}
+	   return jsError;
+   }
+
+	
 }

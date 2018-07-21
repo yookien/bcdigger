@@ -46,6 +46,7 @@ public class Goods extends BaseEntity {
 	// 金蝶内码id
 	private int kingdeeCustId;
 	private int unitCustId;// 销售单位 金蝶内码
+	private int defaultVendor;// 默认供应商
 
 	public int getCatId() {
 		return catId;
@@ -221,6 +222,14 @@ public class Goods extends BaseEntity {
 
 	public void setUnitCustId(int unitCustId) {
 		this.unitCustId = unitCustId;
+	}
+
+	public int getDefaultVendor() {
+		return defaultVendor;
+	}
+
+	public void setDefaultVendor(int defaultVendor) {
+		this.defaultVendor = defaultVendor;
 	}
 
 }
