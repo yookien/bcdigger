@@ -1,0 +1,88 @@
+##prod setting
+server:
+  port: 8080
+  
+spring: 
+  jmx:
+    enabled: false ##启用fastdfs注意加上
+  application: 
+    name: bcdigger
+    
+  freemarker : 
+    cache : false
+    charset : UTF-8
+    check-template-location : true
+    content-type : text/html
+    expose-request-attributes : true
+    expose-session-attributes : true
+    request-context-attribute : request
+    #模板加载的位置
+    template-loader-path: classpath:/templates
+  
+  datasource : 
+    url : jdbc:mysql://localhost:3306/db_pindao?autoReconnect=true&useSSL=false
+    username : rwdb
+    password : rwd@2018!
+    driver-class-name : com.mysql.jdbc.Driver
+    type : com.alibaba.druid.pool.DruidDataSource
+    # 初始化大小，最小，最大
+    initialSize : 5  
+    minIdle : 5  
+    maxActive : 200
+    # 配置获取连接等待超时的时间  
+    maxWait : 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis : 60000 
+    # 配置一个连接在池中最小生存的时间，单位是毫秒 
+    minEvictableIdleTimeMillis : 300000  
+    validationQuery : SELECT 1 FROM DUAL  
+    testWhileIdle : true  
+    testOnBorrow : false  
+    testOnReturn : false  
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements : true  
+    maxPoolPreparedStatementPerConnectionSize : 20  
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters : stat,wall,log4j  
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties : druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  
+  #spring redis   
+  redis : 
+    #database : 6
+    password : 
+    timeout : 0
+    cluster :
+      nodes : 192.168.1.136:7001,192.168.1.136:7002,192.168.1.136:7003,192.168.1.136:7004,192.168.1.136:7005,192.168.1.136:7006
+    expireSeconds: 120
+    commandTimeout: 10000  #redis操作的超时时间
+    pool:
+      max-active : 5000 #最大连接数
+      max-idle : 30 #最大空闲连接数
+      min-idle : 5 #最小空闲连接数
+      max-wait : 3000 #获取连接最大等待时间 ms  #default -1
+      
+mybatis:  
+  type-aliases-package : com.bcdigger.**.entity  
+  mapper-locations : classpath:mappers/**/*.xml
+  config-location : classpath:mybatis-config.xml
+  
+  
+#pagehelper分页插件配置
+pagehelper :
+  helperDialect : mysql
+  reasonable : true
+  supportMethodsArguments : true
+  params : count=countSql
+
+#fastDFS
+fdfs:
+  soTimeout: 6000
+  connectTimeout: 6000
+  thumbImage:             #缩略图生成参数
+    width: 150
+    height: 150
+  trackerList:            #TrackerList参数,支持多个
+    - 192.168.1.137:22122
+#    - 192.168.0.202:22122 
+  webRoot: http://192.168.1.137:8888

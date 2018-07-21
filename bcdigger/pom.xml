@@ -323,7 +323,8 @@
         </dependency>
 	</dependencies>
  	
- 	<dependencyManagement>
+	
+	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -334,12 +335,65 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<profileActive>dev</profileActive>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profileActive>prod</profileActive>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>/mappers/**</exclude>
+					<exclude>/public/**</exclude>
+					<exclude>/static/**</exclude>
+					<exclude>/templates/**</exclude>
+					<!-- <exclude>kingdeeAccessToken.xml</exclude>
+					<exclude>mybatis-config.xml</exclude>
+					<exclude>systemConfig.properties</exclude> -->
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/${profileActive}</directory>
+				<targetPath>${project.build.directory}/classes</targetPath>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>  
+				  <mainClass>com.bcdigger.BCDiggerApp</mainClass>  
+				  <layout>JAR</layout><!-- 大写 JAR WAR ZIP --> 
+				  <!-- <delimiters>
+		          	<delimiter>$[*]</delimiter>
+		          </delimiters>
+		          <useDefaultDelimiters>true</useDefaultDelimiters> -->
+				</configuration>  
+				<executions>  
+				  <execution>  
+				    <goals>  
+				      <goal>repackage</goal>
+				    </goals>
+				  </execution>  
+				</executions> 
 			</plugin>
 		</plugins>
 	</build>
