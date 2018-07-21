@@ -459,6 +459,7 @@ CREATE TABLE `bcd_store` (
   `add_time` datetime DEFAULT NULL COMMENT '添加时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `kingdee_cust_id` int(11) DEFAULT '0',
+  `receive_stock_id`  int(11) NULL DEFAULT 0 COMMENT '收货仓库',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表'
 
