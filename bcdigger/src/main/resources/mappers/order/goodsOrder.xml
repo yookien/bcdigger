@@ -4,7 +4,7 @@
 
 	<sql id="table"> bcd_goods_order </sql>
 
-	<resultMap id="BaseResultMap" type="com.bcdigger.order.entity.GoodsOrder">
+	<resultMap id="BaseResultMap" type="goodsOrder">
 		<id property="id" column="id" jdbcType="BIGINT"/>
 		<result property="orderNo" column="order_no" jdbcType="VARCHAR" />
 		<result property="orderUserId" column="order_user_id" jdbcType="BIGINT" />
@@ -18,15 +18,17 @@
 		<result property="kingdeeCustNo" column="kingdee_cust_no" jdbcType="VARCHAR" />
 		<result property="kingdeePurchaseCustId" column="kingdee_purchase_cust_id" jdbcType="BIGINT" />
 		<result property="kingdeePurchaseCustNo" column="kingdee_purchase_cust_no" jdbcType="VARCHAR" />
+		<result property="kingdeePurchaseInstoreCustId" column="kingdee_purchase_instore_cust_id" jdbcType="BIGINT" />
+		<result property="kingdeePurchaseInstoreCustNo" column="kingdee_purchase_instore_cust_no" jdbcType="VARCHAR" />
 	</resultMap>
 	
-	<resultMap id="orderResultMap" extends="BaseResultMap" type="com.bcdigger.order.entity.GoodsOrder">
+	<resultMap id="orderResultMap" extends="BaseResultMap" type="goodsOrder">
 		<result property="storeName" column="chinese_name" jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<sql id="base_column_list">
 		id,order_no,order_user_id,store_id, order_type, state, add_time, update_time, memo
-		, kingdee_cust_id , kingdee_cust_no, kingdee_purchase_cust_id, kingdeePurchaseCustNo
+		, kingdee_cust_id , kingdee_cust_no, kingdee_purchase_cust_id, kingdee_purchase_cust_no
 	</sql>
 	
 	<sql id="condition_sql">
@@ -90,23 +92,29 @@
 		<![CDATA[ order by id desc]]>
 	</select>
 	
-	<select id="listGoodsOrderByCondation" parameterType="java.util.Map" resultMap="orderResultMap">
+	<select id="listGoodsOrderByCondation" parameterType="goodsOrder" resultMap="orderResultMap">
 		select go.id,go.order_no,go.order_user_id,go.store_id, go.order_type, go.state, go.add_time, 
 			go.update_time, go.memo, go.kingdee_cust_id ,go.kingdee_cust_no , s.chinese_name
 		from bcd_goods_order go , bcd_store s
 		<where>
 			go.store_id = s.id
 			<if test="id != null and id > 0 ">
-				and id = #{id,jdbcType=BIGINT}
+				and go.id = #{id}
+			</if>
+			<if test="orderUserId != null and orderUserId > 0 ">
+				and go.order_user_id = #{orderUserId}
+			</if>
+			<if test=" storeId != null and storeId > 0 ">
+				and go.store_id = #{storeId}
 			</if>
 			<if test=" state != null and state > 0 ">
-				and state = #{state,jdbcType=BIGINT}
+				and go.state = #{state}
 			</if>
 			<if test="orderNo != null and orderNo !='' and like == 1 ">
-				and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+				and go.order_no like concat('%',#{orderNo},'%')
 			</if>
 			<if test="orderNo != null and orderNo !='' and like == null">
-				and order_no = #{orderNo,jdbcType=VARCHAR}
+				and go.order_no = #{orderNo}
 			</if>
 		</where>
 		<![CDATA[ order by go.id desc]]>
@@ -140,6 +148,12 @@
 			</if>
 			<if test=" kingdeePurchaseCustNo != null and kingdeePurchaseCustNo !='' ">
 				kingdee_purchase_cust_no= #{kingdeePurchaseCustNo},
+			</if>
+			<if test=" kingdeePurchaseInstoreCustId != null and kingdeePurchaseInstoreCustId > 0 ">
+				kingdee_purchase_instore_cust_id= #{kingdeePurchaseInstoreCustId},
+			</if>
+			<if test=" kingdeePurchaseInstoreCustNo != null and kingdeePurchaseInstoreCustNo !='' ">
+				kingdee_purchase_instore_cust_no= #{kingdeePurchaseInstoreCustNo},
 			</if>
 		</set>
 		<where>

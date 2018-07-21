@@ -41,13 +41,14 @@
 		<result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
 		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
 		<result property="kingdeeCustId" column="kingdee_cust_id" jdbcType="BIGINT"/>
+		<result property="receiveStockId" column="receive_stock_id" jdbcType="BIGINT"/>
 	</resultMap>
 	
 	<sql id="base_column_list">
 		id,store_code,chinese_name,phone, mobile, address, direction, open_hour, close_hour, english_name, english_address,
 		location_image, store_images ,store_province ,store_city, city_area, is_open, bmap_position, bmap_positionX, bmap_positionY,
 		search_url, bus, subway ,nearby ,email, store_image1 ,store_image2, store_image3, store_image4, appoint_limit, 
-		store_type, is_booking ,open_time ,add_time, update_time,kingdee_cust_id
+		store_type, is_booking ,open_time ,add_time, update_time,kingdee_cust_id,receive_stock_id
 	</sql>
 	
 	<sql id="condition_sql">
@@ -112,12 +113,12 @@
 		(store_code,chinese_name,phone, mobile, address, direction, open_hour, close_hour, english_name, english_address,
 		location_image, store_images ,store_province ,store_city, city_area, is_open, bmap_position, bmap_positionX, bmap_positionY,
 		search_url, bus, subway ,nearby ,email, store_image1 ,store_image2, store_image3, store_image4, appoint_limit, 
-		store_type, is_booking ,open_time ,add_time, update_time , kingdee_cust_id)
+		store_type, is_booking ,open_time ,add_time, update_time , kingdee_cust_id,receive_stock_id)
 		values (
 			#{storeCode},#{chineseName},#{phone},#{mobile},#{address},#{direction},#{openHour},#{closeHour},#{englishName},#{englishAddress},
 			#{locationImage},#{storeImages},#{storeProvince},#{storeCity},#{cityArea},#{isOpen},#{bmapPosition},#{bmapPositionX},#{bmapPositionY},
 			#{searchUrl},#{bus},#{subway},#{nearby},#{email},#{storeImage1},#{storeImage2},#{storeImage3},#{storeImage4},#{appointLimit},
-			#{storeType},#{isBooking},#{openTime},now(),now(),#{kingdeeCustId}
+			#{storeType},#{isBooking},#{openTime},#{addTime},#{updateTime},#{kingdeeCustId},#{receiveStockId}
 		)
 	</insert>
 	
@@ -156,8 +157,10 @@
 			appoint_limit= #{appointLimit},
 			store_type= #{storeType},
 			is_booking= #{isBooking},
-			update_time= now(),
-			kingdee_cust_id= #{kingdeeCustId}
+			add_time= #{addTime},
+			update_time= #{updateTime},
+			kingdee_cust_id= #{kingdeeCustId},
+			receive_stock_id=#{receiveStockId}
 		</set>
 		<where>
 			id = #{id}
