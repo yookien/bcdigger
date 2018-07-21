@@ -13,4 +13,4 @@ echo "maven编译打包服务\n"
 mvn clean package -P prod
 
 echo "启动服务"
-java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar $BASE_PATH/target/bcdigger-0.0.1-SNAPSHOT.jar
+nohup java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar $BASE_PATH/target/bcdigger-0.0.1-SNAPSHOT.jar &
