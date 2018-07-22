@@ -3,7 +3,7 @@ set -o errexit
 
 BASE_PATH=`pwd`
 #BASE_PATH="/home/lhdocker/build-application/java"
-JAVA_OPTS="-server -Dfile.encoding=UTF-8 -Xms1024m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=512m "
+JAVA_OPTS="-server -Dfile.encoding=UTF-8 -Xms1024m -Xmx2048m "
 
 cd $BASE_PATH
 
