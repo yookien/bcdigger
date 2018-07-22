@@ -31,7 +31,7 @@ stop(){
 		kill -9 $pid  
 	done  
 }  
-if  
+
 case "$1" in 
 	build)
 		pull
@@ -54,4 +54,3 @@ case "$1" in
 	exit 1  
 	;;  
 esac
-
