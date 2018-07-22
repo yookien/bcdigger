@@ -2,8 +2,8 @@ package com.bcdigger;
 
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -18,7 +18,8 @@ import com.github.tobato.fastdfs.FdfsClientConfig;
 public class BCDiggerApp {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(BCDiggerApp.class).web(true).run(args);
+		SpringApplication.run(BCDiggerApp.class, args);
+		//new SpringApplicationBuilder(BCDiggerApp.class).web(true).run(args);
 	}
 
 }

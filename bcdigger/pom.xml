@@ -364,7 +364,9 @@
 					<exclude>/public/**</exclude>
 					<exclude>/static/**</exclude>
 					<exclude>/templates/**</exclude>
-					<!-- <exclude>kingdeeAccessToken.xml</exclude>
+					<!-- <exclude>application.yml</exclude>
+					<exclude>log4j.properties</exclude>
+					<exclude>kingdeeAccessToken.xml</exclude>
 					<exclude>mybatis-config.xml</exclude>
 					<exclude>systemConfig.properties</exclude> -->
 				</excludes>
@@ -372,6 +374,11 @@
 			<resource>
 				<directory>src/main/resources/${profileActive}</directory>
 				<targetPath>${project.build.directory}/classes</targetPath>
+				<excludes>
+					<exclude>kingdeeAccessToken.xml</exclude>
+					<exclude>mybatis-config.xml</exclude>
+					<exclude>systemConfig.properties</exclude>
+				</excludes>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
